@@ -1,9 +1,9 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import config from './config.js';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import useUserStore from '@/stores/user.js';
-import i18n from '../i18n/index.js';
+import {useUserStore} from '@/stores/user';
+import i18n from '@/utils/i18n/index.js';
 const { t } = i18n.global;
 // 手动断言 config 的类型为 AxiosRequestConfig
 const axiosConfig = /** @type {import('axios').AxiosRequestConfig} */ (config);

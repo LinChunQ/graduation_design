@@ -1,91 +1,230 @@
 <template>
   <header class="header">
-    <div class="logo">
-      <!-- 这里可以使用图片或文字作为 Logo -->
+    <!-- 左侧Logo区 -->
+    <div class="logo-container">
       <img src="@/assets/icons/logo.png" alt="Logo" class="logo-image"/>
       <label class="logo_name">高校教师助手</label>
     </div>
-    <nav class="nav-links">
+    
+    <!-- 中间导航区 -->
+    <nav class="main-nav">
       <ul>
-        <el-icon size="18px"><House /></el-icon>
-        <li><router-link to="/" >主页</router-link></li>
-        <el-icon size="18px"><Monitor /></el-icon>
-        <li><router-link to="/smart-correction">智能批改</router-link></li>
-        <el-icon size="18px"><Tickets /></el-icon>
-        <li><router-link to="/history">历史使用</router-link></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-          <el-icon size="18px"><User /></el-icon>
-          <li><router-link to="/user-info" >个人信息</router-link></li>
-        <li><router-link to="/login" >登录/注册</router-link></li>
+        <li class="nav-item">
+          <el-icon><House /></el-icon>
+          <router-link to="/">主页</router-link>
+        </li>
+        <li class="nav-item">
+          <el-icon><Monitor /></el-icon>
+          <router-link to="/smart-correction">智能批改</router-link>
+        </li>
+        <li class="nav-item">
+          <el-icon><Tickets /></el-icon>
+          <router-link to="/history">历史使用</router-link>
+        </li>
       </ul>
     </nav>
+
+      <!-- 右侧用户区 -->
+      <div class="user-nav">
+      <div class="nav-item" v-if="userStore.isLoggedIn">
+        <el-icon><User /></el-icon>
+        <router-link to="/user-info">{{ userStore.userInfo?.username || '个人信息' }}</router-link>
+      </div>
+      <div class="nav-item">
+        <span v-if="userStore.isLoggedIn" @click="handleLogout" class="logout-btn">
+          点击注销
+        </span>
+        <router-link v-else to="/login">请登录</router-link>
+      </div>
+    </div>
   </header>
 </template>
 
 <script setup>
+import { useUserStore } from '@/stores/user'
+import { ElMessageBox } from 'element-plus'
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-// 这里可以选择添加脚本逻辑
+const router = useRouter()
+const userStore = useUserStore()
+
+onMounted(() => {
+  //userStore.initAuth()
+})
+
+const handleLogout = () => {
+  ElMessageBox.confirm('确定要注销当前账号吗？', '注销确认', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    userStore.logout()
+    router.push('/login')
+  }).catch(() => {})
+}
+
 </script>
 
-<style scoped>
-/* Header 的外部样式 */
+<style lang="scss" scoped>
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #043873;
-  color: white;
-  padding: 10px 20px;
-  z-index: 10;
-  display: flex;
-  justify-content: space-between; /* 分配空间，左右对齐 */
-  align-items: center; /* 垂直居中 */
-}
-
-.logo {
   display: flex;
   align-items: center;
-  .logo_name{
-    //margin-bottom: -15px;
-    margin-left: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    letter-spacing: 0.3em;
+  padding: 10px 5vw;
+  background: #043873;
+
+  /* 左侧Logo容器 */
+  .logo-container {
+    display: flex;
+    align-items: center;
+    min-width: 280px;
+    margin-right: 50px; // 与中间导航保持距离
+    
+    .logo_name {
+      margin-left: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 0.3em;
+      color: white;
+    }
+    
+    .logo-image {
+      height: 60px;
+    }
   }
-}
 
-.logo-image {
-  height: 60px; /* 调整 Logo 大小 */
-  margin-left: 120px;
-}
+  /* 中间导航区 */
+  .main-nav {
+    flex: 1;
+    ul {
+      display: flex;
+      gap: 40px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      li {
+        color: white;
+        &:last-child::after {
+          content: none;
+        }
+      }
+      .el-icon {
+        top: 2px; // 微调图标位置
+        margin-right: 6px;
+      }
+    }
+  }
 
-.nav-links ul {
-  display: flex;  /* 使用 Flexbox 布局 */
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  transform: translateX(30px); /* 将整个 ul 向左移动 300px */
-}
+  /* 右侧用户区 */
+  .user-nav {
+    display: flex;
+    gap: 30px;
+    min-width: 220px;
+    justify-content: flex-end;
+    
+    .nav-item {
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
 
-.nav-links ul li {
-  margin-left:5px;  /* 每个 li 之间的间距 */
-  margin-right: 50px;
-}
+  /* 通用样式 */
+  a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 
-.nav-links ul li a {
-  color: white;
-  text-decoration: none;
-  font-size: 18px;
-  text-align: left;
-}
+  /* 断点1：900px屏幕 */
+  @media (max-width: 900px) {
+    padding: 10px 3vw;
+    
+    .logo-container {
+      min-width: 200px;
+      margin-right: 30px;
+      
+      .logo-image {
+        height: 50px;
+      }
+      
+      .logo_name {
+        font-size: 18px;
+      }
+    }
+    
+    .main-nav ul {
+      gap: 25px;
+    }
+    
+    .user-nav {
+      gap: 20px;
+      min-width: 180px;
+    }
+  }
 
-.nav-links ul li a:hover {
-  text-decoration: underline;
+  /* 断点2：700px屏幕 */
+  @media (max-width: 700px) {
+    flex-wrap: wrap;
+    
+    .logo-container {
+      margin-right: 0;
+      margin-bottom: 10px;
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .main-nav {
+      order: 3;
+      width: 100%;
+      margin-top: 10px;
+      
+      ul {
+        justify-content: center;
+        gap: 15px;
+      }
+    }
+    
+    .user-nav {
+      min-width: auto;
+      margin-left: auto;
+    }
+  }
+
+  /* 断点3：500px屏幕 */
+  @media (max-width: 500px) {
+    .main-nav ul {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 20px;
+    }
+    
+    .user-nav {
+      gap: 15px;
+      
+      a {
+        font-size: 14px;
+      }
+    }
+  }
+  
+  /* 新增的注销按钮样式 */
+  .user-nav {
+    .logout-btn {
+      cursor: pointer;
+      color: white;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    
+    .nav-item:last-child {
+      margin-left: 15px;
+    }
+  }
 }
 </style>
