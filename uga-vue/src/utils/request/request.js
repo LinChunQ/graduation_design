@@ -16,29 +16,25 @@ export default function request(options) {
         const userStore = useUserStore();
 
         // 增加请求拦截处理
-        instance.interceptors.request.use(
-            (config) => {
-                let token = localStorage.getItem('token');
-                if (token) {
-                    config.headers.Token = `${token}`;
-                } else {
-                    router.push('/login')
-                }
-                return config;
-            },
-            (error) => {
-                console.log('request:', error);
-                if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
-                    ElMessage({ message: '请求超时', type: 'error', showClose: true });
-                }
-                return Promise.reject(error);
+        instance.interceptors.request.use(config => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+              router.push('/login');
+              return Promise.reject(new Error(t('auth.tokenMissing')));
             }
-        );
+            config.headers.Token = token;
+            return config;
+          });
+          
 
         // 增加响应拦截处理
-        instance.interceptors.response.use(
-            (response) => {
-                return response.data;
+        instance.interceptors.response.use(response => {
+            const { code } = response.data;
+            if (code !== 200) {
+              ElMessage.error(response.data.msg || t('error.operationFailed'));
+              return Promise.reject(response.data);
+            }
+            return response.data;
             },
             (err) => {
                 const codeMap = {
