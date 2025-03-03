@@ -5,8 +5,7 @@ import { useRouter } from 'vue-router'
 
 export const useUserStore = defineStore('userInfo', () => {
   const router = useRouter()
-  
-  // 状态定义
+  //用户基本信息
   const userInfo = reactive({
     username: '',
     sex: '',
@@ -17,9 +16,10 @@ export const useUserStore = defineStore('userInfo', () => {
     school: '',
     profession: ''
   })
-  
+  //保存token
   const token = ref('')
-  const isLoggedIn = computed(() => !!token.value)
+  // 判断是否登录
+  const isLoggedIn = false;//computed(() => !!token.value); 测试阶段
 
   // 方法定义
   const login = async (username, password) => {
@@ -33,7 +33,7 @@ export const useUserStore = defineStore('userInfo', () => {
       if (response.token) {
         token.value = response.token
         localStorage.setItem('token', response.token)
-        router.push('/home')
+        router.push('/')
       }
     } catch (error) {
       console.error("Login failed:", error)
