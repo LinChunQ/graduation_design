@@ -25,9 +25,9 @@ export const useUserStore = defineStore('userInfo', () => {
   const login = async (username, password) => {
     try {
       const response = await request({
-        url: '/login',
+        url: '/auth/login',
         method: 'post',
-        data: { username, password }
+        data: { "username":username, "password":password }
       })
 
       if (response.token) {

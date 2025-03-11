@@ -1,20 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // 布局文件
 import HomePage from '@/views/Home/HomePage.vue'
-import SmartCorrection from '../views//SmartCorrections/SmartCorrection.vue';
-import History from '../views/DataCenter/History.vue';
-import UserInfo from '../views/User/UserInfo.vue';
-import Register from '../views/Register.vue';
 
 /**
  * 配置路由
  */
 const routes = [
     {path: '/', name: 'HomePage', component: HomePage,},
-    { path: '/smart-correction', component: SmartCorrection },
-    { path: '/history', component: History },
-    { path: '/user-info', component: UserInfo },
-    { path: '/register', component: Register },
+    { path: '/smart-correction', component: () => import('@/views/SmartCorrections/SmartCorrection.vue') },
+    { path: '/history', component: ()=>import('@/views/DataCenter/History.vue') },
+    { path: '/user-info', component:()=>import('@/views/User/UserInfo.vue') },
+    { path: '/register', component: ()=>import('@/views/Register.vue') },
     {path: '/login', name: 'Login', component: () => import('@/views/Login.vue')},// 直接使用懒加载
     {path: '/:pathMatch(.*)*', redirect: '/404'},
 ];

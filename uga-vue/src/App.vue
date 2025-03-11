@@ -22,7 +22,7 @@ locale.value = localStorage.getItem('locale') || 'zh-cn';
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  
+  background-color: #f0f0f0;
   .content-wrapper {
     flex: 1;
     min-height: calc(100vh - 80px); // 80px为header高度

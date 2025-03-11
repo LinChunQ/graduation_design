@@ -1,10 +1,8 @@
-import json
 from flask import request, jsonify, Blueprint
 from app.services.auth_service import AuthService
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
-
 
 # 用户注册
 @auth_bp.route('/register', methods=['POST'])
@@ -23,7 +21,6 @@ def register():
     result, status_code = AuthService.register(username, sex, age, email, phone, address, school, profession, password)
     return jsonify(result), status_code
 
-
 # 用户登录
 @auth_bp.route('/login', methods=['POST'])
 def login():
@@ -32,7 +29,6 @@ def login():
     password = data.get('password')
     result, status_code = AuthService.login(username, password)
     return jsonify(result), status_code
-
 
 # 受保护路由（需要 JWT 令牌）
 @auth_bp.route('/getUserInfo', methods=['GET'])

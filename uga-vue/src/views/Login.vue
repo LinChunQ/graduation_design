@@ -66,16 +66,11 @@ const handleLogin = async () => {
   }
 
   try {
-      // 对输入进行转义处理
-      const safeUsername = encodeURIComponent(loginForm.username)
-      const safePassword = encodeURIComponent(loginForm.password)
-
-      // 实际的登录API调用
-      console.log('登录请求:', { username: safeUsername, password: safePassword })
-      
-      // 模拟登录成功并设置cookie，设置过期时间为1小时
-      const expires = new Date(Date.now() + 3600 * 1000).toUTCString()
-      document.cookie = `authToken=yourAuthToken; path=/; expires=${expires}`
+      // // 实际的登录API调用
+      // userStore.login({ username: loginForm.username, password: loginForm.password })
+      // // 模拟登录成功并设置cookie，设置过期时间为1小时
+      // const expires = new Date(Date.now() + 3600 * 1000).toUTCString()
+      // document.cookie = `authToken=yourAuthToken; path=/; expires=${expires}`
       userStore.isLoggedIn = true
       // 跳转到主页
       router.push('/')
