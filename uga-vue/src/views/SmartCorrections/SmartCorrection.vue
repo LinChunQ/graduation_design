@@ -1,19 +1,32 @@
 <script setup>
+import {ref} from 'vue'
 const tableData = [
   {sno: '2021283101',name: 'Tom1',p1:8,p2:10,p3:10,p4:20,p5:20,p6:20,grade: 88,},
   {sno: '2021283102',name: 'Tom2',p1:9,p2:10,p3:10,p4:20,p5:20,p6:20,grade: 89,},
   {sno: '2021283103',name: 'Tom3',p1:12,p2:10,p3:10,p4:20,p5:20,p6:20,grade: 92,},
   {sno: '2021283104',name: 'Tom4',p1:11,p2:10,p3:10,p4:20,p5:20,p6:20,grade:91,},
-]
+];
 
-let imageData = [
-    {url:'https://cn.bing.com/images/search?q=%E5%9B%BE%E7%89%87&FORM=IQFRBA&id=42BE9CBF4E57BF77C86A597C9043710BF0AAC2F9',name:'1'},
-    {url:'https://cn.bing.com/images/search?q=%E5%9B%BE%E7%89%87&FORM=IQFRBA&id=42BE9CBF4E57BF77C86A597C9043710BF0AAC2F9',name:'2'},
-    {url:'https://cn.bing.com/images/search?q=%E5%9B%BE%E7%89%87&FORM=IQFRBA&id=42BE9CBF4E57BF77C86A597C9043710BF0AAC2F9',name:'3'},
-    {url:'https://cn.bing.com/images/search?q=%E5%9B%BE%E7%89%87&FORM=IQFRBA&id=42BE9CBF4E57BF77C86A597C9043710BF0AAC2F9',name:'4'},
-    {url:'https://cn.bing.com/images/search?q=%E5%9B%BE%E7%89%87&FORM=IQFRBA&id=42BE9CBF4E57BF77C86A597C9043710BF0AAC2F9',name:'5'},
-    {url:'https://cn.bing.com/images/search?q=%E5%9B%BE%E7%89%87&FORM=IQFRBA&id=42BE9CBF4E57BF77C86A597C9043710BF0AAC2F9',name:'6'},
-]
+const imageData = ref([
+    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'1'},
+    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'2'},
+    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'3'},
+    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'4'},
+    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'5'},
+    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'6'},
+]);
+
+const imageUrl = ref('');
+function uploadFile(item) {
+    debugger;
+    const imageUrl = URL.createObjectURL(item.raw); // 图片上传浏览器回显地址
+    imageData.value.push({ url: imageUrl, name: item.name });
+    console.log("imageUrl:", imageUrl);
+}
+
+function handleCancel() {
+    imageData.value=[];
+}
 </script>
 
 <template>
@@ -23,14 +36,16 @@ let imageData = [
             <!-- 上传文件 -->
             <el-upload
                 class="upload_img"
+                accept="image/jpg,image/jpeg,image/png"
                 drag
-                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-                multiple
+                action="#"
+                :multiple="false"
+                :show-file-list="false"
+                :auto-upload="false"
+                :on-change="uploadFile"
             >
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-                <div class="el-upload__text">
-                拖动文件或 <em>点击上传</em>
-                </div>
+                <div class="el-upload__text"> 拖动文件或 <em>点击上传</em></div>
                 <template #tip>
                 <div class="el-upload__tip" style="color: red">
                     jpg/png图像文件小于2mb
@@ -40,13 +55,13 @@ let imageData = [
             <!-- 图片回显组 -->
             <div class="img-group">
                 <div v-for="(image, index) in imageData" :key="index" class="image-item">
-                    <el-image :src="image.url" style="width: 80px; height: 80px" />
+                    <el-image :src="image.url" style="width: 100px; height: 100px" :fit="fit" />
                 </div>
             </div>
             <!-- 按钮组 -->
             <div class="btn-group">
                 <el-button type="primary" @click="handleSubmit">提交</el-button>
-                <el-button type="danger" plain style="margin-left: 50px">取消</el-button>
+                <el-button type="danger" plain style="margin-left: 50px" @click="handleCancel">取消</el-button>
             </div>
             
        </div>
@@ -77,7 +92,7 @@ let imageData = [
 .uploadfile{
   width: 35%;
   height: 90%;
-  margin-left:85px;
+  margin-left:100px;
   background-color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   margin-top: 10px;
@@ -92,7 +107,7 @@ let imageData = [
 .result{
     width: 50%;
     height:90%;
-    margin-left:50px;
+    margin-left:30px;
     background-color: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     margin-top: 10px;
@@ -105,23 +120,24 @@ let imageData = [
     margin-top: 10px;
     color: #000000;
 }
-.img-group{
-    width: 90%;
-    height:40%;
+.img-group {
+    width: 87%;
+    height: auto;
+    padding: 10px;
     margin-left: 25px;
     margin-top: 20px;
     border: 0.3px solid #bebcbc;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
+    grid-gap: 10px;
+    justify-content: center;
 }
 .btn-group{
     margin-left: 25px;
     margin-top: 20px;
 }
 .image-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100px;
+    height: 100px;
 }
 </style>

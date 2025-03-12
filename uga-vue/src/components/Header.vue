@@ -21,6 +21,18 @@
           <el-icon><Tickets /></el-icon>
           <router-link to="/history">历史使用</router-link>
         </li>
+        <li class="nav-item">
+          <el-icon><PieChart /></el-icon>
+          <router-link to="/statistics">统计分析</router-link>
+        </li>
+        <li class="nav-item">
+          <el-icon><Service /></el-icon>
+          <router-link to="/help">帮助</router-link>
+        </li>
+        <li class="nav-item">
+          <el-icon><Promotion /></el-icon>
+          <router-link to="/about">关于</router-link>
+        </li>
       </ul>
     </nav>
 
