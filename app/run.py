@@ -7,5 +7,12 @@ CORS(app)
 with app.app_context():
     db.create_all()
 
+
+@app.after_request
+def set_default_headers(response):
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
+    return response
+
+
 if __name__ == '__main__':
     app.run(debug=True)

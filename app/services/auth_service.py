@@ -9,7 +9,7 @@ class AuthService:
     @staticmethod
     def register(username, sex, age, email, phone, address, school, profession, password):
         if User.query.filter_by(username=username).first():
-            return {"message": "Username already exists"}, 400
+            return {"code": 400, "msg": "Username already exists"}, 200
 
         new_user = User(username=username, email=email, sex=sex, age=age, phone=phone, address=address, school=school,
                         profession=profession)
@@ -20,17 +20,17 @@ class AuthService:
             db.session.commit()
         except Exception as e:
             db.session.rollback()
-            return {"message": f"Registration failed: {str(e)}"}, 500
+            return {"code": 500, "msg": f"Registration failed: {str(e)}"}, 200
 
-        return {"message": "User registered successfully"}, 201
+        return {"code": 200, "msg": "User registered successfully"}, 200
 
     @staticmethod
     def login(username, password):
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             token = create_access_token(identity=str(user.teacher_id))
-            return {"code":200,"data":{"token": token}, "message": "登录成功"}, 200
-        return {"code":404, "message": "用户名或密码错误!"}, 404
+            return {"code": 200, "data": {"token": token}, "msg": "登录成功"}, 200
+        return {"code": 400, "msg": "用户名或密码错误!"}, 200
 
     @staticmethod
     def getUserInfo(user_id):
@@ -42,8 +42,8 @@ class AuthService:
             userinfo.pop('password_hash', None)
 
             if userinfo:
-                return {"userInfo": userinfo}, 200
-            return {"message": "获取个人信息出错"}, 404
+                return {"code": 200, "data": {"userInfo": userinfo}, "msg": ''}, 200
+            return {"code": 404, "msg": "获取个人信息出错"}, 200
         except Exception as e:
             print(e)
-            return {"message": "服务器出错"}, 500
+            return {"code": 500, "msg": "服务器出错"}, 200

@@ -28,7 +28,7 @@ def login():
     username = data.get('username')
     password = data.get('password')
     result, status_code = AuthService.login(username, password)
-    return jsonify(result), status_code
+    return result, status_code
 
 # 受保护路由（需要 JWT 令牌）
 @auth_bp.route('/getUserInfo', methods=['GET'])
