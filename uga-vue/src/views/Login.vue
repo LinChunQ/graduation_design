@@ -1,41 +1,10 @@
-<template>
-  <div class="login-wrapper">
-      <div class="login-container">
-          <div class="form-header">
-              <h2>用户登录</h2>
-              <p>欢迎回来，请登录您的账号</p>
-          </div>
-          <form @submit.prevent="handleLogin" class="floating-form">
-              <div class="input-group">
-                  <input id="username" v-model.trim="loginForm.username" type="text" autocomplete="off" @input="validateInput" required />
-                  <label for="username">用户名</label>
-                  <span class="highlight"></span>
-              </div>
-              <div class="input-group">
-                  <input id="password" v-model.trim="loginForm.password" type="password" autocomplete="off" @input="validateInput" required />
-                  <label for="password">密码</label>
-                  <span class="highlight"></span>
-              </div>
-              <div class="error-message" v-if="errorMsg">{{ errorMsg }}</div>
-              <button type="submit" class="submit-btn" :disabled="!isFormValid">
-                  <span>登录</span>
-                  <i class="arrow-icon"></i>
-              </button>
-              <div class="form-footer">
-                  <span>还没有账号？</span>
-                  <a href="/register">立即注册</a>
-              </div>
-          </form>
-      </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user'
+import  useAuthStore  from '../stores/useStoreAuth'
 const router = useRouter()
-const userStore = useUserStore()
+const authStore = useAuthStore()
+const {handleLogin}=authStore
 // 表单数据
 const loginForm = reactive({
   username: '',
@@ -57,17 +26,16 @@ const validateInput = () => {
 }
 
 // 登录处理
-const handleLogin = async () => {
+const login = async () => {
   // 防止XSS攻击
   const xssPattern = /(~|\{|\}|"|'|<|>|\?)/g
   if (xssPattern.test(loginForm.username) || xssPattern.test(loginForm.password)) {
       errorMessage('警告:输入内容包含非法字符');
       return
   }
-
   try {
       // // 实际的登录API调用
-      // userStore.login({ username: loginForm.username, password: loginForm.password })
+      handleLogin({ username: loginForm.username, password: loginForm.password })
       // // 模拟登录成功并设置cookie，设置过期时间为1小时
       // const expires = new Date(Date.now() + 3600 * 1000).toUTCString()
       // document.cookie = `authToken=yourAuthToken; path=/; expires=${expires}`
@@ -92,6 +60,38 @@ onMounted(() => {
 })
 
 </script>
+
+<template>
+  <div class="login-wrapper">
+      <div class="login-container">
+          <div class="form-header">
+              <h2>用户登录</h2>
+              <p>欢迎回来，请登录您的账号</p>
+          </div>
+          <form @submit.prevent="login" class="floating-form">
+              <div class="input-group">
+                  <input id="username" v-model.trim="loginForm.username" type="text" autocomplete="off" @input="validateInput" required />
+                  <label for="username">用户名</label>
+                  <span class="highlight"></span>
+              </div>
+              <div class="input-group">
+                  <input id="password" v-model.trim="loginForm.password" type="password" autocomplete="off" @input="validateInput" required />
+                  <label for="password">密码</label>
+                  <span class="highlight"></span>
+              </div>
+              <div class="error-message" v-if="errorMsg">{{ errorMsg }}</div>
+              <button type="submit" class="submit-btn" :disabled="!isFormValid">
+                  <span>登录</span>
+                  <i class="arrow-icon"></i>
+              </button>
+              <div class="form-footer">
+                  <span>还没有账号？</span>
+                  <a href="/register">立即注册</a>
+              </div>
+          </form>
+      </div>
+  </div>
+</template>
 
 <style scoped>
 .login-wrapper {

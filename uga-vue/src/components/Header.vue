@@ -1,3 +1,24 @@
+<script setup>
+import { ElMessageBox } from 'element-plus'
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import useAuthStore from '../stores/useStoreAuth'
+const router = useRouter()
+const authStore = useAuthStore()
+const {logout,isLogin}=authStore
+const handleLogout = () => {
+  ElMessageBox.confirm('确定要注销当前账号吗？', '注销确认', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    logout()
+    router.push('/login')
+  }).catch(() => {})
+}
+
+</script>
+
 <template>
   <header class="header">
     <!-- 左侧Logo区 -->
@@ -38,12 +59,12 @@
 
       <!-- 右侧用户区 -->
       <div class="user-nav">
-      <div class="nav-item" v-if="userStore.isLoggedIn">
+      <div class="nav-item" v-if="isLogin">
         <el-icon><User /></el-icon>
-        <router-link to="/user-info">{{ userStore.userInfo?.username || '个人信息' }}</router-link>
+        <router-link to="/user-info">{{'个人信息' }}</router-link>
       </div>
       <div class="nav-item">
-        <span v-if="userStore.isLoggedIn" @click="handleLogout" class="logout-btn">
+        <span v-if="isLogin" @click="handleLogout" class="logout-btn">
           点击注销
         </span>
         <router-link v-else to="/login">请登录</router-link>
@@ -51,32 +72,6 @@
     </div>
   </header>
 </template>
-
-<script setup>
-import { useUserStore } from '@/stores/user'
-import { ElMessageBox } from 'element-plus'
-import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-const userStore = useUserStore()
-
-onMounted(() => {
-  //userStore.initAuth()
-})
-
-const handleLogout = () => {
-  ElMessageBox.confirm('确定要注销当前账号吗？', '注销确认', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    userStore.logout()
-    router.push('/login')
-  }).catch(() => {})
-}
-
-</script>
 
 <style lang="scss" scoped>
 .header {

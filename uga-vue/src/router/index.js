@@ -13,6 +13,7 @@ const routes = [
     { path: '/statistics', component: ()=>import('@/views/Statistics/Statistics.vue') },
     { path: '/about', component: ()=>import('@/views/About/About.vue') },
     { path: '/help', component: ()=>import('@/views/Help/Help.vue') },
+    { path: '/register', component: ()=>import('@/views/Register.vue') },
     {path: '/login', name: 'Login', component: () => import('@/views/Login.vue')},// 直接使用懒加载
     {path: '/:pathMatch(.*)*', redirect: '/404'},
 ];

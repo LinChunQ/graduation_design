@@ -29,10 +29,8 @@ class AuthService:
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             token = create_access_token(identity=str(user.teacher_id))
-
-            return {"token": token}, 200
-
-        return {"message": "Invalid credentials"}, 401
+            return {"code":200,"data":{"token": token}, "message": "登录成功"}, 200
+        return {"code":404, "message": "用户名或密码错误!"}, 404
 
     @staticmethod
     def getUserInfo(user_id):

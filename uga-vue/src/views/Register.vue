@@ -17,11 +17,6 @@
                   <span class="highlight"></span>
               </div>
               <div class="input-group">
-                  <input type="number" id="age" v-model="age" required maxlength="20" />
-                  <label for="age">年龄</label>
-                  <span class="highlight"></span>
-              </div>
-              <div class="input-group">
                   <input type="tel" id="phone" v-model="phone" required maxlength="20" />
                   <label for="phone">手机号</label>
                   <span class="highlight"></span>
@@ -39,11 +34,6 @@
               <div class="input-group">
                   <input type="text" id="school" v-model="school" required />
                   <label for="school">学校</label>
-                  <span class="highlight"></span>
-              </div>
-              <div class="input-group">
-                  <input type="text" id="address" v-model="address" required />
-                  <label for="address">地址</label>
                   <span class="highlight"></span>
               </div>
               <div class="input-group verification-group">
@@ -80,12 +70,10 @@ import { ref } from 'vue'
 
 const username = ref('')
 const  sex= ref('')
-const age = ref('')
 const phone = ref('')
 const email = ref('')
 const profession = ref('')
 const school = ref('')
-const address = ref('')
 const verificationCode = ref('')
 const password = ref('')
 const confirmPassword = ref('')
@@ -105,7 +93,7 @@ const sendVerificationCode = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .register-wrapper {
   min-height: 93.5vh;
   display: flex;
@@ -126,13 +114,12 @@ const sendVerificationCode = () => {
 
 .form-header {
   text-align: center;
-  margin-bottom: 40px;
 }
 
 .form-header h2 {
   color: #2c3e50;
   font-size: 32px;
-  margin-bottom: 10px;
+ // margin-bottom: 10px;
   font-weight: 700;
 }
 
@@ -143,11 +130,11 @@ const sendVerificationCode = () => {
 
 .floating-form .input-group {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .input-group input {
-  width: 100%;
+  width: 95%;
   padding: 10px;
   border: 2px solid #e0e0e0;
   border-radius: 12px;

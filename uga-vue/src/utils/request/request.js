@@ -1,28 +1,27 @@
 import axios from 'axios';
-import config from './config.js';
-import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import {useUserStore} from '@/stores/user';
-import i18n from '@/utils/i18n/index.js';
-const { t } = i18n.global;
-// 手动断言 config 的类型为 AxiosRequestConfig
-const axiosConfig = /** @type {import('axios').AxiosRequestConfig} */ (config);
-const router = useRouter();
+import useAuthStore from '../../stores/useStoreAuth';
+const axiosConfig ={
+    baseURL: 'http://localhost:5000',
+    // 请求头设置
+    headers: {"Content-type": "application/json"},
+    timeout: 5000,
+}
 export default function request(options) {
-
+    const authStore = useAuthStore(); // 调用 useAuthStore 函数获取 store 实例
+    const { isLogin, token, clearToken } = authStore;
     return new Promise((resolve, reject) => {
         // 创建请求实例
         const instance = axios.create(axiosConfig);
-        const userStore = useUserStore();
-
         // 增加请求拦截处理
         instance.interceptors.request.use(config => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-              router.push('/login');
-              return Promise.reject(new Error(t('auth.tokenMissing')));
+            if (!token.value&&isLogin.value){
+                ElMessage.error("登陆状态出错!");
+              return Promise.reject(new Error('not found token !'));
             }
-            config.headers.Token = token;
+            if(isLogin.value){
+                config.headers.Token = token.value;
+            }
             return config;
           });
           
@@ -31,7 +30,7 @@ export default function request(options) {
         instance.interceptors.response.use(response => {
             const { code } = response.data;
             if (code !== 200) {
-              ElMessage.error(response.data.msg || t('error.operationFailed'));
+              ElMessage.error(response.data.msg);
               return Promise.reject(response.data);
             }
             return response.data;
@@ -55,8 +54,7 @@ export default function request(options) {
                     const errMsg = codeMap[status] || '';
                     ElMessage({ type: 'error', message: errMsg, showClose: true });
                     if (status === 401) {
-                        userStore.clearToken();
-                        router.push('/login');
+                        clearToken();
                     }
                 }
                 return Promise.reject(err);
@@ -69,9 +67,6 @@ export default function request(options) {
                 if (res || res.code === 200) {
                     resolve(res);
                 } else {
-                    if (res.code === -2) {
-                        router.push('/login');
-                    }
                     ElMessage({ type: 'error', message: res.msg || '操作失败', showClose: true });
                     reject(res);
                 }
