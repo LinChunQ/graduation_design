@@ -7,3 +7,11 @@ export async function login(data){
         data: data
     })
 }
+
+export async function register(data){
+    return request({
+        url:'/auth/register',
+        method:'post',
+        data:data
+    })
+}

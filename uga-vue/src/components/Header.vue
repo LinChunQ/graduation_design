@@ -6,6 +6,7 @@ import useAuthStore from '../stores/useStoreAuth'
 const router = useRouter()
 const authStore = useAuthStore()
 const {logout,isLogin}=authStore
+const isLoggedIn=ref(isLogin)
 const handleLogout = () => {
   ElMessageBox.confirm('确定要注销当前账号吗？', '注销确认', {
     confirmButtonText: '确定',
@@ -13,10 +14,16 @@ const handleLogout = () => {
     type: 'warning'
   }).then(() => {
     logout()
+    isLoggedIn.value=false;
     router.push('/login')
-  }).catch(() => {})
+  })
 }
-
+onMounted(()=>{
+  if(!isLogin) isLoggedIn.value=false;
+})
+watch(isLogin,(newVal)=>{
+  isLoggedIn.value=newVal
+})
 </script>
 
 <template>
@@ -59,12 +66,12 @@ const handleLogout = () => {
 
       <!-- 右侧用户区 -->
       <div class="user-nav">
-      <div class="nav-item" v-if="isLogin">
+      <div class="nav-item" v-if="isLoggedIn">
         <el-icon><User /></el-icon>
         <router-link to="/user-info">{{'个人信息' }}</router-link>
       </div>
       <div class="nav-item">
-        <span v-if="isLogin" @click="handleLogout" class="logout-btn">
+        <span v-if="isLoggedIn" @click="handleLogout" class="logout-btn">
           点击注销
         </span>
         <router-link v-else to="/login">请登录</router-link>

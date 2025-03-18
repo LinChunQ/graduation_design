@@ -4,7 +4,7 @@ import useAuthStore from '../../stores/useStoreAuth';
 const axiosConfig ={
     baseURL: 'http://localhost:5000',
     // 请求头设置
-    headers: {"Content-type": "application/json"},
+    headers: {'Content-Type': 'application/json; charset=utf-8'},
     timeout: 5000,
 }
 export default function request(options) {
@@ -15,7 +15,7 @@ export default function request(options) {
         const instance = axios.create(axiosConfig);
         // 增加请求拦截处理
         instance.interceptors.request.use(config => {
-            if (!token.value&&isLogin.value){
+            if (token!=''&&isLogin.value){
                 ElMessage.error("登陆状态出错!");
               return Promise.reject(new Error('not found token !'));
             }
@@ -28,10 +28,11 @@ export default function request(options) {
 
         // 增加响应拦截处理
         instance.interceptors.response.use(response => {
-            const { code } = response.data;
+            const { code,msg } = response.data;
             if (code !== 200) {
-              ElMessage.error(response.data.msg);
-              return Promise.reject(response.data);
+                console.log(msg)
+              ElMessage.error(msg);
+             return ;
             }
             return response.data;
             },

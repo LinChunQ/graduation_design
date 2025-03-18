@@ -1,50 +1,42 @@
 import { defineStore } from "pinia"
-import { login} from '../apis/auth'
+import { login,register} from '../apis/auth'
 import { reactive, ref, computed } from 'vue'
 
 const useAuthStore = defineStore('useAuthStore', () => {
-const isLogin=ref(false)
-const token=ref('')
-
-function getToken(){
-    //token.value= localStorage.getItem('token');
-}
+    const token=computed(()=>{
+        return localStorage.getItem('token')
+    })
+    const isLogin=computed(()=>{
+        return token.value!==null
+    })
 
 async function handleLogin(data){
     const res= await login(data);
-    debugger
-    if(res.code==200){
-        token.value=res.data.token
-        localStorage.setItem('token',token.value)
-        isLogin.value=true
+    if(res.data){
+        isLogin.value=true;
+        localStorage.setItem('token',res.data.token)
     }
-
 }
-const clearToken = () => {
-    token.value = ''
+
+function clearToken() {
     localStorage.removeItem('token')
   }
-
-  const logout = () => {
-    clearToken()
-    router.push('/login')
-  }
-
-  // 初始化方法
-  const initAuth = () => {
-    const storedToken = localStorage.getItem('token')
-    if (storedToken) {
-      token.value = storedToken
+  function logout() {
+      clearToken()
     }
-  }
+async function handleRegister(data){
+        const res=await register(data)
+        debugger
+        return res
+}
 
-return{
+return {
     isLogin,
     token,
     clearToken,
     logout,
-    initAuth,
-    handleLogin
+    handleLogin,
+    handleRegister
 }
 
 })

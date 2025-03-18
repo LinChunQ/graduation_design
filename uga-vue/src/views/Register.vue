@@ -5,34 +5,34 @@
               <h2>创建账号</h2>
               <p>开启您的美好旅程</p>
           </div>
-          <form @submit.prevent="handleRegister" class="floating-form">
+          <form @submit.prevent="register" class="floating-form">
               <div class="input-group">
-                  <input type="text" id="username" v-model="username" required maxlength="20" />
+                  <input type="text" id="username" v-model="userInfo.username" required maxlength="20" />
                   <label for="username">用户名</label>
                   <span class="highlight"></span>
               </div>
               <div class="input-group">
-                  <input type="text" id="sex" v-model="sex" required maxlength="20" />
+                  <input type="text" id="sex" v-model="userInfo.sex" required maxlength="20" />
                   <label for="sex">性别</label>
                   <span class="highlight"></span>
               </div>
               <div class="input-group">
-                  <input type="tel" id="phone" v-model="phone" required maxlength="20" />
+                  <input type="tel" id="phone" v-model="userInfo.phone" required maxlength="20" />
                   <label for="phone">手机号</label>
                   <span class="highlight"></span>
               </div>
               <div class="input-group">
-                  <input type="email" id="email" v-model="email" required />
+                  <input type="email" id="email" v-model="userInfo.email" required />
                   <label for="email">邮箱</label>
                   <span class="highlight"></span>
               </div>
               <div class="input-group">
-                  <input type="text" id="profession" v-model="profession" required />
+                  <input type="text" id="profession" v-model="userInfo.profession" required />
                   <label for="profession">专业名称</label>
                   <span class="highlight"></span>
               </div>
               <div class="input-group">
-                  <input type="text" id="school" v-model="school" required />
+                  <input type="text" id="school" v-model="userInfo.school" required />
                   <label for="school">学校</label>
                   <span class="highlight"></span>
               </div>
@@ -43,12 +43,12 @@
                   <span class="highlight"></span>
               </div>
               <div class="input-group">
-                  <input type="password" id="password" v-model="password" required minlength="6" maxlength="20" />
+                  <input type="password" id="password" v-model="userInfo.password" required minlength="5" maxlength="20" />
                   <label for="password">密码</label>
                   <span class="highlight"></span>
               </div>
               <div class="input-group">
-                  <input type="password" id="confirmPassword" v-model="confirmPassword" required minlength="6" maxlength="20" />
+                  <input type="password" id="confirmPassword" v-model="confirmPassword" required minlength="5" maxlength="20" />
                   <label for="confirmPassword">确认密码</label>
                   <span class="highlight"></span>
               </div>
@@ -67,28 +67,32 @@
 
 <script setup>
 import { ref } from 'vue'
+import useAuthStore from "../stores/useStoreAuth.js";
+import {ElMessage} from "element-plus";
+const authStore=useAuthStore();
+const {handleRegister}=authStore
+const userInfo=reactive({
+  username:'',
+  sex:'',
+  phone:'',
+  email:'',
+  profession:'',
+  school:'',
+  password:'',
+})
 
-const username = ref('')
-const  sex= ref('')
-const phone = ref('')
-const email = ref('')
-const profession = ref('')
-const school = ref('')
 const verificationCode = ref('')
-const password = ref('')
 const confirmPassword = ref('')
 
-const handleRegister = () => {
-  console.log({
-      username: username.value,
-      email: email.value,
-      verificationCode: verificationCode.value,
-      password: password.value,
-      confirmPassword: confirmPassword.value
-  })
+function register (){
+  if(userInfo.password!==confirmPassword.value){
+    ElMessage.error("两次密码不相等!");
+  }
+  handleRegister(userInfo)
 }
 
 const sendVerificationCode = () => {
+  //预留功能
   console.log('Sending verification code to:', email.value)
 }
 </script>

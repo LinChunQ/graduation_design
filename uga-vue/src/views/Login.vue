@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import  useAuthStore  from '../stores/useStoreAuth'
 const router = useRouter()
 const authStore = useAuthStore()
-const {handleLogin}=authStore
+const {handleLogin,isLogin}=authStore
 // 表单数据
 const loginForm = reactive({
   username: '',
@@ -35,11 +35,7 @@ const login = async () => {
   }
   try {
       // // 实际的登录API调用
-      handleLogin({ username: loginForm.username, password: loginForm.password })
-      // // 模拟登录成功并设置cookie，设置过期时间为1小时
-      // const expires = new Date(Date.now() + 3600 * 1000).toUTCString()
-      // document.cookie = `authToken=yourAuthToken; path=/; expires=${expires}`
-      userStore.isLoggedIn = true
+      await handleLogin({ username: loginForm.username, password: loginForm.password })
       // 跳转到主页
       router.push('/')
   } catch (error) {
