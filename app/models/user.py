@@ -8,13 +8,13 @@ class User(db.Model):
 
     teacher_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False)  # 姓名
-    sex = db.Column(db.String(2), unique=True, nullable=True)  # 性别
-    age = db.Column(db.Integer, unique=True, nullable=True)  # 年龄
-    email = db.Column(db.String(128), unique=True, nullable=False)  # 邮件
-    phone = db.Column(db.String(32), unique=True, nullable=True)  # 手机号
-    address = db.Column(db.String(128), unique=True, nullable=True)  # 地址
-    school = db.Column(db.String(128), unique=True, nullable=True)  # 学校
-    profession = db.Column(db.String(128), unique=True, nullable=True)  # 专业
+    sex = db.Column(db.String(2), nullable=True)  # 性别
+    age = db.Column(db.Integer, nullable=True)  # 年龄
+    email = db.Column(db.String(128),  nullable=False)  # 邮件
+    phone = db.Column(db.String(32),  nullable=True)  # 手机号
+    address = db.Column(db.String(128),  nullable=True)  # 地址
+    school = db.Column(db.String(128),  nullable=True)  # 学校
+    profession = db.Column(db.String(128),  nullable=True)  # 专业
     password_hash = db.Column(db.String(512), nullable=False)  # 加密密码
 
     # 设置密码（加密）

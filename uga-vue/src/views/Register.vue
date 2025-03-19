@@ -68,8 +68,10 @@
 <script setup>
 import { ref } from 'vue'
 import useAuthStore from "../stores/useStoreAuth.js";
+import {useRouter} from 'vue-router'
 import {ElMessage} from "element-plus";
 const authStore=useAuthStore();
+const router=useRouter()
 const {handleRegister}=authStore
 const userInfo=reactive({
   username:'',
@@ -84,11 +86,13 @@ const userInfo=reactive({
 const verificationCode = ref('')
 const confirmPassword = ref('')
 
-function register (){
+async function register (){
   if(userInfo.password!==confirmPassword.value){
     ElMessage.error("两次密码不相等!");
   }
-  handleRegister(userInfo)
+  await  handleRegister(userInfo)
+  ElMessage.success("注册成功!");
+  router.push('/login')
 }
 
 const sendVerificationCode = () => {

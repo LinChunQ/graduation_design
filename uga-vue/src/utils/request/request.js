@@ -1,80 +1,80 @@
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import useAuthStore from '../../stores/useStoreAuth';
-const axiosConfig ={
-    baseURL: 'http://localhost:5000',
-    // 请求头设置
-    headers: {'Content-Type': 'application/json; charset=utf-8'},
-    timeout: 5000,
-}
-export default function request(options) {
-    const authStore = useAuthStore(); // 调用 useAuthStore 函数获取 store 实例
-    const { isLogin, token, clearToken } = authStore;
-    return new Promise((resolve, reject) => {
-        // 创建请求实例
-        const instance = axios.create(axiosConfig);
-        // 增加请求拦截处理
-        instance.interceptors.request.use(config => {
-            if (token!=''&&isLogin.value){
-                ElMessage.error("登陆状态出错!");
-              return Promise.reject(new Error('not found token !'));
-            }
-            if(isLogin.value){
-                config.headers.Token = token.value;
-            }
-            return config;
-          });
-          
 
-        // 增加响应拦截处理
-        instance.interceptors.response.use(response => {
-            const { code,msg } = response.data;
-            if (code !== 200) {
-                console.log(msg)
-              ElMessage.error(msg);
-             return ;
-            }
-            return response.data;
+// 全局 Axios 配置
+const axiosConfig = {
+    baseURL: 'http://localhost:5000',  // API 基础地址
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }, // 默认 JSON
+    timeout: 5000, // 超时时间
+};
+
+export default function request(options) {
+    const authStore = useAuthStore();
+    const { isLogin, token, clearToken } = authStore;
+
+    return new Promise((resolve, reject) => {
+        // 创建 Axios 实例
+        const instance = axios.create(axiosConfig);
+
+        // 请求拦截器
+        instance.interceptors.request.use(
+            (config) => {
+                if (!isLogin.value || !token.value) {
+                    console.warn('用户未登录或 token 为空');
+                } else {
+                    config.headers.Token = token.value;
+                }
+                return config;
             },
-            (err) => {
+            (error) => {
+                return Promise.reject(error);
+            }
+        );
+
+        // 响应拦截器
+        instance.interceptors.response.use(
+            (response) => {
+                const { code, msg, data } = response.data;
+                if (code !== 200) {
+                    ElMessage.error(msg || '操作失败');
+                    return Promise.reject(new Error(msg || '操作失败')); // 让 `catch()` 处理错误
+                }
+                return data; // 直接返回 data，避免调用者访问 `res.data.data`
+            },
+            (error) => {
+                if (!error.response) {
+                    ElMessage.error('网络连接失败，请检查网络！');
+                    return Promise.reject(new Error('网络连接失败'));
+                }
+
+                const status = error.response.status;
                 const codeMap = {
                     400: '请求错误',
                     401: '未授权，请登录',
                     403: '拒绝访问',
-                    404: '请求地址出错',
+                    404: '请求地址不存在',
                     408: '请求超时',
                     500: '服务器内部错误',
-                    501: '服务未实现',
                     502: '网关错误',
                     503: '服务不可用',
                     504: '网关超时',
-                    505: 'HTTP版本不受支持'
                 };
-                if (err && err.response) {
-                    const status = err.response.status;
-                    const errMsg = codeMap[status] || '';
-                    ElMessage({ type: 'error', message: errMsg, showClose: true });
-                    if (status === 401) {
-                        clearToken();
-                    }
+
+                const errMsg = codeMap[status] || '请求失败';
+                ElMessage.error(errMsg);
+
+                if (status === 401) {
+                    clearToken(); // 401 需要清除 Token 并重新登录
                 }
-                return Promise.reject(err);
+
+                return Promise.reject(error);
             }
         );
 
-        // 处理正常返回的数据
+        // 发送请求
         instance(options)
-            .then((res) => {
-                if (res || res.code === 200) {
-                    resolve(res);
-                } else {
-                    ElMessage({ type: 'error', message: res.msg || '操作失败', showClose: true });
-                    reject(res);
-                }
-            })
-            .catch((error) => {
-                reject(error);
-            });
+            .then(resolve) // 直接返回成功的数据
+            .catch(reject); // 让调用者处理错误
     });
 }
-

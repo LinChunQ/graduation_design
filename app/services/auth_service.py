@@ -9,7 +9,7 @@ class AuthService:
     @staticmethod
     def register(username, sex, age, email, phone, address, school, profession, password):
         if User.query.filter_by(username=username).first():
-            return {"code": 400, "msg": "Username already exists"}, 200
+            return {"code": 400, "msg": "该用户名已存在!"}, 200
 
         new_user = User(username=username, email=email, sex=sex, age=age, phone=phone, address=address, school=school,
                         profession=profession)
@@ -20,9 +20,9 @@ class AuthService:
             db.session.commit()
         except Exception as e:
             db.session.rollback()
-            return {"code": 500, "msg": f"Registration failed: {str(e)}"}, 200
+            return {"code": 500, "msg": f"注册失败: {str(e)}"}, 200
 
-        return {"code": 200, "msg": "User registered successfully"}, 200
+        return {"code": 200, "msg": "用户注册成功！"}, 200
 
     @staticmethod
     def login(username, password):

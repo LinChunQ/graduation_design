@@ -6,15 +6,13 @@ const useAuthStore = defineStore('useAuthStore', () => {
     const token=computed(()=>{
         return localStorage.getItem('token')
     })
-    const isLogin=computed(()=>{
-        return token.value!==null
-    })
+    const isLogin=ref(false)
 
 async function handleLogin(data){
     const res= await login(data);
-    if(res.data){
+    if(res){
+        localStorage.setItem('token',res.token)
         isLogin.value=true;
-        localStorage.setItem('token',res.data.token)
     }
 }
 
@@ -26,7 +24,6 @@ function clearToken() {
     }
 async function handleRegister(data){
         const res=await register(data)
-        debugger
         return res
 }
 
