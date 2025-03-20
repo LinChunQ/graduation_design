@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { login,register} from '../apis/auth'
+import { login,register,getUserInfoData} from '../apis/auth'
 import { reactive, ref, computed } from 'vue'
 
 const useAuthStore = defineStore('useAuthStore', () => {
@@ -7,6 +7,7 @@ const useAuthStore = defineStore('useAuthStore', () => {
         return localStorage.getItem('token')
     })
     const isLogin=ref(false)
+    const userInfo=reactive({})
 
 async function handleLogin(data){
     const res= await login(data);
@@ -24,17 +25,26 @@ function clearToken() {
     }
 async function handleRegister(data){
         const res=await register(data)
-        return res
+        
+}
+
+async function getUserInfo(){
+    const res=await getUserInfoData()
+    userInfo.value=res.userInfo
+    localStorage.setItem('userInfo',JSON.stringify(res.userInfo))
+    
 }
 
 return {
     isLogin,
     token,
+    userInfo,
     clearToken,
     logout,
     handleLogin,
-    handleRegister
-}
+    handleRegister,
+    getUserInfo
+};
 
 })
 

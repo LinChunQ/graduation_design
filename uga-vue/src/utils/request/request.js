@@ -7,6 +7,8 @@ const axiosConfig = {
     baseURL: 'http://localhost:5000',  // API 基础地址
     headers: { 'Content-Type': 'application/json; charset=utf-8' }, // 默认 JSON
     timeout: 5000, // 超时时间
+    withCredentials: true,
+    Token:''
 };
 
 export default function request(options) {
@@ -18,14 +20,9 @@ export default function request(options) {
         const instance = axios.create(axiosConfig);
 
         // 请求拦截器
-        instance.interceptors.request.use(
-            (config) => {
-                if (!isLogin.value || !token.value) {
-                    console.warn('用户未登录或 token 为空');
-                } else {
-                    config.headers.Token = token.value;
-                }
-                return config;
+        instance.interceptors.request.use((config) => { 
+            if(token) config.headers.Token = token;
+            return config;
             },
             (error) => {
                 return Promise.reject(error);
@@ -43,6 +40,7 @@ export default function request(options) {
                 return data; // 直接返回 data，避免调用者访问 `res.data.data`
             },
             (error) => {
+                debugger
                 if (!error.response) {
                     ElMessage.error('网络连接失败，请检查网络！');
                     return Promise.reject(new Error('网络连接失败'));

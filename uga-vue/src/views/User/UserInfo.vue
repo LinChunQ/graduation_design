@@ -1,21 +1,12 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
 import userAvatar from '@/assets/imgs/avatar.jpeg'
-
-
+import  useAuthStore  from '../../stores/useStoreAuth'
+const authStore = useAuthStore()
+const {userInfo}=authStore
 const formSize = ref('default') 
-const ruleFormRef = ref()
-const ruleForm = reactive({
-  name: '李华',
-  school: '湖州学院',
-  sex: '男',
-  age:'21',
-  email: '497603213@qq.com',
-  phone: '15037626907',
-  address: '浙江省湖州市',
-  profession: '计算机科学与技术',
-  desc: '哈哈哈哈哈哈哈哈哈哈哈哈',
-})
+const ruleFormRef = reactive(userInfo)
+const ruleForm = reactive(userInfo)
 
 const rules = reactive({
   name: [
@@ -62,6 +53,15 @@ const resetForm = (formEl) => {
   formEl.resetFields()
 }
 
+onMounted(() => {
+  debugger
+  console.log(ruleForm)
+})
+
+watch(userInfo,(newVal)=>{
+  debugger
+  Object.assign(ruleForm,newVal)
+})
 </script>
 
 <template>
@@ -83,7 +83,7 @@ const resetForm = (formEl) => {
           <el-input v-model="ruleForm.school" />
         </el-form-item>
         <el-form-item label="个人简介:">
-          <el-input v-model="ruleForm.desc" type="textarea" size="large" :rows="10"/>
+          <el-input v-model="ruleForm.desc" type="textarea" size="large" :rows="8"/>
         </el-form-item>
         <el-form-item>
         </el-form-item>
@@ -129,7 +129,7 @@ const resetForm = (formEl) => {
           <el-input v-model="ruleForm.address" />
         </el-form-item>
         <el-form-item label="个人简介:">
-          <el-input v-model="ruleForm.desc" type="textarea" size="large" :rows="5"/>
+          <el-input v-model="ruleForm.desc" type="textarea" size="large" :rows="4"/>
         </el-form-item>
         <el-form-item class="bnt">
           <el-button type="primary" @click="submitForm(ruleFormRef)">
@@ -153,7 +153,7 @@ const resetForm = (formEl) => {
   flex-direction: column; /* 修改为垂直排列 */
   align-items: center; /* 居中对齐 */
   width: 20%;
-  height: 70%;
+  height: 75%;
   border-radius: 10px;
   margin-top:50px;
   margin-left: 250px;
@@ -171,7 +171,7 @@ const resetForm = (formEl) => {
   margin-top:50px;
   margin-left: 50px;
   width: 50%;
-  height: 70%;
+  height: 75%;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #ffffff;

@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import useAuthStore from '../stores/useStoreAuth'
 const router = useRouter()
 const authStore = useAuthStore()
-const {logout,token,isLogin}=authStore
+const {logout,token,isLogin,getUserInfo,userInfo}=authStore
 const isLoggedIn=ref(isLogin)
 const handleLogout = () => {
   ElMessageBox.confirm('确定要注销当前账号吗？', '注销确认', {
@@ -19,12 +19,18 @@ const handleLogout = () => {
   })
 }
 onMounted(()=>{
-  if(token.value!==null){
-    isLoggedIn.value=true;
-  }else{
-    isLoggedIn.value=false
+  if(token){
+    isLoggedIn.value = true;
+    getUserInfo()
+  
   }
 })
+
+watch(isLogin,(newVal)=>{
+  debugger;
+  if(newVal) isLoggedIn.value=true;
+})
+
 </script>
 
 <template>

@@ -15,3 +15,10 @@ export async function register(data){
         data:data
     })
 }
+
+export async function getUserInfoData(){
+    return request({
+        url:'/auth/getUserInfo',
+        method:'get'
+    })
+}
