@@ -37,6 +37,6 @@ const useUserStore = defineStore('useUserStore', () => {
     getUserInfo,
     editUserInfo,
   }
-})
+},{persist:true})
 
 export default useUserStore

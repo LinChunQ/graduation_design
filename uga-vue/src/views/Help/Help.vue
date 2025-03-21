@@ -8,13 +8,28 @@
     </div>
     <div class="content">
         <div class="box">
-            <img class="box-img" src="@/assets/imgs/introducefunction.png" alt="功能介绍"/>
+            <dv-border-box8 :dur="6">
+                <img class="box-img" src="@/assets/imgs/introFunc.png" alt="功能介绍"/>
+                <div class="box-name">智能批改</div>
+            </dv-border-box8>
         </div>
         <div class="box">
+            <dv-border-box8 :dur="6">
+                <img class="box-img" src="@/assets/imgs/hisFunc.png" alt="功能介绍"/>
+                <div class="box-name">历史使用</div>
+            </dv-border-box8>
         </div>
         <div class="box">
+            <dv-border-box8 :dur="6">
+                <img class="box-img" src="@/assets/imgs/statisFunc.png" alt="功能介绍"/>
+                <div class="box-name">统计分析</div>
+            </dv-border-box8> 
         </div>
         <div class="box">
+            <dv-border-box8 :dur="6">
+                <img class="box-img" src="@/assets/imgs/reFunc.png" alt="功能介绍"/>
+                <div class="box-name">相关文章</div>
+            </dv-border-box8>
         </div>
     </div>
     
@@ -36,16 +51,19 @@
     width:100vw;
     padding:20px;
     height: 10vh;
+    margin-top: 30px;
     //border:1px solid rgb(255, 255, 255);
     .title{
         margin-top:80px;
-        font-size: 26px;
+        font-size: 48px;
+        font-weight: bold;
         color: rgb(255, 255, 255);
         gap:20px;
         text-align: center;
     }
 }
 .content{
+    margin-top:30px;
     display:flex;
     width:100vw;
     height: 70vh;
@@ -54,10 +72,13 @@
     gap:50px;
 }
 .box{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
     margin-top:80px;
     height:200px;
     width:200px;
-    background-color: rgb(255, 255, 255);
+    background-color: #5f89b9;
     box-shadow: 0 0 10px rgba(148, 147, 147, 0.5);
     border-radius: 10px;
     padding: 20px;
@@ -67,8 +88,17 @@
         transform: scale(0.95); // 点击时缩小
     }
     .box-img{
-        width:100%;
-        height:100%;
+        margin-top:10px;
+        margin-left:20px;
+        width:80%;
+        height:80%;
+        //图片颜色#2a367d
+    }
+    .box-name{
+        font-size: 20px;
+        letter-spacing: 3px;
+        color: #fff;
+        text-align: center;
     }
 }
 </style>

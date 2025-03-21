@@ -7,7 +7,7 @@ const useAuthStore = defineStore('useAuthStore', () => {
         return localStorage.getItem('token')
     })
     const isLogin=ref(false)
-    const userInfo=reactive({})
+    const userInfo=ref({})
 
 async function handleLogin(data){
     const res= await login(data);
@@ -46,6 +46,7 @@ return {
     getUserInfo
 };
 
-})
+
+},{persist:true})
 
 export default useAuthStore

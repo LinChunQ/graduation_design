@@ -1,11 +1,12 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
+import {storeToRefs} from 'pinia'
 import userAvatar from '@/assets/imgs/avatar.jpeg'
 import  useAuthStore  from '../../stores/useStoreAuth'
 const authStore = useAuthStore()
 const {userInfo}=authStore
-const formSize = ref('default') 
-const ruleFormRef = reactive(userInfo)
+
+const ruleFormRef = reactive({})
 const ruleForm = reactive(userInfo)
 
 const rules = reactive({
@@ -33,7 +34,7 @@ const rules = reactive({
     { min: 11, max: 11, message: '手机号长度必须为11位!', trigger: 'blur' },
   ],
   desc: [
-    { required: true, message: 'Please input activity form', trigger: 'blur' },
+    { required: true, message: '请输入描述信息', trigger: 'blur' },
   ],
 })
 
@@ -54,12 +55,12 @@ const resetForm = (formEl) => {
 }
 
 onMounted(() => {
-  debugger
+ 
+  console.log(userInfo)
   console.log(ruleForm)
 })
 
 watch(userInfo,(newVal)=>{
-  debugger
   Object.assign(ruleForm,newVal)
 })
 </script>
@@ -69,9 +70,9 @@ watch(userInfo,(newVal)=>{
     <!-- 侧边栏 -->
     <div class="userInfo">
       <el-image class="avatar" :src="userAvatar" />
-      <el-form :model="ruleForm" label-width="auto" style="max-width: 350px; margin-top:50px; margin-right: 35px">
+      <el-form :model="userInfo" label-width="auto" style="margin-top:50px; margin-right: 35px">
         <el-form-item label="姓名:">
-          <el-input v-model="ruleForm.name" />
+          <el-input v-model="ruleForm.username" />
         </el-form-item>
         <el-form-item label="性别">
           <el-radio-group v-model="ruleForm.sex">
@@ -98,11 +99,11 @@ watch(userInfo,(newVal)=>{
           :rules="rules"
           label-width="auto"
           class="demo-ruleForm"
-          :size="formSize"
+          size="default"
           status-icon
       >
         <el-form-item label="姓名" prop="name">
-          <el-input v-model="ruleForm.name" />
+          <el-input v-model="ruleForm.username" />
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-radio-group v-model="ruleForm.sex">
