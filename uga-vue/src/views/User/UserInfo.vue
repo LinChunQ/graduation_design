@@ -2,10 +2,9 @@
 import { ref, onMounted, reactive } from 'vue';
 import {storeToRefs} from 'pinia'
 import userAvatar from '@/assets/imgs/avatar.jpeg'
-import  useAuthStore  from '../../stores/useStoreAuth'
-const authStore = useAuthStore()
-const {userInfo}=authStore
-
+import  useUserStore  from '../../stores/useStoreUser'
+const userStore = useUserStore()
+const {userInfo}=userStore
 const ruleFormRef = reactive({})
 const ruleForm = reactive(userInfo)
 
@@ -53,12 +52,6 @@ const resetForm = (formEl) => {
   if (!formEl) return
   formEl.resetFields()
 }
-
-onMounted(() => {
- 
-  console.log(userInfo)
-  console.log(ruleForm)
-})
 
 watch(userInfo,(newVal)=>{
   Object.assign(ruleForm,newVal)

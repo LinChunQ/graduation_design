@@ -1,5 +1,8 @@
 <script setup>
 import {ref} from 'vue'
+import useUserStore from '@/stores/useStoreUser'
+const userStore=useUserStore()
+const {smartGrading}=userStore
 const tableData = [
   {sno: '2021283101',name: 'Tom1',p1:8,p2:10,p3:10,p4:20,p5:20,p6:20,grade: 88,},
   {sno: '2021283102',name: 'Tom2',p1:9,p2:10,p3:10,p4:20,p5:20,p6:20,grade: 89,},
@@ -7,21 +10,15 @@ const tableData = [
   {sno: '2021283104',name: 'Tom4',p1:11,p2:10,p3:10,p4:20,p5:20,p6:20,grade:91,},
 ];
 
-const imageData = ref([
-    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'1'},
-    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'2'},
-    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'3'},
-    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'4'},
-    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'5'},
-    {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',name:'6'},
-]);
+const imageData = ref([]);
 
-const imageUrl = ref('');
 function uploadFile(item) {
+    const formData = new FormData();
+    formData.append('image', item.raw);
     debugger;
+    smartGrading(formData)
     const imageUrl = URL.createObjectURL(item.raw); // 图片上传浏览器回显地址
     imageData.value.push({ url: imageUrl, name: item.name });
-    console.log("imageUrl:", imageUrl);
 }
 
 function handleCancel() {
@@ -61,7 +58,7 @@ function handleCancel() {
             <!-- 按钮组 -->
             <div class="btn-group">
                 <el-button type="primary" @click="handleSubmit">提交</el-button>
-                <el-button type="danger" plain style="margin-left: 50px" @click="handleCancel">取消</el-button>
+                <el-button type="danger" plain style="margin-left: 50px" @click="handleCancel">清理图片区域</el-button>
             </div>
             
        </div>
@@ -122,6 +119,7 @@ function handleCancel() {
 }
 .img-group {
     width: 87%;
+    min-height:200px;
     height: auto;
     padding: 10px;
     margin-left: 25px;

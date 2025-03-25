@@ -21,7 +21,7 @@ export default function request(options) {
 
         // 请求拦截器
         instance.interceptors.request.use((config) => { 
-            if(token) config.headers.Token = token;
+            if(token) config.headers.Authorization = token;
             return config;
             },
             (error) => {
@@ -43,7 +43,7 @@ export default function request(options) {
                 debugger
                 if (!error.response) {
                     ElMessage.error('网络连接失败，请检查网络！');
-                    return Promise.reject(new Error('网络连接失败'));
+                    return Promise.reject(new Error('服务器内部错误!'));
                 }
 
                 const status = error.response.status;

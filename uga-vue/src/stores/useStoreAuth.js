@@ -1,13 +1,16 @@
 import { defineStore } from "pinia"
-import { login,register,getUserInfoData} from '../apis/auth'
+import { login,register} from '../apis/auth'
 import { reactive, ref, computed } from 'vue'
+import useUserStore from '../stores/useStoreUser'
+
 
 const useAuthStore = defineStore('useAuthStore', () => {
     const token=computed(()=>{
         return localStorage.getItem('token')
     })
     const isLogin=ref(false)
-    const userInfo=ref({})
+    const userStore=useUserStore()
+    const {userInfo} =userStore
 
 async function handleLogin(data){
     const res= await login(data);
@@ -20,20 +23,17 @@ async function handleLogin(data){
 function clearToken() {
     localStorage.removeItem('token')
   }
-  function logout() {
+function logout() {
       clearToken()
-    }
+      userInfo.value={};
+      localStorage.removeItem('userInfo')
+}
 async function handleRegister(data){
         const res=await register(data)
         
 }
 
-async function getUserInfo(){
-    const res=await getUserInfoData()
-    userInfo.value=res.userInfo
-    localStorage.setItem('userInfo',JSON.stringify(res.userInfo))
-    
-}
+
 
 return {
     isLogin,
@@ -43,10 +43,9 @@ return {
     logout,
     handleLogin,
     handleRegister,
-    getUserInfo
 };
 
 
-},{persist:true})
+})
 
 export default useAuthStore

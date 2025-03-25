@@ -3,9 +3,12 @@ import { ElMessageBox } from 'element-plus'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import useAuthStore from '../stores/useStoreAuth'
+import useUserStore from '../stores/useStoreUser'
 const router = useRouter()
 const authStore = useAuthStore()
-const {logout,token,isLogin,getUserInfo,userInfo}=authStore
+const userStore=useUserStore()
+const {logout,token,isLogin,}=authStore
+const {userInfo,getUserInfo} =userStore
 const isLoggedIn=ref(isLogin)
 const handleLogout = () => {
   ElMessageBox.confirm('确定要注销当前账号吗？', '注销确认', {
@@ -27,7 +30,6 @@ onMounted(()=>{
 })
 
 watch(isLogin,(newVal)=>{
-  debugger;
   if(newVal) isLoggedIn.value=true;
 })
 
@@ -157,7 +159,7 @@ watch(isLogin,(newVal)=>{
     text-decoration: none;
     font-size: 16px;
     &:hover {
-      text-decoration: underline;
+      color:aquamarine;
     }
   }
 
