@@ -15,21 +15,21 @@
       <!-- 展示图片 -->
       <div class="about-img">
         <div class="img-box">
-          <img class="img" src="@/assets/imgs/avatar.jpeg" alt="关于我们">
-          <div>图1</div>
+          <img class="img" src="@/assets/imgs/font.png" alt="关于我们">
+          <div class="label">前端技术</div>
         </div>
         <div class="img-box">
-          <img class="img" src="@/assets/imgs/avatar.jpeg" alt="关于我们">
-          <div>图2</div>
+          <img class="img" src="@/assets/imgs/backEnd.png" alt="关于我们">
+          <div class="label">后端技术</div>
         </div>
         <div class="img-box">
-          <img class="img" src="@/assets/imgs/avatar.jpeg" alt="关于我们">
-          <div>图3</div>
+          <img class="img" src="@/assets/imgs/ai.png" alt="关于我们">
+          <div class="label">人工智能</div>
         </div>
       </div>
     </div>
     <div class="join-us">
-      <div >加入我们</div>
+      <div class="label">加入我们</div>
       <dv-decoration3 style="width:250px;height:30px;"/>
     </div>
   </div>
@@ -77,12 +77,13 @@
       width: 200px;
       font-size: 20px;
       color: #fff;
-      img{
-        height: 80%;
-        width: 80%;
+      .img{
+        height: 85%;
+        width: 85%;
         border-radius: 50%;
         margin-bottom: 10px;
       }
+     
     }
   }
   .join-us{
@@ -93,6 +94,11 @@
     font-size: 18px;
     color: #fff;
     letter-spacing: 3px;
+  }
+
+  .label{
+        font-size:larger;
+        font-weight:bolder;
   }
 }
 </style>

@@ -5,7 +5,7 @@ from app.utils.MyTool import model_to_dict
 import base64
 import requests
 import sys
-from flask import Flask,request
+from flask import Flask, request
 
 if sys.version_info.major == 2:
     from urllib import quote
@@ -18,7 +18,7 @@ templateSign = "5f26f20073e43c27f7b5ffa526dbc194"
 
 class SmartService:
     @staticmethod
-    def grading():
+    def grading(user_id):
         try:
             # 接收前端上传的文件对象
             uploaded_file = request.files.get('image')
@@ -34,12 +34,12 @@ class SmartService:
             }
             # 请求模板的bodys
             recognise_bodys = "access_token=" + access_token + "&templateSign=" + templateSign + \
-                                  "&image=" + quote(image_b64.encode("utf8"))
+                              "&image=" + quote(image_b64.encode("utf8"))
             # 请求模板识别
             response = requests.post(recognise_api_url, data=recognise_bodys, headers=headers)
             # JSON解析方式
             try:
-                response_data = json.loads(response.text)  #正确解析文本为JSON
+                response_data = json.loads(response.text)  # 正确解析文本为JSON
             except json.JSONDecodeError as e:
                 return {"code": 500, "msg": f"响应解析失败：{str(e)}", "data": None}, 500
 
@@ -62,21 +62,35 @@ class SmartService:
                 if "word_name" in item  # 确保包含word_name字段
             }
 
-            new_test = TestPaper(college=word_mapping["学院"], stu_class=word_mapping["班级"],stu_name=word_mapping["姓名"],
-                                 stu_no=word_mapping["学号"],p1=word_mapping['一'],p2=word_mapping['二'],p3=word_mapping['三'],
-                                 p4=word_mapping['四'],p5=word_mapping['五'],p6=word_mapping['六'],total=word_mapping['成绩'],)
-            new_test.calcgrading()
-
+            new_test = TestPaper(
+                college=word_mapping["学院"], 
+                teacher_id=user_id, 
+                stu_class=word_mapping["班级"],
+                stu_name=word_mapping["姓名"],
+                stu_no=word_mapping["学号"],
+                p1=int(word_mapping.get('一', '0')) if word_mapping.get('一', '0').isdigit() else 0,
+                p2=int(word_mapping.get('二', '0')) if word_mapping.get('二', '0').isdigit() else 0,
+                p3=int(word_mapping.get('三', '0')) if word_mapping.get('三', '0').isdigit() else 0,
+                p4=int(word_mapping.get('四', '0')) if word_mapping.get('四', '0').isdigit() else 0,
+                p5=int(word_mapping.get('五', '0')) if word_mapping.get('五', '0').isdigit() else 0,
+                p6=int(word_mapping.get('六', '0')) if word_mapping.get('六', '0').isdigit() else 0,
+                total=0  # 初始化为0，calctotal方法会计算总分
+            )
+            new_test.calctotal()
             try:
                 db.session.add(new_test)
                 db.session.commit()
             except Exception as e:
                 db.session.rollback()
+                return {"code": 500, "msg": f"数据库插入失败：{str(e)}", "data": None}, 500
+
+            # 重新查询以确保包含test_id
+            new_test = TestPaper.query.filter_by(stu_no=new_test.stu_no).first()
 
             return {
                 "code": 200,
                 "msg": "识别成功",
-                "data": word_mapping
+                "data": model_to_dict(new_test)
             }, 200
 
         except Exception as e:

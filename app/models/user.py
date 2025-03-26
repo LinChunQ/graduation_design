@@ -16,6 +16,7 @@ class User(db.Model):
     school = db.Column(db.String(128),  nullable=True)  # 学校
     profession = db.Column(db.String(128),  nullable=True)  # 专业
     password_hash = db.Column(db.String(512), nullable=False)  # 加密密码
+    test_papers = db.relationship('TestPaper', backref='user')
 
     # 设置密码（加密）
     def set_password(self, password):

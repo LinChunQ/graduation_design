@@ -7,31 +7,29 @@ import useUserStore from '../stores/useStoreUser'
 const router = useRouter()
 const authStore = useAuthStore()
 const userStore=useUserStore()
-const {logout,token,isLogin,}=authStore
-const {userInfo,getUserInfo} =userStore
-const isLoggedIn=ref(isLogin)
+const isLoggedIn=ref(false)
 const handleLogout = () => {
   ElMessageBox.confirm('确定要注销当前账号吗？', '注销确认', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    logout()
+    authStore.logout()
     isLoggedIn.value=false;
     router.push('/login')
   })
 }
 onMounted(()=>{
-  if(token){
+  if(authStore.token){
     isLoggedIn.value = true;
-    getUserInfo()
+    userStore.getUserInfo()
   
   }
 })
 
-watch(isLogin,(newVal)=>{
-  if(newVal) isLoggedIn.value=true;
-})
+watch(()=>authStore.isLogin,(newVal)=>{
+  isLoggedIn.value=newVal;
+},{deep:true})
 
 </script>
 

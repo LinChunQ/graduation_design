@@ -1,9 +1,12 @@
+from sqlalchemy.orm import foreign
+
 from app.extensions import db
 
 class TestPaper(db.Model):
     __tablename__ = 'test_paper'  # 数据库表名
 
     test_id = db.Column(db.Integer, primary_key=True)
+    teacher_id = db.Column(db.Integer,db.ForeignKey('users.teacher_id') ,nullable=False) #教师id
     college = db.Column(db.String(256), nullable=False)  # 学院
     stu_class = db.Column(db.String(256), nullable=True)  # 班级
     stu_name = db.Column(db.String(64), nullable=True)  # 姓名
@@ -16,6 +19,6 @@ class TestPaper(db.Model):
     p6 = db.Column(db.Integer, nullable=True)  # 题目六
     total = db.Column(db.Integer, nullable=True)  #总分
 
-    # 设置密码（加密）
-    def calcgrading(self):
-        self.total=self.p1+self.p2+self.p3+self.p4+self.p5+self.p6
+    def calctotal(self):
+        # 确保将字段转换为整数后再相加
+        self.total = (self.p1 or 0) + (self.p2 or 0) + (self.p3 or 0) + (self.p4 or 0) + (self.p5 or 0) + (self.p6 or 0)

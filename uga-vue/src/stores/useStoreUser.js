@@ -15,6 +15,9 @@ const useUserStore = defineStore('useUserStore', () => {
     school: '',
     profession: ''
   })
+
+  //单个试卷分数
+  const singleGrade=ref({})
   async function getUserInfo(){
     const res=await getUserInfoData()
     Object.assign(userInfo,res.userInfo)
@@ -32,12 +35,13 @@ const useUserStore = defineStore('useUserStore', () => {
 
   async function smartGrading(data){
     const res= await requestGrading(data)
-    debugger
+    singleGrade.value=res;
   } 
 
 
   return {
     userInfo,
+    singleGrade,
     getUserInfo,
     editUserInfo,
     smartGrading
