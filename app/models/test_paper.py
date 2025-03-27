@@ -1,5 +1,3 @@
-from sqlalchemy.orm import foreign
-
 from app.extensions import db
 
 class TestPaper(db.Model):
@@ -7,6 +5,7 @@ class TestPaper(db.Model):
 
     test_id = db.Column(db.Integer, primary_key=True)
     teacher_id = db.Column(db.Integer,db.ForeignKey('users.teacher_id') ,nullable=False) #教师id
+    course_id = db.Column(db.Integer, db.ForeignKey('course.course_id'), nullable=False)  # 课程id
     college = db.Column(db.String(256), nullable=False)  # 学院
     stu_class = db.Column(db.String(256), nullable=True)  # 班级
     stu_name = db.Column(db.String(64), nullable=True)  # 姓名

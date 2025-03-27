@@ -68,6 +68,7 @@
       align-items: center;
       gap:50px;
       height: 60%;
+      
     }
     .img-box{
       display: flex;
@@ -82,6 +83,7 @@
         width: 85%;
         border-radius: 50%;
         margin-bottom: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
       }
      
     }

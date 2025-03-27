@@ -4,14 +4,14 @@ import {storeToRefs} from 'pinia'
 import userAvatar from '@/assets/imgs/avatar.jpeg'
 import  useUserStore  from '../../stores/useStoreUser'
 const userStore = useUserStore()
-const {userInfo}=userStore
-const ruleFormRef = reactive({})
-const ruleForm = reactive(userInfo)
+const ruleFormRef = ref()
+const ruleForm = reactive(userStore.userInfo)
 
+//个人信息表单
 const rules = reactive({
-  name: [
+  nickname: [
     { required: true, message: '请输入姓名!', trigger: 'blur' },
-    { min: 2, max: 15, message: '姓名长度2~15个!', trigger: 'blur' },
+    { min: 1, max: 15, message: '姓名长度2~15个!', trigger: 'blur' },
   ],
   sex: [
     {
@@ -37,52 +37,68 @@ const rules = reactive({
   ],
 })
 
-const submitForm = async (formEl) => { 
-  if (!formEl) return
+//课程信息
+const tableData= [
+  {
+    course_name: '计算机网络',
+    stu_count: 41,
+    submit_count:36
+  },
+  {
+    course_name: '数据结构',
+    stu_count: 41,
+    submit_count:36
+  },
+  {
+    course_name: '计算机组成原理',
+    stu_count: 41,
+    submit_count:36
+  },
+  {
+    course_name: '计算机操作系统',
+    stu_count: 41,
+    submit_count:36
+  },
+]
+
+
+
+//课程模块
+const tableRowClassName = ({row,rowIndex,}) => {
+  if (rowIndex === 1) {
+    return 'warning-row'
+  } else if (rowIndex === 3) {
+    return 'success-row'
+  }
+  return ''
+}
+
+
+const submitForm = async (formEl) => { //提交个人信息
+  if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      console.log('submit!')
+      userStore.updateUserInfo(ruleForm);
     } else {
       console.log('error submit!', fields)
     }
   })
 }
 
-const resetForm = (formEl) => { 
+const resetForm = (formEl) => { //重置个人信息表单
   if (!formEl) return
   formEl.resetFields()
 }
 
-watch(userInfo,(newVal)=>{
+watch(userStore.userInfo,(newVal)=>{
   Object.assign(ruleForm,newVal)
 })
+
 </script>
 
 <template>
   <div class="conatainer">
-    <!-- 侧边栏 -->
-    <div class="userInfo">
-      <el-image class="avatar" :src="userAvatar" />
-      <el-form :model="userInfo" label-width="auto" style="margin-top:50px; margin-right: 35px">
-        <el-form-item label="姓名:">
-          <el-input v-model="ruleForm.username" />
-        </el-form-item>
-        <el-form-item label="性别">
-          <el-radio-group v-model="ruleForm.sex">
-            <el-radio value="男">男</el-radio>
-            <el-radio value="女">女</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="学校:">
-          <el-input v-model="ruleForm.school" />
-        </el-form-item>
-        <el-form-item label="个人简介:">
-          <el-input v-model="ruleForm.desc" type="textarea" size="large" :rows="8"/>
-        </el-form-item>
-        <el-form-item>
-        </el-form-item>
-      </el-form>
-    </div>
+   
     <!-- 主体内容 -->
     <div class="content">
       <el-form
@@ -96,7 +112,7 @@ watch(userInfo,(newVal)=>{
           status-icon
       >
         <el-form-item label="姓名" prop="name">
-          <el-input v-model="ruleForm.username" />
+          <el-input v-model="ruleForm.nickname" />
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-radio-group v-model="ruleForm.sex">
@@ -133,6 +149,20 @@ watch(userInfo,(newVal)=>{
         </el-form-item>
       </el-form>
     </div>
+
+
+     <!-- 侧边栏展示课程 -->
+     <div class="user-course">
+      <el-table
+        :data="tableData"
+        style="width: 90%"
+        :row-class-name="tableRowClassName"
+      >
+        <el-table-column prop="course_name" label="课程名称" width="150%" />
+        <el-table-column prop="stu_count" label="学生人数" width="80%" />
+        <el-table-column prop="submit_count" label="批改数量"  width="80%"/>
+      </el-table>
+    </div>
   </div>
 </template>
 
@@ -142,33 +172,29 @@ watch(userInfo,(newVal)=>{
   width: 100vw;
   height:100vh;
 }
-.userInfo {
+.user-course {
   display: flex;
-  flex-direction: column; /* 修改为垂直排列 */
-  align-items: center; /* 居中对齐 */
-  width: 20%;
+  width: 25%;
   height: 75%;
   border-radius: 10px;
   margin-top:50px;
-  margin-left: 250px;
+  margin-left: 5%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #ffffff;
-  .avatar {
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-    margin-top: 50px;
-  }
+  padding:20px;
 }
 
 .content {
+  display:flex;
+  flex-direction:column;
   margin-top:50px;
-  margin-left: 50px;
+  margin-left: 5%;
   width: 50%;
   height: 75%;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #ffffff;
+  padding:20px;
 }
 .demo-ruleForm{
   margin-top: 50px;
@@ -177,5 +203,12 @@ watch(userInfo,(newVal)=>{
 .bnt{
     margin-top:20px;
     margin-left:20px;
+}
+
+.el-table .warning-row {
+  --el-table-tr-bg-color: var(--el-color-warning-light-9);
+}
+.el-table .success-row {
+  --el-table-tr-bg-color: var(--el-color-success-light-9);
 }
 </style>

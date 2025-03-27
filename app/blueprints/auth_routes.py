@@ -36,4 +36,11 @@ def login():
 def getUserInfo():
     user_id = get_jwt_identity()
     result, status_code = AuthService.getUserInfo(user_id)
-    return result, status_code
+    return jsonify(result), status_code
+@auth_bp.route('/updateUserInfo', methods=['POST'])
+@jwt_required()
+def updateUserInfo():
+    user_id = get_jwt_identity()
+    userInfo = request.json
+    result, status_code = AuthService.updateUserInfo(userInfo,user_id)
+    return jsonify(result), status_code

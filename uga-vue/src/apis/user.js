@@ -7,6 +7,13 @@ export  function getUserInfoData(){
     })
 }
 
+export function editUserInfo(data){
+  return request({
+    url:'/auth/updateUserInfo',
+    method:'post',
+    data
+  })
+}
 export function requestGrading(data){
     return request({
       url: '/smart/grading',

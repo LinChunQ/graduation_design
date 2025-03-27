@@ -5,4 +5,4 @@ class Config:
     JWT_SECRET_KEY = 'uga12345678'
     JWT_HEADER_NAME = 'Authorization'
     JWT_HEADER_TYPE = ''
-
+    JSON_AS_ASCII= False  # 确保 JSON 响应中非 ASCII 字符不被转义

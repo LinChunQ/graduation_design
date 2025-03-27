@@ -1,7 +1,8 @@
 import { defineStore } from "pinia"
 import { reactive, ref, computed } from 'vue'
 import request from '@/utils/request/request.js'
-import {getUserInfoData,requestGrading} from '@/apis/user.js'
+import {getUserInfoData,requestGrading,editUserInfo} from '@/apis/user.js'
+import { ElMessage } from 'element-plus'
 
 const useUserStore = defineStore('useUserStore', () => {
   //用户基本信息
@@ -24,15 +25,10 @@ const useUserStore = defineStore('useUserStore', () => {
     localStorage.setItem('userInfo',JSON.stringify(res.userInfo))
     
   }
-  const editUserInfo = async (newInfo) => {
-    try {
-      await request.put('/auth/updateUserInfo', newInfo)
-      Object.assign(userInfo, newInfo)
-    } catch (error) {
-      console.error("Update user info failed:", error)
-    }
-  }
 
+  async function updateUserInfo(data){
+     await editUserInfo(data)
+  }
   async function smartGrading(data){
     const res= await requestGrading(data)
     singleGrade.value=res;
@@ -44,7 +40,8 @@ const useUserStore = defineStore('useUserStore', () => {
     singleGrade,
     getUserInfo,
     editUserInfo,
-    smartGrading
+    smartGrading,
+    updateUserInfo
   }
 },{persist:true})
 

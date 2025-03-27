@@ -37,10 +37,16 @@ export default function request(options) {
                     ElMessage.error(msg || '操作失败');
                     return Promise.reject(new Error(msg || '操作失败')); // 让 `catch()` 处理错误
                 }
+                //成功!
+                if(msg){
+                    ElMessage({
+                        message:msg,
+                        type: 'success',
+                      })
+                }
                 return data; // 直接返回 data，避免调用者访问 `res.data.data`
             },
             (error) => {
-                debugger
                 if (!error.response) {
                     ElMessage.error('网络连接失败，请检查网络！');
                     return Promise.reject(new Error('服务器内部错误!'));

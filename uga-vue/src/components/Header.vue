@@ -21,14 +21,14 @@ const handleLogout = () => {
 }
 onMounted(()=>{
   if(authStore.token){
-    isLoggedIn.value = true;
     userStore.getUserInfo()
-  
+    isLoggedIn.value = true;
   }
 })
 
 watch(()=>authStore.isLogin,(newVal)=>{
   isLoggedIn.value=newVal;
+  userStore.getUserInfo()
 },{deep:true})
 
 </script>

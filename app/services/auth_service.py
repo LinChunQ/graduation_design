@@ -1,4 +1,5 @@
 from app.models.user import User
+from app.common.request.response import ResponseHandler
 from app.extensions import db
 from flask_jwt_extended import create_access_token
 import json
@@ -7,7 +8,7 @@ from app.utils.MyTool import model_to_dict
 
 class AuthService:
     @staticmethod
-    def register(username, sex, age, email, phone, address, school, profession, password):
+    def register(username, sex, age, email, phone, address, school, profession, password): #注册用户
         if User.query.filter_by(username=username).first():
             return {"code": 400, "msg": "该用户名已存在!"}, 200
 
@@ -25,7 +26,7 @@ class AuthService:
         return {"code": 200, "msg": "用户注册成功！"}, 200
 
     @staticmethod
-    def login(username, password):
+    def login(username, password):#登陆
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             token = create_access_token(identity=str(user.teacher_id))
@@ -33,7 +34,7 @@ class AuthService:
         return {"code": 400, "msg": "用户名或密码错误!"}, 200
 
     @staticmethod
-    def getUserInfo(user_id):
+    def getUserInfo(user_id): #获取用户信息
         try:
             users = User.query.filter_by(teacher_id=user_id).first()
             userinfo = model_to_dict(users)
@@ -44,6 +45,22 @@ class AuthService:
             if userinfo:
                 return {"code": 200, "data": {"userInfo": userinfo}, "msg": ''}, 200
             return {"code": 404, "msg": "获取个人信息出错"}, 200
+        except Exception as e:
+            print(e)
+            return {"code": 500, "msg": "服务器出错"}, 200
+    @staticmethod
+    def updateUserInfo(userInfo,user_id): #修改用户信息
+        try:
+            user = User.query.filter_by(teacher_id=user_id).first()
+            user.nickname = userInfo['nickname']
+            user.sex = userInfo['sex']
+            user.age = userInfo['age']
+            user.phone = userInfo['phone']
+            user.address = userInfo['address']
+            user.school = userInfo['school']
+            user.profession = userInfo['profession']
+            db.session.commit()
+            return {"code": 200, "msg": "修改成功"}, 200
         except Exception as e:
             print(e)
             return {"code": 500, "msg": "服务器出错"}, 200
