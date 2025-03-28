@@ -8,5 +8,5 @@ class Course(db.Model):
     course_name = db.Column(db.String(256), nullable=False)  #课程名称也是试卷名称
     stu_count= db.Column(db.Integer, nullable=False) #课程学生人数
     submit_count = db.Column(db.Integer, nullable=False) #已批改人数
-    teacher = db.relationship('User', back_populates='course')
-    test_papers = db.relationship('TestPaper', backref='course')
+    isDelete = db.Column(db.Boolean, default=False)#判断是否删除
+    teacher = db.relationship('User', backref='course')

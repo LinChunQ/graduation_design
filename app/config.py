@@ -1,3 +1,4 @@
+from datetime import timedelta
 class Config:
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:QQ1314520@localhost:3306/uga-flask'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -6,3 +7,4 @@ class Config:
     JWT_HEADER_NAME = 'Authorization'
     JWT_HEADER_TYPE = ''
     JSON_AS_ASCII= False  # 确保 JSON 响应中非 ASCII 字符不被转义
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=1)

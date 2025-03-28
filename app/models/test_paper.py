@@ -5,7 +5,7 @@ class TestPaper(db.Model):
 
     test_id = db.Column(db.Integer, primary_key=True)
     teacher_id = db.Column(db.Integer,db.ForeignKey('users.teacher_id') ,nullable=False) #教师id
-    course_id = db.Column(db.Integer, db.ForeignKey('course.course_id'), nullable=False)  # 课程id
+    course_id = db.Column(db.Integer, nullable=False)  # 课程id
     college = db.Column(db.String(256), nullable=False)  # 学院
     stu_class = db.Column(db.String(256), nullable=True)  # 班级
     stu_name = db.Column(db.String(64), nullable=True)  # 姓名
@@ -17,6 +17,7 @@ class TestPaper(db.Model):
     p5 = db.Column(db.Integer,  nullable=True)  #题目五
     p6 = db.Column(db.Integer, nullable=True)  # 题目六
     total = db.Column(db.Integer, nullable=True)  #总分
+    isDelete = db.Column(db.Boolean, default=False)
 
     def calctotal(self):
         # 确保将字段转换为整数后再相加

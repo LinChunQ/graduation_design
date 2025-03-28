@@ -2,6 +2,7 @@ from flask import Flask
 from app.extensions import db, jwt
 from app.blueprints.auth_routes import auth_bp
 from app.blueprints.smart_routes import smart_bp
+from app.blueprints.user_routes import user_bp
 from app.config import Config
 from flask_cors import CORS
 
@@ -21,6 +22,7 @@ def create_app():
     # 注册蓝图
     app.register_blueprint(auth_bp)
     app.register_blueprint(smart_bp)
+    app.register_blueprint(user_bp)
     # 🚀 打印所有路由
     with app.app_context():
         print(app.url_map)

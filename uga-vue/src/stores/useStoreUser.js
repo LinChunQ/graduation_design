@@ -1,7 +1,9 @@
 import { defineStore } from "pinia"
 import { reactive, ref, computed } from 'vue'
 import request from '@/utils/request/request.js'
-import {getUserInfoData,requestGrading,editUserInfo} from '@/apis/user.js'
+import {getUserInfoData,requestGrading,editUserInfo,
+        createCourse,getCourseById,deleteCourseById,
+        updateCourse,getTestByCourseId} from '@/apis/user.js'
 import { ElMessage } from 'element-plus'
 
 const useUserStore = defineStore('useUserStore', () => {
@@ -17,6 +19,17 @@ const useUserStore = defineStore('useUserStore', () => {
     profession: ''
   })
 
+  const courseInfo=reactive({
+    course_id:'',
+    course_name:'',
+    teacher_id:'',
+    stu_count:0,
+    submit_count:0,
+    idDelete:false
+  })
+
+  const courseList=reactive([])
+  const testPaperData=reactive({})
   //单个试卷分数
   const singleGrade=ref({})
   async function getUserInfo(){
@@ -33,15 +46,48 @@ const useUserStore = defineStore('useUserStore', () => {
     const res= await requestGrading(data)
     singleGrade.value=res;
   } 
+  
+  async function addCourse(data){
+     await createCourse(data)
+  }
 
+  async function getCourse(){
+    const res=await getCourseById();
+   Object.assign(courseList,res)
+  }
+
+  async function deleteCourse(data){
+    await deleteCourseById(data)
+  }
+
+  async function editCourse(data){
+    await updateCourse(data)
+  }
+
+  async function getTestPaper(data){
+    const res=await getTestByCourseId(data)
+    if(res.length!=0){
+      Object.assign(testPaperData,res)
+    }else{
+      testPaperData={};
+    }
+   
+  }
 
   return {
     userInfo,
     singleGrade,
-    getUserInfo,
     editUserInfo,
+    courseList,
+    testPaperData,
+    getUserInfo,
     smartGrading,
-    updateUserInfo
+    updateUserInfo,
+    addCourse,
+    getCourse,
+    deleteCourse,
+    editCourse,
+    getTestPaper
   }
 },{persist:true})
 

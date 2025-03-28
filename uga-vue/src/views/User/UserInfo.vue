@@ -6,8 +6,19 @@ import  useUserStore  from '../../stores/useStoreUser'
 const userStore = useUserStore()
 const ruleFormRef = ref()
 const ruleForm = reactive(userStore.userInfo)
+const dialogFormVisible = ref(false)
+const formLabelWidth = '140px'
+const keyFlag=ref('add') //用于添加和编辑复用
+const dialogTitle=ref('创建课程')
 
-//个人信息表单
+const form = reactive({
+  course_name:'',
+  stu_count:'',
+  submit_count:''
+})
+
+
+//个人信息表单规则
 const rules = reactive({
   nickname: [
     { required: true, message: '请输入姓名!', trigger: 'blur' },
@@ -38,39 +49,46 @@ const rules = reactive({
 })
 
 //课程信息
-const tableData= [
-  {
-    course_name: '计算机网络',
-    stu_count: 41,
-    submit_count:36
-  },
-  {
-    course_name: '数据结构',
-    stu_count: 41,
-    submit_count:36
-  },
-  {
-    course_name: '计算机组成原理',
-    stu_count: 41,
-    submit_count:36
-  },
-  {
-    course_name: '计算机操作系统',
-    stu_count: 41,
-    submit_count:36
-  },
-]
+const tableData=reactive([{}])
 
 
 
 //课程模块
-const tableRowClassName = ({row,rowIndex,}) => {
-  if (rowIndex === 1) {
-    return 'warning-row'
-  } else if (rowIndex === 3) {
-    return 'success-row'
-  }
-  return ''
+const search = ref('')
+const filterTableData = computed(() =>
+  tableData.filter(
+    (data) =>
+      !search.value ||
+      data.course_name.toLowerCase().includes(search.value.toLowerCase())
+  )
+)
+
+const handleEdit = (index, row) => { //编辑课程
+  keyFlag.value='edit';
+  dialogTitle.value='编辑课程'
+  dialogFormVisible.value =true;
+  Object.assign(form,row);
+ 
+}
+
+async function changeCourse(){
+      await userStore.editCourse(form)
+      await userStore.getCourse()
+      dialogFormVisible.value=false;
+       //将资源还给创建
+      keyFlag.value='add';
+      dialogTitle.value="创建课程"
+}
+async function handleDelete (index, row){ //删除课程
+  await userStore.deleteCourse(row)
+  tableData.splice(index,1)
+}
+
+async function addCourse(){
+  await userStore.addCourse(form)
+  await userStore.getCourse()
+  dialogFormVisible.value = false
+
 }
 
 
@@ -90,8 +108,16 @@ const resetForm = (formEl) => { //重置个人信息表单
   formEl.resetFields()
 }
 
+onMounted(()=>{
+  userStore.getCourse();
+})
+
 watch(userStore.userInfo,(newVal)=>{
   Object.assign(ruleForm,newVal)
+})
+
+watch(userStore.courseList,(newVal)=>{
+  Object.assign(tableData,newVal)
 })
 
 </script>
@@ -141,7 +167,7 @@ watch(userStore.userInfo,(newVal)=>{
         <el-form-item label="个人简介:">
           <el-input v-model="ruleForm.desc" type="textarea" size="large" :rows="4"/>
         </el-form-item>
-        <el-form-item class="bnt">
+        <el-form-item class="bnt" >
           <el-button type="primary" @click="submitForm(ruleFormRef)">
             提交更改
           </el-button>
@@ -153,17 +179,65 @@ watch(userStore.userInfo,(newVal)=>{
 
      <!-- 侧边栏展示课程 -->
      <div class="user-course">
-      <el-table
-        :data="tableData"
-        style="width: 90%"
-        :row-class-name="tableRowClassName"
+      <el-table 
+        :data="filterTableData" 
+        style="width: 100%"
+        :cell-style="{ textAlign: 'center' }"
+        :header-cell-style="{textAlign: 'center'}"
       >
-        <el-table-column prop="course_name" label="课程名称" width="150%" />
-        <el-table-column prop="stu_count" label="学生人数" width="80%" />
-        <el-table-column prop="submit_count" label="批改数量"  width="80%"/>
+        <el-table-column label="课程名称" prop="course_name" />
+        <el-table-column label="学生人数" prop="stu_count" />
+        <el-table-column label="批改人数" prop="submit_count" />
+        <el-table-column align="right">
+          <template #header>
+            <el-input v-model="search" size="small" placeholder="搜索我的课程" />
+          </template>
+          <template #default="scope">
+            <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
+              编辑
+            </el-button>
+            <el-button
+              size="small"
+              type="danger"
+              @click="handleDelete(scope.$index, scope.row)"
+            >
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
+
+      <el-button plain @click="dialogFormVisible = true" style="margin-top:30px;">
+        创建课程
+      </el-button>
     </div>
   </div>
+
+  <!-- 对话框 -->
+  <el-dialog v-model="dialogFormVisible" :title="dialogTitle" width="500">
+    <el-form :model="form">
+      <el-form-item label="课程名称" :label-width="formLabelWidth">
+        <el-input v-model="form.course_name" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="课程人数" :label-width="formLabelWidth">
+        <el-input v-model="form.stu_count" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="批改人数" :label-width="formLabelWidth">
+        <el-input v-model="form.submit_count" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="addCourse" v-show="keyFlag=='add'">
+          确认创建
+        </el-button>
+        <el-button type="primary" @click="changeCourse" v-show="keyFlag=='edit'">
+          确认修改
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped lang="scss">
@@ -174,11 +248,12 @@ watch(userStore.userInfo,(newVal)=>{
 }
 .user-course {
   display: flex;
-  width: 25%;
+  flex-direction:column;
+  width: 35%;
   height: 75%;
   border-radius: 10px;
   margin-top:50px;
-  margin-left: 5%;
+  margin-left: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #ffffff;
   padding:20px;
@@ -189,7 +264,7 @@ watch(userStore.userInfo,(newVal)=>{
   flex-direction:column;
   margin-top:50px;
   margin-left: 5%;
-  width: 50%;
+  width: 40%;
   height: 75%;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -205,10 +280,5 @@ watch(userStore.userInfo,(newVal)=>{
     margin-left:20px;
 }
 
-.el-table .warning-row {
-  --el-table-tr-bg-color: var(--el-color-warning-light-9);
-}
-.el-table .success-row {
-  --el-table-tr-bg-color: var(--el-color-success-light-9);
-}
+
 </style>

@@ -23,7 +23,11 @@ class SmartService:
             # 接收前端上传的文件对象
             uploaded_file = request.files.get('image')
             if not uploaded_file:
-                return {"code": 400, "msg": "未接收到图片文件"}, 400
+                return {"code": 400, "msg": "未接收到图片文件"}, 200
+                # 接收前端传递的course_id
+            course_id = request.form.get('course_id')
+            if not course_id:
+                return {"code": 400, "msg": "请选择要批改的课程"}, 200
 
             # 直接读取文件内容
             image_data = uploaded_file.read()
@@ -41,7 +45,7 @@ class SmartService:
             try:
                 response_data = json.loads(response.text)  # 正确解析文本为JSON
             except json.JSONDecodeError as e:
-                return {"code": 500, "msg": f"响应解析失败：{str(e)}", "data": None}, 500
+                return {"code": 500, "msg": f"响应解析失败：{str(e)}", "data": None}, 200
 
             # 根据实际响应结构调整（关键修改点）
             if response_data.get("error_code") != 0:
@@ -49,7 +53,7 @@ class SmartService:
                     "code": 500,
                     "msg": f"OCR识别失败：{response_data.get('error_msg', '未知错误')}",
                     "data": None
-                }, 500
+                }, 200
 
             # 正确获取数据层级（根据你提供的响应示例）
             actual_data = response_data.get("data", {})
@@ -64,7 +68,8 @@ class SmartService:
 
             new_test = TestPaper(
                 college=word_mapping["学院"], 
-                teacher_id=user_id, 
+                teacher_id=user_id,
+                course_id=int(course_id),
                 stu_class=word_mapping["班级"],
                 stu_name=word_mapping["姓名"],
                 stu_no=word_mapping["学号"],
@@ -82,7 +87,7 @@ class SmartService:
                 db.session.commit()
             except Exception as e:
                 db.session.rollback()
-                return {"code": 500, "msg": f"数据库插入失败：{str(e)}", "data": None}, 500
+                return {"code": 500, "msg": f"数据库插入失败：{str(e)}", "data": None}, 200
 
             # 重新查询以确保包含test_id
             new_test = TestPaper.query.filter_by(stu_no=new_test.stu_no).first()
@@ -94,4 +99,4 @@ class SmartService:
             }, 200
 
         except Exception as e:
-            return {"code": 500, "msg": f"系统异常：{str(e)}", "data": None}, 500
+            return {"code": 500, "msg": f"系统异常：{str(e)}", "data": None}, 200

@@ -3,15 +3,23 @@ import {ref,watch} from 'vue'
 import useUserStore from '@/stores/useStoreUser'
 const userStore=useUserStore()
 const tableData =ref([]);
-
 const imageData = ref([]);
+
+const optionVal = ref('')
+const options =reactive([])
 
 function uploadFile(item) {
     const formData = new FormData();
     formData.append('image', item.raw);
-    userStore.smartGrading(formData)
-    const imageUrl = URL.createObjectURL(item.raw); // 图片上传浏览器回显地址
-    imageData.value.push({ url: imageUrl, name: item.name });
+    if(optionVal.value){
+        formData.append('course_id',optionVal.value)
+        userStore.smartGrading(formData)
+        const imageUrl = URL.createObjectURL(item.raw); // 图片上传浏览器回显地址
+        imageData.value.push({ url: imageUrl, name: item.name });
+    }else{
+        ElMessage({message:"请选择课程!",type: 'error',})
+    }
+    
 }
 
 function handleCancel() {
@@ -21,17 +29,39 @@ function handleCancel() {
 function handleSubmit(){
 
 }
+onMounted(()=>{
+    userStore.getCourse()
+})
 
 watch(()=>userStore.singleGrade,(newVal)=>{
     tableData.value.push(newVal)
 })
 
+watch(userStore.courseList,()=>{
+    Object.assign(options,userStore.courseList)
+})
 </script>
 
 <template>
     <div class="container">
         <!-- 上传图片区域 -->
        <div class="uploadfile">
+            <!-- 选择课程 -->
+            <div class="optCourse">
+                <el-select
+                    v-model="optionVal"
+                    placeholder="请选择课程"
+                    size="large"
+                    style="width: 240px"
+                >
+                    <el-option
+                        v-for="item in options"
+                        :key="item.course_id"
+                        :label="item.course_name"
+                        :value="item.course_id"
+                    />
+                </el-select>
+            </div>
             <!-- 上传文件 -->
             <el-upload
                 class="upload_img"
@@ -102,12 +132,16 @@ watch(()=>userStore.singleGrade,(newVal)=>{
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   margin-top: 10px;
   border-radius: 4px;
+  padding:10px;
+  .optCourse{
+    margin-left:25px;
+  }
 }
 
 .upload_img{
     width: 90%;
     margin-left: 25px;
-    margin-top: 30px;
+    margin-top: 10px;
    // border: 1px solid #6b2a2a;
 }
 .result{
