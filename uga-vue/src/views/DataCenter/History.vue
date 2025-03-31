@@ -61,7 +61,6 @@ onMounted(()=>{
 })
 
 watch(userStore.testPaperData,(newVal)=>{
-    debugger
     if(newVal.data.length!=0){
       Object.assign(tableData,newVal.data)
       total.value=newVal.total_items

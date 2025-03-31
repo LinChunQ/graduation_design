@@ -1,4 +1,19 @@
 <script setup>
+import useUserStore from '@/stores/useStoreUser'
+const userStore=useUserStore()
+const optionVal = ref('')
+const options =reactive([])
+
+onMounted(()=>{
+    userStore.getCourse()
+})
+watch(optionVal,(newVal)=>{
+    userStore.getTestPaper({course_id:newVal});
+})
+
+watch(userStore.courseList,(newVal)=>{
+    Object.assign(options,newVal)
+})
 
 </script>
 
@@ -13,6 +28,22 @@
     </div>
     <div class="middle">
         <dv-border-box12>
+             <!-- 选择框 -->
+            <div class="optionCourse">
+                    <el-select
+                        v-model="optionVal"
+                        placeholder="请选择课程"
+                        size="large"
+                        style="width: 25%"
+                        >
+                        <el-option
+                            v-for="item in options"
+                            :key="item.course_id"
+                            :label="item.course_name"
+                            :value="item.course_id"
+                        />
+                    </el-select>
+            </div>
         </dv-border-box12>
     </div>
     <div class="right">
@@ -55,6 +86,21 @@
     height:80%;
     width:35%;
     margin-top:50px;
+    .optionCourse{
+        width:100%;
+        margin-top:2%;
+        margin-left:3%;
+        margin-bottom:10px;
+        background-color:transparent;
+       :deep(.el-select--large .el-select__wrapper) {
+            font-size: 14px;
+            gap: 6px;
+            line-height: 24px;
+            min-height: 40px;
+            padding: 8px 16px;
+            background-color: transparent;
+        }
+ }
 }
 .right{
     display:flex;
@@ -63,5 +109,6 @@
     width:25%;
     margin-top:50px;
 }
+
 
 </style>
