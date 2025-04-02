@@ -1,6 +1,5 @@
 import { defineStore } from "pinia"
 import { reactive, ref, computed } from 'vue'
-import request from '@/utils/request/request.js'
 import {getUserInfoData,requestGrading,editUserInfo,
         createCourse,getCourseById,deleteCourseById,
         updateCourse,getTestByCourseId} from '@/apis/user.js'
@@ -69,7 +68,7 @@ const useUserStore = defineStore('useUserStore', () => {
     if(res.length!=0){
       Object.assign(testPaperData,res)
     }else{
-      testPaperData={};
+      testPaperData.length=0;
     }
    
   }

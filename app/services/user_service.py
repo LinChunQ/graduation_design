@@ -1,3 +1,4 @@
+from sqlalchemy import nullsfirst
 from sqlalchemy.sql.dml import isdelete
 
 from app.extensions import db
@@ -60,11 +61,32 @@ class UserService:
         return {"code": 200, "msg": "更新课程成功!"}, 200
 
     @staticmethod
-    @staticmethod
     def getTestByCourseId(data, user_id):  # 根据用户id和课程id获取所有试卷信息
+        print(data)
         course_id = data.get('course_id')
-        page = int(data.get('currentPage', 1))  # 当前页码，默认为1
-        per_page = int(data.get('pageSize', 10))  # 每页显示的记录数，默认为10
+        currentPage = data.get('currentPage', 1)  # 当前页码，默认为1
+        pageSize = data.get('pageSize', 10)  # 每页显示的记录数，默认为10
+
+        if currentPage == 0 and pageSize == 0:
+            try:
+                test_papers = TestPaper.query.filter_by(course_id=course_id, isDelete=False).all()
+                return {
+                    "code": 200,
+                    "msg": "",
+                    "data": {
+                        "data": [model_to_dict(test_paper) for test_paper in test_papers],
+                        "current_page": 1,
+                        "per_page": len(test_papers),
+                        "total_pages": 1,
+                        "total_items": len(test_papers),
+                    }
+                }, 200
+            except Exception as e:
+                return {"code": 500, "msg": "获取试卷失败!"}, 200
+
+        page = int(currentPage) if currentPage != 0 else 1
+        per_page = int(pageSize) if pageSize != 0 else 10
+
         if course_id == 0:
             try:
                 pagination = TestPaper.query.filter_by(teacher_id=user_id).paginate(page=page, per_page=per_page,
@@ -73,8 +95,8 @@ class UserService:
                 return {
                     "code": 200,
                     "msg": "",
-                    "data":{
-                        "data":[model_to_dict(test_paper) for test_paper in test_papers],
+                    "data": {
+                        "data": [model_to_dict(test_paper) for test_paper in test_papers],
                         "current_page": pagination.page,
                         "per_page": pagination.per_page,
                         "total_pages": pagination.pages,
@@ -90,15 +112,15 @@ class UserService:
                                                                                                  error_out=False)
             test_papers = pagination.items
             return {
-                    "code": 200,
-                    "msg": "",
-                    "data":{
-                        "data":[model_to_dict(test_paper) for test_paper in test_papers],
-                        "current_page": pagination.page,
-                        "per_page": pagination.per_page,
-                        "total_pages": pagination.pages,
-                        "total_items": pagination.total,
-                    }
-                }, 200
+                "code": 200,
+                "msg": "",
+                "data": {
+                    "data": [model_to_dict(test_paper) for test_paper in test_papers],
+                    "current_page": pagination.page,
+                    "per_page": pagination.per_page,
+                    "total_pages": pagination.pages,
+                    "total_items": pagination.total,
+                }
+            }, 200
         except Exception as e:
             return {"code": 500, "msg": "获取试卷失败!"}, 200

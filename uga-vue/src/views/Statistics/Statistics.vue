@@ -1,5 +1,9 @@
 <script setup>
 import useUserStore from '@/stores/useStoreUser'
+import RankTable from "@/components/statistics/RankTable.vue"
+import RadarChart from "@/components/statistics/RadarChart.vue"
+import RateChart from "@/components/statistics/RateChart.vue"
+import BarChart from "@/components/statistics/BarChart.vue"
 const userStore=useUserStore()
 const optionVal = ref('')
 const options =reactive([])
@@ -21,9 +25,11 @@ watch(userStore.courseList,(newVal)=>{
 <div class="sta-container">
 <dv-border-box2>
     <div class="left">
-        <dv-border-box12>
+        <dv-border-box12> 
+            <RadarChart/>
         </dv-border-box12>
         <dv-border-box12>
+            <RateChart/>
         </dv-border-box12>
     </div>
     <div class="middle">
@@ -44,12 +50,18 @@ watch(userStore.courseList,(newVal)=>{
                         />
                     </el-select>
             </div>
+            
         </dv-border-box12>
     </div>
     <div class="right">
         <dv-border-box12>
+            <div class="table">
+                <RankTable
+                :course_id="optionVal.value"/>
+            </div>
         </dv-border-box12>
         <dv-border-box12>
+            
         </dv-border-box12>
     </div>
 </dv-border-box2>
@@ -88,8 +100,7 @@ watch(userStore.courseList,(newVal)=>{
     margin-top:50px;
     .optionCourse{
         width:100%;
-        margin-top:2%;
-        margin-left:3%;
+        margin-left:4%;
         margin-bottom:10px;
         background-color:transparent;
        :deep(.el-select--large .el-select__wrapper) {
@@ -100,15 +111,29 @@ watch(userStore.courseList,(newVal)=>{
             padding: 8px 16px;
             background-color: transparent;
         }
- }
+    }
+
+ :deep(.border-box-content){
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
 }
+
+}
+
 .right{
     display:flex;
     flex-direction:column;
     height:80%;
     width:25%;
     margin-top:50px;
+    .table{
+    height:80%;
+    width:100%;
+ }
 }
+
 
 
 </style>

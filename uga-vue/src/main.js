@@ -10,6 +10,8 @@ import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import 'normalize.css';  // 使用normalize.css 重置样式
 import DataVVue3 from '@kjgl77/datav-vue3'
+import * as echarts from 'echarts'; 
+
 const  app=createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
@@ -21,4 +23,5 @@ app.use(pinia);
 app.use(index);
 app.use(ElementPlus);
 app.use(DataVVue3);
+app.config.globalProperties.$echarts = echarts;
 app.mount('#app');
