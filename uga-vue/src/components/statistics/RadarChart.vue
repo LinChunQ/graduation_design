@@ -7,9 +7,11 @@ const userStore=useUserStore()
 
 function  initChart(){
     const chartDom = document.getElementById('main');
-    const myChart = echarts.init(chartDom);
-    let option=radarOption;
-    myChart.setOption(option);
+    if(chartDom){
+        const myChart = echarts.init(chartDom);
+        let option=radarOption;
+        myChart.setOption(option);
+    }
 }
 
 onMounted(()=>{
@@ -22,7 +24,7 @@ onMounted(()=>{
 <div class="radar-container">
     <div class="radar-header">
         <div class="dot"><div class="inner"></div></div>
-        <div class="radar-title">试题得分率</div>
+        <div class="radar-title">得分率</div>
     </div>
     <div class="radar-content">
         <div id='main'></div>

@@ -1,16 +1,9 @@
-from sqlalchemy import nullsfirst
-from sqlalchemy.sql.dml import isdelete
-
 from app.extensions import db
-import json
-
 from app.models.test_paper import TestPaper
 from app.utils.MyTool import model_to_dict
 from app.models.course import Course
 
-
 class UserService:
-
     @staticmethod
     def createCourse(data, user_id):
         course = Course(course_name=data['course_name'], teacher_id=user_id,

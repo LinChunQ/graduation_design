@@ -1,6 +1,6 @@
 <script setup>
 import useUserStore from '@/stores/useStoreUser'
-import {pieOption} from './echartsOption.js'
+import {barOption} from './echartsOption.js'
 import * as echarts from 'echarts'; // 引入 ECharts
 const userStore=useUserStore()
 
@@ -8,8 +8,7 @@ const userStore=useUserStore()
 function  initChart(){
     const chartDom = document.getElementById('bar');
     const myChart = echarts.init(chartDom);
-    let option=pieOption;
-    myChart.setOption(option);
+    myChart.setOption(barOption);
 }
 
 onMounted(()=>{
@@ -19,19 +18,19 @@ onMounted(()=>{
 </script>
 
 <template>
-<div class="radar-container">
-    <div class="radar-header">
+<div class="bar-container">
+    <div class="bar-header">
         <div class="dot"><div class="inner"></div></div>
-        <div class="radar-title">试题得分率</div>
+        <div class="bar-title">分数分析</div>
     </div>
-    <div class="radar-content">
+    <div class="bar-content">
         <div id='bar'></div>
     </div>
 </div>
 </template>
 
 <style scoped lang="scss">
-.radar-container{
+.bar-container{
     margin-top:3%;
     display:flex;
     flex-direction:column;
@@ -40,11 +39,11 @@ onMounted(()=>{
     overflow:hidden;
 }
 
-.radar-header{
+.bar-header{
     display:flex;
     margin-left:2%;
     padding:10px;
-    .radar-title{
+    .bar-title{
         margin-left:3px;
         color:#fff;
         font-size:18px;
@@ -52,7 +51,7 @@ onMounted(()=>{
     }
 }
 
-.radar-content{
+.bar-content{
     display:flex;
     justify-content:center;
     #bar{

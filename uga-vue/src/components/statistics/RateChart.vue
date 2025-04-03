@@ -7,9 +7,11 @@ const userStore=useUserStore()
 
 function  initChart(){
     const chartDom = document.getElementById('pie');
-    const myChart = echarts.init(chartDom);
-    let option=pieOption;
-    myChart.setOption(option);
+    if(chartDom){
+        const myChart = echarts.init(chartDom);
+        let option=pieOption;
+        myChart.setOption(option);
+    }
 }
 
 onMounted(()=>{
@@ -22,7 +24,7 @@ onMounted(()=>{
     <div class="pie-container">
         <div class="pie-header">
             <div class="dot"><div class="inner"></div></div>
-            <div class="pie-title">分数占比饼图</div>
+            <div class="pie-title">分数占比</div>
         </div>
         <div class="pie-content">
             <div id='pie'></div>

@@ -4,6 +4,7 @@ import RankTable from "@/components/statistics/RankTable.vue"
 import RadarChart from "@/components/statistics/RadarChart.vue"
 import RateChart from "@/components/statistics/RateChart.vue"
 import BarChart from "@/components/statistics/BarChart.vue"
+import MainChart from "@/components/statistics/MainChart.vue"
 const userStore=useUserStore()
 const optionVal = ref('')
 const options =reactive([])
@@ -50,7 +51,8 @@ watch(userStore.courseList,(newVal)=>{
                         />
                     </el-select>
             </div>
-            
+            <!-- 图形 -->
+             <MainChart/>
         </dv-border-box12>
     </div>
     <div class="right">
@@ -61,7 +63,7 @@ watch(userStore.courseList,(newVal)=>{
             </div>
         </dv-border-box12>
         <dv-border-box12>
-            
+            <BarChart/>
         </dv-border-box12>
     </div>
 </dv-border-box2>
@@ -101,7 +103,7 @@ watch(userStore.courseList,(newVal)=>{
     .optionCourse{
         width:100%;
         margin-left:4%;
-        margin-bottom:10px;
+        margin-top:2%;
         background-color:transparent;
        :deep(.el-select--large .el-select__wrapper) {
             font-size: 14px;

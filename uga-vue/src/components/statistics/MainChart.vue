@@ -1,14 +1,12 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import * as echarts from 'echarts';
-import {getMainOption} from './echartsOption.vue'
- 
+import {getMainOption} from './echartsOption.js'
+import {mockData} from './data.js'
 
-// 是否为样本数据
-const isSample = ref(true);
 
 // 计算属性
-const data = ref('')
+const data = ref(mockData)
 
 
 // 生成 Echarts 图
@@ -22,8 +20,10 @@ const initChartsData = (ref) => {
         chart.resize();
     });
 
-    // 清理事件监听器
-    onUnmounted(() => {
+
+
+// 清理事件监听器
+onUnmounted(() => {
         window.removeEventListener("resize", () => {
             chart.resize();
         });
@@ -34,37 +34,66 @@ const initChartsData = (ref) => {
 // 初始化数据
 onMounted(() => {
     initChartsData('chart');
-
 });
 </script>
 
 <template>
-    <div id="app">
-        <div style="height: 90px; width: 36%; float: left;">
-            正态分布曲线函数： `f(x) = (1 / (\sqrt {2\pi} \sigma)) e^(-(x-\mu)^2/(2\sigma^2))`
-            <span style="color:blue">
-                其中:
-                `\mu` ：数学期望
-                `\sigma` ：标准差
-            </span>
-        </div>
-        <div style="height: 90px; float: left; padding-left: 450px;">
-            <p>总长度：{{ data.length }}</p>
-            <p>总 和： {{ sum }}</p>
-            <p>平均值：{{ average }}</p>
-            <p>最大值：{{ max }}</p>
-            <p>最小值：{{ min }}</p>
-            <p>{{ isSample ? '样本' : '总体' }}方差：{{ variance }}</p>
-            <p>{{ isSample ? '样本' : '总体' }}标准差：{{ standardDeviation }}</p>
-            <p>一倍标准差范围：{{ standarDevRangeOfOne.low + " ~ " + standarDevRangeOfOne.up }}</p>
-            <p>二倍标准差范围：{{ standarDevRangeOfTwo.low + " ~ " + standarDevRangeOfTwo.up }}</p>
-            <p>三倍标准差范围：{{ standarDevRangeOfThree.low + " ~ " + standarDevRangeOfThree.up }}</p>
-        </div>
-       
-        <div ref="chart" id="chart" style="width: 866px; height: 762px;"></div>
+<div class="main-container">
+    <div class="main-header">
+        <div class="dot"><div class="inner"></div></div>
+        <div class="main-title">高斯分布</div>
     </div>
+    <div class="main-content">
+        <div ref="chart" id="chart"></div>
+    </div>
+</div>
 </template>
 
 <style scoped>
-/* 添加样式 */
+.main-container{
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    width:100%;
+    overflow:hidden;
+}
+.main-header{
+        display:flex;
+        margin-left:2%;
+        padding:10px;
+        .main-title{
+            margin-left:3px;
+            color:#fff;
+            font-size:18px;
+            font-weight:600;
+        }
+}
+
+.main-content{
+    height:100%;
+    width:98%;
+    margin-left:1%;
+    margin-top:5%;
+    #chart{
+       width:35vw;
+       height: 50vh;
+    }
+}
+
+.dot{
+    display:flex;
+    justify-content:center;
+    height:10px;
+    width:10px;
+    padding:3px;
+    border:2px solid #fff;
+    border-radius:50%;
+    .inner{
+        height:10px;
+        width:10px;
+        border-radius:50%;
+        background-color: #fff;
+        }
+}
+
 </style>
