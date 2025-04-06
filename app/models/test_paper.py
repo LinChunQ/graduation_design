@@ -1,5 +1,6 @@
 from app.extensions import db
 
+
 class TestPaper(db.Model):
     __tablename__ = 'test_paper'  # 数据库表名
 

@@ -43,6 +43,7 @@ class SmartService:
             response = requests.post(recognise_api_url, data=recognise_bodys, headers=headers)
             # JSON解析方式
             try:
+                print(response.text)
                 response_data = json.loads(response.text)  # 正确解析文本为JSON
             except json.JSONDecodeError as e:
                 return {"code": 500, "msg": f"响应解析失败：{str(e)}", "data": None}, 200
