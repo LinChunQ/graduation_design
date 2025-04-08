@@ -61,6 +61,14 @@ watch(()=>authStore.isLogin,(newVal)=>{
           <router-link to="/statistics">统计分析</router-link>
         </li>
         <li class="nav-item">
+          <el-icon><Message /></el-icon>
+          <router-link to="/feedback">反馈管理</router-link>
+        </li>
+        <li class="nav-item">
+          <el-icon><Notification /></el-icon>
+          <router-link to="/notice">公告管理</router-link>
+        </li>
+        <li class="nav-item">
           <el-icon><Service /></el-icon>
           <router-link to="/help">帮助</router-link>
         </li>

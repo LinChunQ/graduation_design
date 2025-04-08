@@ -14,6 +14,8 @@ const routes = [
     { path: '/about', component: ()=>import('@/views/About/About.vue') },
     { path: '/help', component: ()=>import('@/views/Help/Help.vue') },
     { path: '/register', component: ()=>import('@/views/Register.vue') },
+    { path: '/notice', component: ()=>import('@/views/Notice/Notice.vue') },
+    { path: '/feedback', component: ()=>import('@/views/FeedBack/FeedBack.vue') },
     {path: '/login', name: 'Login', component: () => import('@/views/Login.vue')},// 直接使用懒加载
     {path: '/:pathMatch(.*)*', redirect: '/404'},
 ];
