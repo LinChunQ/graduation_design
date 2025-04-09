@@ -176,7 +176,7 @@ watch(userStore.courseList,(newVal)=>{
     padding:10px;
     border-radius:10px;
     background-color:#fff;
-    overflow: hidden;
+    overflow: auto;
 }
 
 </style>

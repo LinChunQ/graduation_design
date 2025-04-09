@@ -5,8 +5,10 @@ import  useAuthStore  from '../stores/useStoreAuth'
 const router = useRouter()
 const authStore = useAuthStore()
 const {handleLogin,isLogin}=authStore
+const role = ref('user')
 // 表单数据
 const loginForm = reactive({
+  role:role.value,
   username: '',
   password: ''
 })
@@ -35,7 +37,7 @@ const login = async () => {
   }
   try {
       // // 实际的登录API调用
-      await handleLogin({ username: loginForm.username, password: loginForm.password })
+      await handleLogin({ username: loginForm.username, password: loginForm.password ,role:loginForm.role})
       // 跳转到主页
       router.push('/')
   } catch (error) {
@@ -81,8 +83,15 @@ onMounted(() => {
                   <i class="arrow-icon"></i>
               </button>
               <div class="form-footer">
+                <el-radio-group v-model="role">
+                  <el-radio :value="'admin'">管理员</el-radio>
+                  <el-radio :value="'user'">普通用户</el-radio>
+                </el-radio-group>
+                <div class="reg">
                   <span>还没有账号？</span>
                   <a href="/register">立即注册</a>
+                </div>
+                  
               </div>
           </form>
       </div>
@@ -198,6 +207,9 @@ onMounted(() => {
 }
 
 .form-footer {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   text-align: center;
   margin-top: 20px;
   color: #95a5a6;
