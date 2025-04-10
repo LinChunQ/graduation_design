@@ -1,9 +1,10 @@
 import request from '../utils/request/request'
 
-export  function getUserInfoData(){//获取个人信息
+export  function getUserInfoData(data){//获取个人信息
     return request({
         url:'/auth/getUserInfo',
-        method:'get'
+        method:'post',
+        data,
     })
 }
 

@@ -3,7 +3,9 @@ import { ref, onMounted, reactive } from 'vue';
 import {storeToRefs} from 'pinia'
 import userAvatar from '@/assets/imgs/avatar.jpeg'
 import  useUserStore  from '../../stores/useStoreUser'
+import useAuthStore from '../../stores/useStoreAuth'
 const userStore = useUserStore()
+const authStore=useAuthStore()
 const ruleFormRef = ref()
 const ruleForm = reactive(userStore.userInfo)
 const dialogFormVisible = ref(false)
@@ -96,7 +98,7 @@ const submitForm = async (formEl) => { //提交个人信息
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      userStore.updateUserInfo(ruleForm);
+      userStore.updateUserInfo({"userInfo":ruleForm,"role":authStore.role});
     } else {
       console.log('error submit!', fields)
     }

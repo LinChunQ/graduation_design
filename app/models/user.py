@@ -5,7 +5,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
     __tablename__ = 'users'  # 数据库表名
-
     teacher_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False)  # 用户名用来登陆
     nickname= db.Column(db.String(64), nullable=False) # 昵称

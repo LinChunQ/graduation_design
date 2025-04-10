@@ -10,6 +10,7 @@ const useAuthStore = defineStore('useAuthStore', () => {
     })
     const isLogin=ref(false)
     const userStore=useUserStore()
+    const role=ref('1')
     const {userInfo} =userStore
 
 async function handleLogin(data){
@@ -39,6 +40,7 @@ return {
     isLogin,
     token,
     userInfo,
+    role,
     clearToken,
     logout,
     handleLogin,

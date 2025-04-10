@@ -27,20 +27,24 @@ def login():
     data = request.json
     username = data.get('username')
     password = data.get('password')
-    result, status_code = AuthService.login(username, password)
+    role = data.get('role')
+    result, status_code = AuthService.login(username, password,role)
     return result, status_code
 
 # 受保护路由（需要 JWT 令牌）
-@auth_bp.route('/getUserInfo', methods=['GET'])
+@auth_bp.route('/getUserInfo', methods=['POST'])
 @jwt_required()  # JWT 认证保护
 def getUserInfo():
     user_id = get_jwt_identity()
-    result, status_code = AuthService.getUserInfo(user_id)
+    role = request.json.get('role')
+    result, status_code = AuthService.getUserInfo(user_id,role)
     return jsonify(result), status_code
 @auth_bp.route('/updateUserInfo', methods=['POST'])
 @jwt_required()
 def updateUserInfo():
     user_id = get_jwt_identity()
-    userInfo = request.json
-    result, status_code = AuthService.updateUserInfo(userInfo,user_id)
+    data=request.json
+    userInfo = data.get('userInfo')
+    role=data.get('role')
+    result, status_code = AuthService.updateUserInfo(userInfo,user_id,role)
     return jsonify(result), status_code

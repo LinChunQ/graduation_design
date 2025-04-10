@@ -3,7 +3,7 @@ import { reactive, ref, computed } from 'vue'
 import {getUserInfoData,requestGrading,editUserInfo,
         createCourse,getCourseById,deleteCourseById,
         updateCourse,getTestByCourseId} from '@/apis/user.js'
-import { ElMessage } from 'element-plus'
+
 
 const useUserStore = defineStore('useUserStore', () => {
   //用户基本信息
@@ -31,8 +31,8 @@ const useUserStore = defineStore('useUserStore', () => {
   const testPaperData=reactive({})
   //单个试卷分数
   const singleGrade=ref({})
-  async function getUserInfo(){
-    const res=await getUserInfoData()
+  async function getUserInfo(data){
+    const res=await getUserInfoData(data)
     Object.assign(userInfo,res.userInfo)
     localStorage.setItem('userInfo',JSON.stringify(res.userInfo))
     

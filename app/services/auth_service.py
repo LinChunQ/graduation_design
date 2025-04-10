@@ -1,4 +1,7 @@
+from sqlalchemy import nullsfirst
+
 from app.models.user import User
+from app.models.admin import Admin
 from app.common.request.response import ResponseHandler
 from app.extensions import db
 from flask_jwt_extended import create_access_token
@@ -26,20 +29,34 @@ class AuthService:
         return {"code": 200, "msg": "用户注册成功！"}, 200
 
     @staticmethod
-    def login(username, password):#登陆
-        user = User.query.filter_by(username=username).first()
-        if user and user.check_password(password):
+    def login(username, password,role):#登陆
+        if role=='0':
+            user = Admin.query.filter_by(username=username).first()
+        elif role=='1':
+            user = User.query.filter_by(username=username).first()
+
+        if not user:
+            return {"code": 400, "msg": "不存在该用户,请注册!"}, 200
+        elif not user.check_password(password):
+            return {"code": 400, "msg": "用户名或密码错误!"}, 200
+        else:
             token = create_access_token(identity=str(user.teacher_id))
             return {"code": 200, "data": {"token": token}, "msg": "登录成功"}, 200
-        return {"code": 400, "msg": "用户名或密码错误!"}, 200
+
 
     @staticmethod
-    def getUserInfo(user_id): #获取用户信息
+    def getUserInfo(user_id,role): #获取用户信息
         try:
-            users = User.query.filter_by(teacher_id=user_id).first()
+            if role=='0':
+                users= Admin.query.filter_by(admin_id=user_id).first()
+            elif role=='1':
+                users = User.query.filter_by(teacher_id=user_id).first()
             userinfo = model_to_dict(users)
             # 使用 pop 删除指定的键，pop 会返回删除的值，但我们这里不需要返回值
-            userinfo.pop('teacher_id', None)  # 如果键不存在，返回 None 不会抛出异常
+            if role=='0':
+                userinfo.pop('admin_id', None)  # 如果键不存在，返回 None 不会抛出异常
+            elif role=='1':
+                userinfo.pop('username', None)
             userinfo.pop('password_hash', None)
 
             if userinfo:
@@ -49,16 +66,20 @@ class AuthService:
             print(e)
             return {"code": 500, "msg": "服务器出错"}, 200
     @staticmethod
-    def updateUserInfo(userInfo,user_id): #修改用户信息
+    def updateUserInfo(userInfo,user_id,role): #修改用户信息
         try:
-            user = User.query.filter_by(teacher_id=user_id).first()
+            if role=='0':
+                user = Admin.query.filter_by(admin_id=user_id).first()
+            elif role=='1':
+                user = User.query.filter_by(teacher_id=user_id).first()
             user.nickname = userInfo['nickname']
             user.sex = userInfo['sex']
             user.age = userInfo['age']
             user.phone = userInfo['phone']
             user.address = userInfo['address']
             user.school = userInfo['school']
-            user.profession = userInfo['profession']
+            if role=='1':
+                user.profession = userInfo['profession']
             db.session.commit()
             return {"code": 200, "msg": "修改成功"}, 200
         except Exception as e:

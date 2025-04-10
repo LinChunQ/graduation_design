@@ -224,7 +224,7 @@ const form = reactive({
     border-left: 1px var(--el-border-color) var(--el-border-style);
     display: inline-block;
     height: 1em;
-    margin: 0 8px;
+    margin: 0 15px;
     position: relative;
     vertical-align: middle;
     width: 1px;
