@@ -2,6 +2,20 @@
 const classify=[{id:1,name:"活动通知"},{id:2,name:"功能通知"},
                 {id:3,name:"版本更新"},{id:4,name:"紧急通知"}];
 const value = ref('')
+const dialogFormVisible = ref(false)
+const formLabelWidth = '140px'
+
+const form = reactive({
+  name: '',
+  region: '',
+  date1: '',
+  date2: '',
+  delivery: false,
+  type: [],
+  resource: '',
+  desc: '',
+})
+
 const options = [
   {
     value: 'Option1',
@@ -102,7 +116,7 @@ const tableData=[{title:"版本已更新,赶快体验新功能!",name:"李华",s
                     />
                 </el-select>
             </div>
-            <el-button type="primary" plain>发布公告</el-button>
+            <el-button type="primary" plain @click="dialogFormVisible = true">发布公告</el-button>
         </div>
         <!-- 表格 -->
         <div class="data">
@@ -135,6 +149,39 @@ const tableData=[{title:"版本已更新,赶快体验新功能!",name:"李华",s
     </div>
 </dv-border-box-10>
 </div>
+
+
+<!-- 弹框 -->
+<el-dialog v-model="dialogFormVisible" title="发布公告" width="500">
+    <el-form :model="form">
+      <el-form-item label="公告标题" :label-width="formLabelWidth">
+        <el-input v-model="form.name" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="公告类型" :label-width="formLabelWidth">
+        <el-select v-model="form.region" placeholder="选择公告类型">
+          <el-option label="活动通知" value="1" />
+          <el-option label="功能通知" value="2" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="发布范围" :label-width="formLabelWidth">
+        <el-select v-model="form.region" placeholder="选择发布范围">
+          <el-option label="全部用户" value="1" />
+          <el-option label="测试用户" value="2" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="详细内容">
+            <el-input v-model="form.desc" type="textarea" :rows="6" />
+        </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">
+          发布
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 <style lang="scss" scoped>
 .n-container{

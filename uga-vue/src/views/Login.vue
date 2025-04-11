@@ -5,10 +5,10 @@ import  useAuthStore  from '../stores/useStoreAuth'
 const router = useRouter()
 const authStore = useAuthStore()
 const {handleLogin,isLogin}=authStore
-const role = ref('1')
+const Role = ref('1')
 // 表单数据
 const loginForm = reactive({
-  role:role.value,
+  role:Role.value,
   username: '',
   password: ''
 })
@@ -36,7 +36,8 @@ const login = async () => {
       return
   }
   try {
-      await handleLogin({ username: loginForm.username, password: loginForm.password ,role:role.value})
+      localStorage.setItem('role',Role.value);
+      await handleLogin({ username: loginForm.username, password: loginForm.password ,role:Role.value})
       // 跳转到主页
       router.push('/')
   } catch (error) {
@@ -56,9 +57,7 @@ onMounted(() => {
   validateInput()
 })
 
-watch(role,(newVal)=>{
-  authStore.role=newVal
-})
+
 
 </script>
 
@@ -86,9 +85,9 @@ watch(role,(newVal)=>{
                   <i class="arrow-icon"></i>
               </button>
               <div class="form-footer">
-                <el-radio-group v-model="role">
-                  <el-radio value="0">管理员</el-radio>
-                  <el-radio value="1">普通用户</el-radio>
+                <el-radio-group v-model="Role">
+                  <el-radio :value="'0'">管理员</el-radio>
+                  <el-radio :value="'1'">普通用户</el-radio>
                 </el-radio-group>
                 <div class="reg">
                   <span>还没有账号？</span>

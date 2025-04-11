@@ -40,7 +40,10 @@ class AuthService:
         elif not user.check_password(password):
             return {"code": 400, "msg": "用户名或密码错误!"}, 200
         else:
-            token = create_access_token(identity=str(user.teacher_id))
+            if role=='0':
+                token = create_access_token(identity=str(user.admin_id))
+            else:
+                token = create_access_token(identity=str(user.teacher_id))
             return {"code": 200, "data": {"token": token}, "msg": "登录成功"}, 200
 
 
@@ -52,13 +55,7 @@ class AuthService:
             elif role=='1':
                 users = User.query.filter_by(teacher_id=user_id).first()
             userinfo = model_to_dict(users)
-            # 使用 pop 删除指定的键，pop 会返回删除的值，但我们这里不需要返回值
-            if role=='0':
-                userinfo.pop('admin_id', None)  # 如果键不存在，返回 None 不会抛出异常
-            elif role=='1':
-                userinfo.pop('username', None)
             userinfo.pop('password_hash', None)
-
             if userinfo:
                 return {"code": 200, "data": {"userInfo": userinfo}, "msg": ''}, 200
             return {"code": 404, "msg": "获取个人信息出错"}, 200

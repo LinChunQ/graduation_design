@@ -1,10 +1,26 @@
 <script setup>
+const dialogFormVisible = ref(false)
+const formLabelWidth = '140px'
+const form = reactive({
+  name: '',
+  region: '',
+  date1: '',
+  date2: '',
+  delivery: false,
+  type: [],
+  resource: '',
+  desc: '',
+})
+
 </script>
 
 <template>
   <div class="container">
     <div class="header">
         <div class="title">使 用 指 南</div>
+        <div class="feedback" @click="dialogFormVisible = true">
+            <img src="../../assets/feedback.avif"/>
+        </div>
     </div>
     <div class="content">
         <div class="box">
@@ -34,6 +50,26 @@
     </div>
     
   </div>
+
+    <!-- 弹窗对话框 -->
+  <el-dialog v-model="dialogFormVisible" title="感谢您的反馈!" width="500">
+    <el-form :model="form">
+        <el-form-item>
+            亲爱的用户朋友， 感谢您使用高校教师助手！为了共创更好的平台，我们期待您宝贵的意见和建议：
+        </el-form-item>
+        <el-form-item label="">
+            <el-input v-model="form.desc" type="textarea" :rows="6" />
+        </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">
+          提交
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped lang="scss">
@@ -48,18 +84,34 @@
   background-repeat: no-repeat;  /* 防止背景重复 */
 }
 .header{
+    display: flex;
+    justify-content:flex-end;
+    align-items:center;
     width:100vw;
     padding:20px;
     height: 10vh;
     margin-top: 30px;
-    //border:1px solid rgb(255, 255, 255);
     .title{
         margin-top:80px;
         font-size: 48px;
+        margin-right:25%;
         font-weight: bold;
         color: rgb(255, 255, 255);
         gap:20px;
         text-align: center;
+    }
+    .feedback{
+        width:70px;
+        height:80px;
+        margin-top:8%;
+        margin-right:15%;
+        img{
+            width:70px;
+            height:80px;
+        }
+        &:active {
+        transform: scale(0.95); // 点击时缩小
+    }
     }
 }
 .content{

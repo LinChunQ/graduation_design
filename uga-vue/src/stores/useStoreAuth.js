@@ -10,7 +10,9 @@ const useAuthStore = defineStore('useAuthStore', () => {
     })
     const isLogin=ref(false)
     const userStore=useUserStore()
-    const role=ref('1')
+    const role=computed(()=>{
+        return localStorage.getItem('role')
+    })
     const {userInfo} =userStore
 
 async function handleLogin(data){
@@ -26,8 +28,10 @@ function clearToken() {
   }
 function logout() {
       clearToken()
+      isLogin.value=false;
       userInfo.value={};
       localStorage.removeItem('userInfo')
+      localStorage.removeItem('role')
 }
 async function handleRegister(data){
         const res=await register(data)

@@ -1,6 +1,11 @@
+<script setup>
+import Notice from '../../components/notice/Notice.vue'
+</script>
 <template>
   <div class="Container">
-    
+      <div class="notice">
+       <Notice/>
+      </div>
       <div class="title">
         <h1 class="t1">高校教师专属 AI 助手，一键精准统计分数</h1>
         <h2 class="t2">------告别繁琐分数统计，开启智能教学新时代</h2>
@@ -38,10 +43,6 @@
   </div>
 </template>
 
-<script setup>
-
-</script>
-
 <style scoped lang="scss">
 .Container{
   width: 100%;
@@ -51,6 +52,12 @@
   background-position: center;  /* 背景居中 */
   background-repeat: no-repeat;  /* 防止背景重复 */
 }
+.notice{
+  display:flex;
+  justify-content:center;
+  height:5%;
+  width:100%;
+}
 .title{
   display:flex;
   flex-direction:column;
@@ -59,10 +66,6 @@
   width:100%;
   //border:1px solid #fff;
   color:#fff;
-
-  .t1{
-    margin-top:5%;
-  }
   .t2{
     margin-left:35%;
   }

@@ -19,6 +19,10 @@ const form = reactive({
   submit_count:''
 })
 
+const role=reactive({
+  '0':'管理员',
+  '1':'普通用户'
+})
 
 //个人信息表单规则
 const rules = reactive({
@@ -139,6 +143,9 @@ watch(userStore.courseList,(newVal)=>{
           size="default"
           status-icon
       >
+      <el-form-item label="用户类型" prop="name">
+          <el-input v-model="role[authStore.role]"  disabled/>
+        </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input v-model="ruleForm.nickname" />
         </el-form-item>
@@ -154,7 +161,7 @@ watch(userStore.courseList,(newVal)=>{
         <el-form-item label="学校" prop="school">
           <el-input v-model="ruleForm.school" />
         </el-form-item>
-        <el-form-item label="专业" prop="profession">
+        <el-form-item label="专业" prop="profession" v-show="authStore.role==1">
           <el-input v-model="ruleForm.profession" />
         </el-form-item>
         <el-form-item label="手机" prop="phone">
@@ -166,8 +173,8 @@ watch(userStore.courseList,(newVal)=>{
         <el-form-item label="地址" prop="address">
           <el-input v-model="ruleForm.address" />
         </el-form-item>
-        <el-form-item label="个人简介:">
-          <el-input v-model="ruleForm.desc" type="textarea" size="large" :rows="4"/>
+        <el-form-item label="个人简介:" v-show="authStore.role==1">
+          <el-input v-model="ruleForm.desc" type="textarea" size="large" :rows="4" />
         </el-form-item>
         <el-form-item class="bnt" >
           <el-button type="primary" @click="submitForm(ruleFormRef)">
@@ -180,7 +187,7 @@ watch(userStore.courseList,(newVal)=>{
 
 
      <!-- 侧边栏展示课程 -->
-     <div class="user-course">
+     <div class="user-course" v-show="authStore.role==1">
       <el-table 
         :data="filterTableData" 
         style="width: 100%"

@@ -4,10 +4,12 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import useAuthStore from '../stores/useStoreAuth'
 import useUserStore from '../stores/useStoreUser'
+
 const router = useRouter()
 const authStore = useAuthStore()
 const userStore=useUserStore()
 const isLoggedIn=ref(false)
+const isAdmin=ref(false)
 const handleLogout = () => {
   ElMessageBox.confirm('确定要注销当前账号吗？', '注销确认', {
     confirmButtonText: '确定',
@@ -23,12 +25,22 @@ onMounted(()=>{
   if(authStore.token){
     userStore.getUserInfo({"role":authStore.role})
     isLoggedIn.value = true;
+    if(authStore.role=='0'){
+    isAdmin.value=true;
+  }else{
+    isAdmin.value=false;
+  }
   }
 })
 
 watch(()=>authStore.isLogin,(newVal)=>{
   isLoggedIn.value=newVal;
-  userStore.getUserInfo({"role":authStore.role})
+  if(authStore.role=='0'){
+    isAdmin.value=true;
+  }else{
+    isAdmin.value=false;
+  }
+ if(newVal) userStore.getUserInfo({"role":authStore.role})
 },{deep:true})
 
 </script>
@@ -60,11 +72,11 @@ watch(()=>authStore.isLogin,(newVal)=>{
           <el-icon><PieChart /></el-icon>
           <router-link to="/statistics">统计分析</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="isAdmin">
           <el-icon><Message /></el-icon>
           <router-link to="/feedback">反馈管理</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="isAdmin">
           <el-icon><Notification /></el-icon>
           <router-link to="/notice">公告管理</router-link>
         </li>
