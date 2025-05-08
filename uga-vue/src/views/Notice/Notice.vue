@@ -1,10 +1,11 @@
 <script setup>
-const classify=[{id:1,name:"活动通知"},{id:2,name:"功能通知"},
-                {id:3,name:"版本更新"},{id:4,name:"紧急通知"}];
-const value = ref('')
-const dialogFormVisible = ref(false)
-const formLabelWidth = '140px'
 
+const optVal1 = ref('')
+const optVal2 = ref('')
+const dialogFormVisible = ref(false)
+const typeFormVisible = ref(false)
+const formLabelWidth = '140px'
+const classfiy_type=ref("");
 const form = reactive({
   name: '',
   region: '',
@@ -16,29 +17,11 @@ const form = reactive({
   desc: '',
 })
 
-const options = [
-  {
-    value: 'Option1',
-    label: 'Option1',
-  },
-  {
-    value: 'Option2',
-    label: 'Option2',
-  },
-  {
-    value: 'Option3',
-    label: 'Option3',
-  },
-  {
-    value: 'Option4',
-    label: 'Option4',
-  },
-  {
-    value: 'Option5',
-    label: 'Option5',
-  },
-]
+const classify=ref([{id:1,name:"活动通知"},{id:2,name:"功能通知"},
+                {id:3,name:"版本更新"},{id:4,name:"紧急通知"}]);
 
+const options1 =classify.value
+const options2 =[{id:1,name:'全部用户'},{id:2,name:'测试用户'},{id:3,name:"内部用户"}]
 const tableData=[{title:"版本已更新,赶快体验新功能!",name:"李华",scale:'全部用户',type:'定时发布',stat:"已发布",time:'2025-3-31 12:11:33'},
 {title:"历史使用出现bug,暂停服务!",name:"管理员",scale:'内部用户',type:'定时发布',stat:"已发布",time:'2025-3-31 12:11:33'},
 {title:"智能审批功能已上线,赶快体验新功能!",name:"李华",scale:'全部用户',type:'定时发布',stat:"未发布",time:'2025-3-31 12:11:33'},
@@ -50,6 +33,16 @@ const tableData=[{title:"版本已更新,赶快体验新功能!",name:"李华",s
 {title:"统计分析出现bug,暂停服务!",name:"管理员",scale:'全部用户',type:'定时发布',stat:"未发布",time:'2025-3-31 12:11:33'},
 {title:"版本已更新,赶快体验新功能!",name:"李华",scale:'全部用户',type:'定时发布',stat:"已发布",time:'2025-3-31 12:11:33'}
 ]
+
+const handlType=()=>{
+    let len=classify.value.length;
+    classify.value.push({id:len+1,name:classfiy_type.value})
+    ElMessage({
+    message: '操作成功!',
+    type: 'success',
+  })
+    typeFormVisible.value=false;
+}
 </script>
 <template>
 <div class="n-container">
@@ -61,7 +54,7 @@ const tableData=[{title:"版本已更新,赶快体验新功能!",name:"李华",s
                 <div class="n-label"></div>
                 <div class="n-font"><strong>公告分类</strong></div>
             </div>
-            <el-button type="primary" plain>增加分类</el-button>
+            <el-button type="primary" plain @click="typeFormVisible=true">增加分类</el-button>
         </div>
         <div class="left-content">
             <el-card 
@@ -88,31 +81,31 @@ const tableData=[{title:"版本已更新,赶快体验新功能!",name:"李华",s
             </div>
             <div class="opt-type">
                 <el-select
-                    v-model="value"
+                    v-model="optVal1"
                     placeholder="选择公告类型"
                     size="large"
                     style="width: 240px"
                     >
                     <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
+                        v-for="item in options1"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"
                     />
                 </el-select>
             </div>
             <div class="opt-type">
                 <el-select
-                    v-model="value"
+                    v-model="optVal2"
                     placeholder="选择公告范围"
                     size="large"
                     style="width: 240px"
                     >
                     <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
+                        v-for="item in options2"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"
                     />
                 </el-select>
             </div>
@@ -127,31 +120,21 @@ const tableData=[{title:"版本已更新,赶快体验新功能!",name:"李华",s
                 :header-cell-style="{textAlign: 'center'}"
                 >
                 <el-table-column label="序号" type="index" width="100%" />
-                <el-table-column label="公告标题" prop="title" width="350%"/>
+                <el-table-column label="公告标题" prop="title" width="280%"/>
                 <el-table-column label="发布人" prop="name" width="100%" />
-                <el-table-column label="发布范围" prop="scale" width="150%" />
-                <el-table-column label="发布类型" prop="type" width="150%"/>
+                <el-table-column label="发布范围" prop="scale" width="100%" />
+                <el-table-column label="发布类型" prop="type" width="100%"/>
                 <el-table-column label="发布状态" prop="stat" width="100%"/>
-                <el-table-column label="发布时间" prop="time" width="200%"/>
-                <el-table-column align="right" width="auto">
-                <template #header>
-                    <el-input v-model="search" size="small" placeholder="输入标题搜索!" />
-                </template>
-                <template #default="scope">
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
-                    查看详情
-                    </el-button>
-                </template>
-                </el-table-column>
+                <el-table-column label="发布时间" prop="time" width="150%"/>
             </el-table>
         </div>
-        <el-pagination background layout="prev, pager, next" :total="1000" />
+        <el-pagination background layout="prev, pager, next" :total="100" />
     </div>
 </dv-border-box-10>
 </div>
 
 
-<!-- 弹框 -->
+<!-- 添加公告弹框 -->
 <el-dialog v-model="dialogFormVisible" title="发布公告" width="500">
     <el-form :model="form">
       <el-form-item label="公告标题" :label-width="formLabelWidth">
@@ -178,6 +161,23 @@ const tableData=[{title:"版本已更新,赶快体验新功能!",name:"李华",s
         <el-button @click="dialogFormVisible = false">取消</el-button>
         <el-button type="primary" @click="dialogFormVisible = false">
           发布
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+
+  <!-- 添加分类弹框 -->
+<el-dialog v-model="typeFormVisible" title="添加公告类型" width="500">
+    <el-form :model="form">
+      <el-form-item label="公告类型" :label-width="formLabelWidth">
+        <el-input v-model="classfiy_type" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="typeFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="handlType">
+          添加
         </el-button>
       </div>
     </template>

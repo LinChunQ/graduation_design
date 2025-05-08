@@ -101,7 +101,7 @@ watch(userStore.courseList,()=>{
        <!-- 计算结果区域 -->
        <div class="result">
         <el-table class="res_table" :data="tableData" border>
-            <el-table-column prop="stu_no" label="学号" width="95%" />
+            <el-table-column prop="stu_no" label="学号" width="120%" />
             <el-table-column prop="stu_name" label="姓名" width="80%" />
             <el-table-column prop="p1" label="题目一" width="70%"/>
             <el-table-column prop="p2" label="题目二" width="70%"/>
@@ -171,7 +171,7 @@ watch(userStore.courseList,()=>{
     margin-top: 20px;
     border: 0.3px solid #bebcbc;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
     justify-content: center;
 }

@@ -13,7 +13,7 @@ else:
     from urllib.parse import quote
 
 recognise_api_url = "https://aip.baidubce.com/rest/2.0/solution/v1/iocr/recognise"
-access_token = "24.35a5c96a1f6d6cc1b8c9f81bbea80b44.2592000.1745477152.282335-118175815"
+access_token = "24.9f26c9476d1545ba61df68ea173704fe.2592000.1748185512.282335-118175815"
 templateSign = "5f26f20073e43c27f7b5ffa526dbc194"
 
 class SmartService:

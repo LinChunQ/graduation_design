@@ -1,3 +1,4 @@
+import { color } from "echarts";
 
 //雷达图
 const radarOption = {
@@ -68,12 +69,12 @@ const pieOption={
           borderRadius: 8
         },
         data: [
-          { value: 40, name: 'rose 1' },
-          { value: 38, name: 'rose 2' },
-          { value: 32, name: 'rose 3' },
-          { value: 30, name: 'rose 4' },
-          { value: 28, name: 'rose 5' },
-          { value: 26, name: 'rose 6' },
+          { value: 40, name: '题6' },
+          { value: 38, name: '题5' },
+          { value: 32, name: '题3' },
+          { value: 30, name: '题4' },
+          { value: 28, name: '题2' },
+          { value: 26, name: '题1' },
         ]
       }
     ]
@@ -346,37 +347,48 @@ return mainOption;
 
 //柱状图
 const barOption={
-    legend: {
-        textStyle: {
-            color: '#fff'
-        }
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
     },
-    tooltip: {},
-    dataset: {
-      dimensions: ['product', '2015', '2016', '2017'],
-      source: [
-        { product: 'Matcha Latte', 2015: 43.3, 2016: 85.8, 2017: 93.7 },
-        { product: 'Milk Tea', 2015: 83.1, 2016: 73.4, 2017: 55.1 },
-        { product: 'Cheese Cocoa', 2015: 86.4, 2016: 65.2, 2017: 82.5 },
-        { product: 'Walnut Brownie', 2015: 72.4, 2016: 53.9, 2017: 39.1 }
-      ]
+    textStyle:{
+        color:'#f1f1f1'
     },
-    xAxis: {
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '1%',
+      containLabel: true
+    },
+    
+    xAxis: [
+      {
         type: 'category',
-        axisLabel: {
-            color: '#fff' 
-        } 
-    },
-    yAxis: {
-        type:'value',
-        splitLine:{
-            show:false
-        },
-        axisLabel: {
-            color: '#fff'
+        
+        data: ['0~59', '60~79', '80~100'],
+        axisTick: {
+          alignWithLabel: true
         }
-    },
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value',
+        name: "人数",
+        nameLocation: "end",
+      },
+      
+    ],
     series: [
-        { type: 'bar',}, { type: 'bar' }, { type: 'bar' },]
+      {
+        name: '人数',
+        type: 'bar',
+        barWidth: '40%',
+        data: [16, 22, 10]
+      },
+      
+    ],
   };
 export{radarOption,pieOption,barOption,getMainOption}

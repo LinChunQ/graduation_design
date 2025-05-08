@@ -17,7 +17,7 @@ import Notice from '../../components/notice/Notice.vue'
         </div>
         <div class="disc">
           <strong>AI 智能识别试卷，快速录入成绩</strong>
-          运用先进的图像识别与人工智能技术，精准识别试卷上的学生作答情况及分数。无需手动逐一录入，大幅节省时间，将原本漫长的成绩录入工作压缩至最短时间，让您从重复劳动中解脱。
+          运用先进的图像识别与人工智能技术，精准识别试卷上的学生分数。无需手动逐一录入，大幅节省时间，让您从重复劳动中解脱。
         </div>
       </div>
       <div class="box">
@@ -26,7 +26,7 @@ import Notice from '../../components/notice/Notice.vue'
         </div>
         <div class="disc">
           <strong>自动生成成绩报表，多种格式导出</strong>
-          系统可根据录入的成绩数据，自动生成清晰、规范的成绩报表。无论是常见的 Excel 格式，还是便于展示的 PDF 格式等，均可一键导出，方便您存档、分析以及向上汇报。
+          系统可根据录入的成绩数据，自动生成清晰、规范的成绩报表,一键导出，方便您存档、分析以及向上汇报。
         </div>
       </div>
       <div class="box">
@@ -35,7 +35,7 @@ import Notice from '../../components/notice/Notice.vue'
         </div>
         <div class="disc">
           <strong>智能分析成绩数据，提供教学改进建议</strong>
-          借助大数据分析与智能算法，深度剖析成绩数据背后的规律。不仅能呈现班级整体成绩分布、各分数段人数等基础信息，还能通过对比分析、趋势预测等手段，为您提供针对性强、切实可行的教学改进建议，助力教学质量稳步提升。
+          呈现班级整体成绩分布、各分数段人数，通过对比分析、趋势预测等手段，为您提供针对性强、切实可行的教学改进建议，助力教学质量稳步提升。
         </div>
       </div>
     </div>
@@ -80,7 +80,7 @@ import Notice from '../../components/notice/Notice.vue'
   .box{
     margin-top:1%;
     height:100%;
-    width:18%;
+    width:25%;
     border-radius:0px 0px 8px 8px;
     //box-shadow: 1px 1px 4px rgba(255, 255, 255, 0.5);
     .disc{

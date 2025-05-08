@@ -45,6 +45,12 @@ onMounted(() => {
     </div>
     <div class="main-content">
         <div ref="chart" id="chart"></div>
+        <div class="data">
+            <div class="item">最高分：<div class="value">92</div></div>
+            <div class="item">最低分：<div class="value">22</div></div>
+            <div class="item">平均分：<div class="value">63.6</div></div>
+            <div class="item">中位数：<div class="value">62</div></div>
+        </div>
     </div>
 </div>
 </template>
@@ -94,6 +100,22 @@ onMounted(() => {
         border-radius:50%;
         background-color: #fff;
         }
+}
+
+.data{
+    height:20%;
+    width: 100%;
+    display: grid;
+    grid-template: repeat(2, auto) / repeat(2, auto);
+    .item{
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        color: aliceblue;
+        .value{
+            color: aquamarine;
+        }
+    }
 }
 
 </style>

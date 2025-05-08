@@ -7,9 +7,9 @@ class User(db.Model):
     __tablename__ = 'users'  # 数据库表名
     teacher_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False)  # 用户名用来登陆
-    nickname= db.Column(db.String(64), nullable=False) # 昵称
+    nickname= db.Column(db.String(255), nullable=True) # 昵称
     sex = db.Column(db.String(2), nullable=True)  # 性别
-    age = db.Column(db.Integer, nullable=True)  # 年龄
+    age = db.Column(db.Integer, nullable=False)  # 年龄
     email = db.Column(db.String(128),  nullable=False)  # 邮件
     phone = db.Column(db.String(32),  nullable=True)  # 手机号
     address = db.Column(db.String(128),  nullable=True)  # 地址

@@ -47,20 +47,20 @@ const tableData = [
     process:"未查看",
     content:'有bug.............'
   },
-  { id:"000000007",
-    type:'好评',
-    nickname:"李华",
-    date: '2016-05-03',
-    process:"未查看",
-    content:'产品好用.............'
-  },
-  { id:"000000008",
-    type:'好评',
-    nickname:"李华",
-    date: '2016-05-03',
-    process:"未查看",
-    content:'产品好用.............'
-  },
+//   { id:"000000007",
+//     type:'好评',
+//     nickname:"李华",
+//     date: '2016-05-03',
+//     process:"未查看",
+//     content:'产品好用.............'
+//   },
+//   { id:"000000008",
+//     type:'好评',
+//     nickname:"李华",
+//     date: '2016-05-03',
+//     process:"未查看",
+//     content:'产品好用.............'
+//   },
 ]
 
 const form = reactive({
@@ -71,6 +71,19 @@ const form = reactive({
     process:"未查看",
     content:'产品好用.............'
 })
+
+function handleSelect(row){
+    Object.assign(form,row)
+}
+
+function onSubmit(){
+    debugger
+    form.process='已回复'
+    ElMessage({
+    message: '操作成功!',
+    type: 'success'
+  })
+}
 
 </script>
 
@@ -102,6 +115,8 @@ const form = reactive({
             style="width: 100%"
             :cell-style="{ textAlign: 'center' }"
             :header-cell-style="{textAlign: 'center'}"
+            @row-click="handleSelect"
+            
             >
                 <el-table-column label="序号"  type="index" width="80%" />
                 <el-table-column prop="type" label="反馈类型" width="100%" />
@@ -112,7 +127,7 @@ const form = reactive({
                 <el-table-column prop="content" label="反馈内容" width="auto" />
             </el-table>
         </div>
-        <el-pagination background layout="prev, pager, next" :total="1000" />
+        <el-pagination background layout="prev, pager, next" :total="100" />
     </div>
     <el-divider direction="vertical" border-style="double" />
     <!-- 回复部分 -->
@@ -134,13 +149,13 @@ const form = reactive({
                 <el-input v-model="form.type" disabled />
                 </el-form-item>
                 <el-form-item label="反馈进度">
-                <el-select v-model="form.region" placeholder="未查看">
+                <el-select disabled v-model="form.region" placeholder="未查看">
                     <el-option label="已查看" value="已查看" />
                     <el-option label="已处理" value="已处理" />
                 </el-select>
                 </el-form-item>
                 <el-form-item label="反馈信息">
-                <el-input v-model="form.content" type="textarea" />
+                <el-input disabled v-model="form.content" type="textarea" />
                 </el-form-item>
                 <el-form-item label="回复信息">
                 <el-input v-model="form.desc" type="textarea" />
@@ -186,6 +201,7 @@ const form = reactive({
     height:65%;
     box-shadow:0px 0px 4px 1px #d4d3d3;
     border-radius:10px;
+    overflow-y: hidden;
     .list{
         height:90%;
         width:60%;

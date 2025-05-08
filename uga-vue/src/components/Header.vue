@@ -118,7 +118,7 @@ watch(()=>authStore.isLogin,(newVal)=>{
   .logo-container {
     display: flex;
     align-items: center;
-    min-width: 280px;
+    min-width: 5%;
     margin-right: 50px; // 与中间导航保持距离
     
     .logo_name {
@@ -139,7 +139,7 @@ watch(()=>authStore.isLogin,(newVal)=>{
     flex: 1;
     ul {
       display: flex;
-      gap: 40px;
+      gap: 30px;
       margin: 0;
       padding: 0;
       list-style: none;

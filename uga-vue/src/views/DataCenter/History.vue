@@ -110,17 +110,17 @@ watch(userStore.courseList,(newVal)=>{
                 :cell-style="{ textAlign: 'center' }"
                 :header-cell-style="{textAlign: 'center'}"
                 >
-                <el-table-column label="学院" prop="college" width="150%"/>
-                <el-table-column label="班级" prop="stu_class" width="150%" />
-                <el-table-column label="学号" prop="stu_no" width="150%" />
-                <el-table-column label="姓名" prop="stu_name" width="150%"/>
-                <el-table-column label="题目一" prop="p1" width="90%"/>
-                <el-table-column label="题目二" prop="p2" width="90%"/>
-                <el-table-column label="题目三" prop="p3" width="90%"/>
-                <el-table-column label="题目四" prop="p4" width="90%"/>
-                <el-table-column label="题目五" prop="p5" width="90%"/>
-                <el-table-column label="题目六" prop="p6" width="90%"/>
-                <el-table-column label="成绩" prop="total" width="90%"/>
+                <el-table-column label="学院" prop="college" width="120%"/>
+                <el-table-column label="班级" prop="stu_class" width="120%" />
+                <el-table-column label="学号" prop="stu_no" width="120%" />
+                <el-table-column label="姓名" prop="stu_name" width="120%"/>
+                <el-table-column label="题目一" prop="p1" width="80%"/>
+                <el-table-column label="题目二" prop="p2" width="80%"/>
+                <el-table-column label="题目三" prop="p3" width="80%"/>
+                <el-table-column label="题目四" prop="p4" width="80%"/>
+                <el-table-column label="题目五" prop="p5" width="80%"/>
+                <el-table-column label="题目六" prop="p6" width="80%"/>
+                <el-table-column label="成绩" prop="total" width="80%"/>
                 <el-table-column align="right" width="auto">
                 <template #header>
                     <el-input v-model="search" size="small" placeholder="输入学号搜索试卷!" />
@@ -159,6 +159,7 @@ watch(userStore.courseList,(newVal)=>{
     display:flex;
     justify-content:center;
     height:100vh;
+    width: 100vw;
     overflow: hidden;
 }
 
@@ -171,7 +172,7 @@ watch(userStore.courseList,(newVal)=>{
 }
 .mainarea{
     margin-top:2%;
-    width:80%;
+    width:80vw;
     margin-left:10%;
     padding:10px;
     border-radius:10px;

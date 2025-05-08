@@ -1,5 +1,6 @@
 <script setup>
 const dialogFormVisible = ref(false)
+const rateVal=ref(0);
 const formLabelWidth = '140px'
 const form = reactive({
   name: '',
@@ -60,6 +61,7 @@ const form = reactive({
         <el-form-item label="">
             <el-input v-model="form.desc" type="textarea" :rows="6" />
         </el-form-item>
+        <el-rate v-model="rateVal" clearable />
     </el-form>
     <template #footer>
       <div class="dialog-footer">
