@@ -6,3 +6,4 @@ numpy
 Requests
 SQLAlchemy
 Werkzeug
+pymysql
