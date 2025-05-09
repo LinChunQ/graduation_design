@@ -9,6 +9,7 @@ const routes = [
     {path: '/', name: 'HomePage', component: HomePage,},
     { path: '/smart-correction', component: () => import('@/views/SmartCorrections/SmartCorrection.vue') },
     { path: '/history', component: ()=>import('@/views/DataCenter/History.vue') },
+    { path: '/header', component: ()=>import('@/views/DataCenter/index.vue') },
     { path: '/user-info', component:()=>import('@/views/User/UserInfo.vue') },
     { path: '/statistics', component: ()=>import('@/views/Statistics/Statistics.vue') },
     { path: '/about', component: ()=>import('@/views/About/About.vue') },
