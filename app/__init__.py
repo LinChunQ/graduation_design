@@ -23,7 +23,7 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(smart_bp)
     app.register_blueprint(user_bp)
-    # 🚀 打印所有路由
-    with app.app_context():
-        print(app.url_map)
+    # # 🚀 打印所有路由
+    # with app.app_context():
+    #     print(app.url_map)
     return app
