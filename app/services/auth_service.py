@@ -1,13 +1,16 @@
 from sqlalchemy import nullsfirst
+import random
+import string
 
 from app.models.user import User
 from app.models.admin import Admin
 from app.common.request.response import ResponseHandler
-from app.extensions import db
+from app.extensions import db,mail
 from flask_jwt_extended import create_access_token
-import json
 from app.utils.MyTool import model_to_dict
-
+from flask_mail import Message
+from flask import Flask, request
+from app.models.email_captcha import EmailCaptchaModel
 
 class AuthService:
     @staticmethod
@@ -27,6 +30,25 @@ class AuthService:
             return {"code": 500, "msg": f"注册失败: {str(e)}"}, 200
 
         return {"code": 200, "msg": "用户注册成功！"}, 200
+
+    @staticmethod
+    def get_email_captcha(email):
+        # 6位，数字和字母的组成
+        source = string.digits * 6
+        captcha = random.sample(source, 6)
+        # 列表变成字符串
+        captcha = "".join(captcha)
+        print(captcha)
+
+        # I/O 操作
+        message = Message(subject="高校教师助手", recipients=[email], body=f"您的验证码是:{captcha}")
+        mail.send(message)
+
+        # 使用数据库存储
+        email_captcha = EmailCaptchaModel(email=email, captcha=captcha)
+        db.session.add(email_captcha)
+        db.session.commit()
+        return {"code": 200, "msg": "验证码已发送到邮箱!"},200
 
     @staticmethod
     def login(username, password,role):#登陆

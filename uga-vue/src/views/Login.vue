@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import  useAuthStore  from '../stores/useStoreAuth'
 const router = useRouter()
@@ -45,6 +45,10 @@ const login = async () => {
   }
 }
 
+function reset(){
+  loginForm.username = ''
+  loginForm.password = ''
+}
 // 错误提示
 const errorMessage = (text) => {
   errorMsg.value = text
@@ -54,9 +58,13 @@ const errorMessage = (text) => {
 }
 
 onMounted(() => {
+  reset()
   validateInput()
 })
 
+onUnmounted(()=>{
+  reset()
+})
 
 
 </script>
@@ -89,6 +97,10 @@ onMounted(() => {
                   <el-radio :value="'0'">管理员</el-radio>
                   <el-radio :value="'1'">普通用户</el-radio>
                 </el-radio-group>
+                <div class="forget" v-if="false">
+                  <a href="/forget">忘记密码？</a>
+                </div>
+                <div class="reset"  @click="reset">重置</div>
                 <div class="reg">
                   <span>还没有账号？</span>
                   <a href="/register">立即注册</a>
@@ -233,6 +245,15 @@ onMounted(() => {
   font-size: 14px;
   text-align: center;
   margin-bottom: 20px;
+}
+
+.reset{
+  font-size: 16px;
+  color: #95a5a6;
+  &:active {
+    transform: scale(1.2);
+    font-weight: bold;
+  }
 }
 
 @media (max-width: 480px) {

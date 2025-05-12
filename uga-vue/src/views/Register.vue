@@ -22,11 +22,6 @@
                   <span class="highlight"></span>
               </div>
               <div class="input-group">
-                  <input type="email" id="email" v-model="userInfo.email" required />
-                  <label for="email">邮箱</label>
-                  <span class="highlight"></span>
-              </div>
-              <div class="input-group">
                   <input type="text" id="profession" v-model="userInfo.profession" required />
                   <label for="profession">专业名称</label>
                   <span class="highlight"></span>
@@ -34,6 +29,11 @@
               <div class="input-group">
                   <input type="text" id="school" v-model="userInfo.school" required />
                   <label for="school">学校</label>
+                  <span class="highlight"></span>
+              </div>
+              <div class="input-group">
+                  <input type="email" id="email" v-model="userInfo.email" required />
+                  <label for="email">邮箱</label>
                   <span class="highlight"></span>
               </div>
               <div class="input-group verification-group">
@@ -56,20 +56,25 @@
                   <span>立即注册</span>
                   <i class="arrow-icon"></i>
               </button>
-              <div class="form-footer">
+              <div class="footer">  
+                <div class="reset"  @click="reset">重置</div>
+                <div class="form-footer">
                   <span>已有账号？</span>
                   <a href="/login">立即登录</a>
               </div>
+              </div>
+              
           </form>
       </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import useAuthStore from "../stores/useStoreAuth.js";
 import {useRouter} from 'vue-router'
 import {ElMessage} from "element-plus";
+import {getCaptcha} from '../apis/auth'
 const authStore=useAuthStore();
 const router=useRouter()
 const {handleRegister}=authStore
@@ -95,10 +100,25 @@ async function register (){
   router.push('/login')
 }
 
-const sendVerificationCode = () => {
-  //预留功能
-  console.log('Sending verification code to:', email.value)
+const sendVerificationCode = async () => {
+   await getCaptcha({email: email.value});
 }
+
+const reset=()=>{
+  userInfo.username=''
+  userInfo.sex=''
+  userInfo.phone=''
+  userInfo.email=''
+  userInfo.profession=''
+  userInfo.school=''
+  userInfo.password=''
+  confirmPassword.value=''
+  verificationCode.value=''
+}
+
+onMounted(()=>{
+  
+})
 </script>
 
 <style scoped lang="scss">
@@ -229,6 +249,23 @@ const sendVerificationCode = () => {
   display: inline-block;
   padding: 3px;
   transform: rotate(-45deg);
+}
+
+.footer{
+  display: flex;
+  justify-content: flex-start; 
+  align-items: center;
+  gap: 25%;
+  padding: 10px;
+  .reset{
+  margin-top: 15px;
+  font-size: 16px;
+  color: #95a5a6;
+  &:active {
+    transform: scale(1.2);
+    font-weight: bold;
+  }
+}
 }
 
 .form-footer {

@@ -1,5 +1,5 @@
 from flask import Flask
-from app.extensions import db, jwt
+from app.extensions import db, jwt,mail
 from app.blueprints.auth_routes import auth_bp
 from app.blueprints.smart_routes import smart_bp
 from app.blueprints.user_routes import user_bp
@@ -18,7 +18,7 @@ def create_app():
     # 初始化扩展
     db.init_app(app)
     jwt.init_app(app)
-
+    mail.init_app(app)
     # 注册蓝图
     app.register_blueprint(auth_bp)
     app.register_blueprint(smart_bp)

@@ -16,3 +16,11 @@ export  function register(data){
     })
 }
 
+export function getCaptcha(data){
+    return request({
+        url:'/auth/getCaptcha',
+        method:'post',
+        data:data
+    })
+}
+
