@@ -120,13 +120,14 @@ watch(userStore.courseList,()=>{
   display: flex;
   width: 100%;
   height:100%;
-  margin-top:50px;
+  margin-top:20px;
+  overflow: hidden;
 }
 
 .uploadfile{
   width: 35%;
-  height: 100%;
-  min-height:600px;
+  height: 90%;
+  min-height:50%;
   margin-left:100px;
   background-color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -146,22 +147,22 @@ watch(userStore.courseList,()=>{
 }
 .result{
     width: 50%;
-    height:100%;
-    min-height:600px;
+    height:93%;
+    min-height:50%;
     margin-left:30px;
     background-color: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     margin-top: 10px;
     border-radius: 4px;
+    .res_table{
+        width: 95%;
+        margin-left: 12px;
+        margin-top: 30px;
+        color: #000000;
+    }
 }
 
-.res_table{
-    width: 95%;
-    height:100%;
-    margin-left: 12px;
-    margin-top: 30px;
-    color: #000000;
-}
+
 .img-group {
     width: 87%;
     min-height:200px;

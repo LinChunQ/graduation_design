@@ -89,16 +89,15 @@ function onSubmit(){
 
 <template>
 <div class="fb-container">
-<dv-border-box-10>
-    <div class="fb-top">
-        <TopCard v-for="(item,index) in topList"
-        :key="index"
-        :title="item.title"
-        :num="item.num"
-        :id="item.id"
-        />
-    </div>
-    <!-- 底部 -->
+<div class="fb-top">
+    <TopCard v-for="(item,index) in topList"
+    :key="index"
+    :title="item.title"
+    :num="item.num"
+    :id="item.id"
+    />
+</div>
+<!-- 底部 -->
 <div class="fb-bottom">
     <!-- 列表部分 -->
     <div class="list">
@@ -169,7 +168,6 @@ function onSubmit(){
         </div>
     </div>
 </div>
-</dv-border-box-10>
 </div>
 </template>
 <style scoped lang="scss">
@@ -178,9 +176,9 @@ function onSubmit(){
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    height:90vh;
+    height:100%;
     width:100%;
-    gap:1%;
+    gap:20px;
     overflow:hidden;
 }
 .fb-top{
@@ -226,16 +224,6 @@ function onSubmit(){
     }
 }
 
-:deep(.border-box-content){
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    height:90vh;
-    width:100%;
-    gap:1%;
-    overflow:hidden;
-}
 :deep(.el-divider--vertical){
     border-left: 1px var(--el-border-color) var(--el-border-style);
     display: inline-block;

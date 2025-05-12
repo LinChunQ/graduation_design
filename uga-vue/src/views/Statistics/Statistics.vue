@@ -25,7 +25,6 @@ watch(userStore.courseList,(newVal)=>{
 
 <template>
 <div class="sta-container">
-<dv-border-box2>
     <div class="left">
         <dv-border-box12> 
             <RadarChart/>
@@ -67,7 +66,6 @@ watch(userStore.courseList,(newVal)=>{
             <BarChart/>
         </dv-border-box12>
     </div>
-</dv-border-box2>
 </div>
 </template>
 <style scoped lang="scss">
@@ -75,17 +73,12 @@ watch(userStore.courseList,(newVal)=>{
   display: flex;
   justify-content:center;
   width: 100%;
-  height: 100vh;  /* 使其填满整个屏幕 */
+  height: 100%;  /* 使其填满整个屏幕 */
   background-image: url('@/assets/imgs/Home-background1.png'); /* 这里使用你的背景图路径 */
   background-size: cover;  /* 背景图覆盖整个区域 */
   background-position: center;  /* 背景居中 */
   background-repeat: no-repeat;  /* 防止背景重复 */
   overflow:hidden;
-}
-
-::v-deep .dv-border-box-2 .border-box-content {
-    display:flex;
-    justify-content:center;
 }
 
 .left{
@@ -115,13 +108,6 @@ watch(userStore.courseList,(newVal)=>{
             background-color: transparent;
         }
     }
-
- :deep(.border-box-content){
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-}
 
 }
 

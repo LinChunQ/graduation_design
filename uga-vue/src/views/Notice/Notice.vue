@@ -46,7 +46,6 @@ const handlType=()=>{
 </script>
 <template>
 <div class="n-container">
-<dv-border-box-10>
     <!-- 左边框 -->
     <div class="n-left">
         <div class="left-header">
@@ -130,7 +129,6 @@ const handlType=()=>{
         </div>
         <el-pagination background layout="prev, pager, next" :total="100" />
     </div>
-</dv-border-box-10>
 </div>
 
 
@@ -186,9 +184,11 @@ const handlType=()=>{
 <style lang="scss" scoped>
 .n-container{
     display:flex;
+    align-items:center;
     justify-content:center;
     width:100%;
-    height:91vh;
+    height:100%;
+    gap:10px;
     overflow:hidden;
 }
 .n-left{
@@ -245,12 +245,6 @@ const handlType=()=>{
     }
 }
 
-:deep(.border-box-content){
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:10px;
-}
 :deep(.el-divider--horizontal){
     margin:5px;
 }

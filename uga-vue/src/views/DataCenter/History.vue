@@ -82,7 +82,6 @@ watch(userStore.courseList,(newVal)=>{
 <template>
 <div class="his-container">
     <!-- 数据主页面 -->
-    <dv-border-box-10>
         <div class="mainarea">
             <!-- 选择框 -->
         <div class="optionCourse">
@@ -150,28 +149,27 @@ watch(userStore.courseList,(newVal)=>{
             @prev-click="handlePrevClick"
             @next-click="handleNextClick"/>
         </div>
-    </dv-border-box-10>
+    
 </div>
 </template>
 
 <style scoped lang="scss">
 .his-container{
     display:flex;
-    justify-content:center;
-    height:100vh;
-    width: 100vw;
+    justify-content:flex-start;
+    height:100%;
+    width: 100%;
     overflow: hidden;
 }
 
 .optionCourse{
-    margin-top:1%;
     margin-bottom:10px;;
 }
 .data{
     margin-bottom:20px;
 }
 .mainarea{
-    margin-top:2%;
+    margin-top:1%;
     width:80vw;
     margin-left:10%;
     padding:10px;

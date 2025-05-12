@@ -16,8 +16,8 @@ const form = reactive({
 </script>
 
 <template>
-  <div class="container">
-    <div class="header">
+  <div class="help-container">
+    <div class="help-header">
         <div class="title">使 用 指 南</div>
         <div class="feedback" @click="dialogFormVisible = true">
             <img src="../../assets/feedback.avif"/>
@@ -75,23 +75,24 @@ const form = reactive({
 </template>
 
 <style scoped lang="scss">
-.container{
+.help-container{
   display: flex;
   flex-direction: column; //竖直布局
   width: 100%;
-  height: 100vh;  /* 使其填满整个屏幕 */
+  height: 100%;  /* 使其填满整个屏幕 */
   background-image: url('@/assets/imgs/Home-background1.png'); /* 这里使用你的背景图路径 */
   background-size: cover;  /* 背景图覆盖整个区域 */
   background-position: center;  /* 背景居中 */
   background-repeat: no-repeat;  /* 防止背景重复 */
+  overflow: hidden;
 }
-.header{
+.help-header{
     display: flex;
     justify-content:flex-end;
     align-items:center;
     width:100vw;
     padding:20px;
-    height: 10vh;
+    height: 10%;
     margin-top: 30px;
     .title{
         margin-top:80px;
@@ -120,7 +121,7 @@ const form = reactive({
     margin-top:30px;
     display:flex;
     width:100vw;
-    height: 70vh;
+    height: 100%;
     //border:1px solid rgb(255, 255, 255);
     justify-content: center; // 使内容水平居中
     gap:50px;

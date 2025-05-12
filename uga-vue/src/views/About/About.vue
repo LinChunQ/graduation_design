@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="container">
+  <div class="about-container">
     <div class="title">关于我们</div>
     <div class="content">
       <!-- 关于说明 -->
@@ -36,28 +36,29 @@
 </template>
 
 <style scoped lang="scss">
-.container{
+.about-container{
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
-  height: 100vh;  /* 使其填满整个屏幕 */
+  width: 100%;
+  height: 100%;  /* 使其填满整个屏幕 */
   background-image: url('@/assets/imgs/Home-background1.png'); /* 这里使用你的背景图路径 */
   background-size: cover;  /* 背景图覆盖整个区域 */
   background-position: center;  /* 背景居中 */
   background-repeat: no-repeat;  /* 防止背景重复 */
-
-  .title{
+  overflow: hidden;
+}
+.title{
     font-size: 25px;
     font-weight: bold;
     color: #fff;
     margin-top: 8%;
     margin-bottom: 20px;
   }
-  .content{
+.content{
     font-size: 18px;
     color: #fff;
-    height: 40%;
+    height: 100%;
 
     .about-text{
       height: 30%;
@@ -67,8 +68,7 @@
       justify-content:center;
       align-items: center;
       gap:50px;
-      height: 60%;
-      
+      height: 100%;
     }
     .img-box{
       display: flex;
@@ -87,8 +87,8 @@
       }
      
     }
-  }
-  .join-us{
+}
+.join-us{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -96,11 +96,10 @@
     font-size: 18px;
     color: #fff;
     letter-spacing: 3px;
-  }
+}
 
-  .label{
+.label{
         font-size:larger;
         font-weight:bolder;
-  }
 }
 </style>
