@@ -6,10 +6,11 @@ from app.blueprints.user_routes import user_bp
 from app.config import Config
 from flask_cors import CORS
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-
+    #配置跨域
     CORS(app,
          resources={r"/*": {"origins": "http://localhost:5173"}},
          supports_credentials=True,

@@ -9,7 +9,7 @@
       <!-- 关于说明 -->
       <div class="about-text">
         <p>
-          本系统采用Vue.js作为前端框架，Python作为后端框架，MySQL作为数据库，并采用Docker作为容器化技术，实现系统部署和运维。
+          本系统采用Vue3作为前端框架，Flask作为后端框架，MySQL作为数据库，Redis作为验证码缓存，并采用Docker作为容器化技术，实现系统部署和运维。
         </p>
       </div>
       <!-- 展示图片 -->
@@ -29,7 +29,9 @@
       </div>
     </div>
     <div class="join-us">
-      <div class="label">加入我们</div>
+      <el-tooltip effect="light"content="通过该邮箱联系我们：497603213@qq.com" placement="top">
+        <div class="label">加入我们</div>
+      </el-tooltip>
       <dv-decoration3 style="width:250px;height:30px;"/>
     </div>
   </div>
@@ -53,7 +55,6 @@
     font-weight: bold;
     color: #fff;
     margin-top: 8%;
-    margin-bottom: 20px;
   }
 .content{
     font-size: 18px;
@@ -61,14 +62,14 @@
     height: 100%;
 
     .about-text{
-      height: 30%;
+      height: 10%;
     }
     .about-img{
       display: flex;
       justify-content:center;
       align-items: center;
       gap:50px;
-      height: 100%;
+      height: 80%;
     }
     .img-box{
       display: flex;

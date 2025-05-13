@@ -37,9 +37,9 @@
                   <span class="highlight"></span>
               </div>
               <div class="input-group verification-group">
-                  <input type="text" id="verificationCode" v-model="verificationCode" required maxlength="6" />
+                  <input type="text" id="verificationCode" v-model="userInfo.captcha" required maxlength="6" />
                   <label for="verificationCode">验证码</label>
-                  <button type="button" @click="sendVerificationCode" class="send-code-btn">获取验证码</button>
+                  <button type="button" @click="sendVerificationCode" class="send-code-btn">{{captchaText}}</button>
                   <span class="highlight"></span>
               </div>
               <div class="input-group">
@@ -86,22 +86,39 @@ const userInfo=reactive({
   profession:'',
   school:'',
   password:'',
+  captcha:''
 })
 
 const verificationCode = ref('')
 const confirmPassword = ref('')
 
+const totalTime = ref(60)//倒计时
+const captchaText=ref('获取验证码')
+const isClick=ref(true) //控制按钮是否可用
 async function register (){
   if(userInfo.password!==confirmPassword.value){
     ElMessage.error("两次密码不相等!");
   }
+
   await  handleRegister(userInfo)
-  ElMessage.success("注册成功!");
   router.push('/login')
 }
 
 const sendVerificationCode = async () => {
-   await getCaptcha({email: email.value});
+  if(!isClick.value) return;
+  else isClick.value=false;
+
+  let clock = window.setInterval(() => {
+  captchaText.value =totalTime.value + 's后重新发送'
+  totalTime.value--
+  if (totalTime.value < 0) {     //当倒计时小于0时清除定时器
+    window.clearInterval(clock)
+    captchaText.value = '重新发送验证码'
+    totalTime.value = 60;
+    isClick.value=true;
+    }
+  },1000)
+  await getCaptcha({email: email.value});
 }
 
 const reset=()=>{
@@ -123,12 +140,11 @@ onMounted(()=>{
 
 <style scoped lang="scss">
 .register-wrapper {
-  min-height: 93.5vh;
+  height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 20px;
 }
 
 .register-container {
@@ -136,8 +152,9 @@ onMounted(()=>{
   max-width: 480px;
   background: white;
   border-radius: 20px;
-  padding: 40px;
+  padding: 0 30px 0 30px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
 }
 
 .form-header {
@@ -149,11 +166,13 @@ onMounted(()=>{
   font-size: 32px;
  // margin-bottom: 10px;
   font-weight: 700;
+  margin-bottom: 0;
 }
 
 .form-header p {
   color: #95a5a6;
   font-size: 16px;
+  margin: 8px;
 }
 
 .floating-form .input-group {
@@ -176,8 +195,8 @@ onMounted(()=>{
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  background: white;
-  padding: 0 5px;
+  background: #fff;
+  padding: 0;
   color: #95a5a6;
   font-size: 14px;
   transition: all 0.3s ease;
@@ -283,88 +302,5 @@ onMounted(()=>{
 
 .form-footer a:hover {
   text-decoration: underline;
-}
-
-@media (max-width: 480px) {
-  .register-container {
-      padding: 20px;
-  }
-  
-  .form-header h2 {
-      font-size: 24px;
-  }
-  
-  .input-group input {
-      padding: 12px;
-  }
-}
-
-@media (max-width: 768px) {
-  .register-container {
-      max-width: 400px;
-      padding: 30px;
-  }
-
-  .form-header h2 {
-      font-size: 28px;
-  }
-
-  .form-header p {
-      font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .register-container {
-      padding: 20px;
-      margin: 10px;
-      max-width: 100%;
-  }
-  
-  .form-header h2 {
-      font-size: 24px;
-  }
-  
-  .form-header p {
-      font-size: 14px;
-  }
-
-  .input-group input {
-      padding: 12px;
-      font-size: 14px;
-  }
-
-  .input-group label {
-      font-size: 14px;
-  }
-
-  .verification-group {
-      flex-direction: column;
-      gap: 5px;
-  }
-
-  .send-code-btn {
-      width: 100%;
-      padding: 12px;
-  }
-
-  .submit-btn {
-      padding: 12px;
-      font-size: 16px;
-  }
-}
-
-@media (max-width: 320px) {
-  .register-container {
-      padding: 15px;
-  }
-
-  .form-header h2 {
-      font-size: 20px;
-  }
-
-  .input-group {
-      margin-bottom: 20px;
-  }
 }
 </style>

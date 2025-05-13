@@ -2,10 +2,14 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import  useAuthStore  from '../stores/useStoreAuth'
+import SIdentify from '../components/SIdentify.vue'
+
 const router = useRouter()
 const authStore = useAuthStore()
 const {handleLogin,isLogin}=authStore
 const Role = ref('1')
+const identifyCode=ref()
+const code=ref('')
 // 表单数据
 const loginForm = reactive({
   role:Role.value,
@@ -29,6 +33,10 @@ const validateInput = () => {
 
 // 登录处理
 const login = async () => {
+  if(code.value!==identifyCode.value){
+    errorMessage('验证码错误');
+    return;
+  } 
   // 防止XSS攻击
   const xssPattern = /(~|\{|\}|"|'|<|>|\?)/g
   if (xssPattern.test(loginForm.username) || xssPattern.test(loginForm.password)) {
@@ -57,9 +65,19 @@ const errorMessage = (text) => {
   }, 3000)
 }
 
+//随机生成4位验证码
+const randomCode = () => {
+  return Math.floor(1000 + Math.random() * 9000).toString();
+}
+
+const changeCode=()=>{
+  identifyCode.value=randomCode()
+}
+
 onMounted(() => {
   reset()
   validateInput()
+  identifyCode.value=randomCode()
 })
 
 onUnmounted(()=>{
@@ -88,15 +106,20 @@ onUnmounted(()=>{
                   <span class="highlight"></span>
               </div>
               <div class="error-message" v-if="errorMsg">{{ errorMsg }}</div>
+              <div class="form-middle">
+                <el-radio-group v-model="Role">
+                  <el-radio :value="'0'">管理员</el-radio>
+                  <el-radio :value="'1'">普通用户</el-radio>
+                </el-radio-group>
+                <el-input v-model="code" style="height:35px; width: 120px;" placeholder="请输入验证码" />
+                <SIdentify :identifyCode="identifyCode" @click="changeCode"/>
+              </div>
               <button type="submit" class="submit-btn" :disabled="!isFormValid">
                   <span>登录</span>
                   <i class="arrow-icon"></i>
               </button>
               <div class="form-footer">
-                <el-radio-group v-model="Role">
-                  <el-radio :value="'0'">管理员</el-radio>
-                  <el-radio :value="'1'">普通用户</el-radio>
-                </el-radio-group>
+                
                 <div class="forget" v-if="false">
                   <a href="/forget">忘记密码？</a>
                 </div>
@@ -112,9 +135,9 @@ onUnmounted(()=>{
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .login-wrapper {
-  min-height: 93.5vh;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,14 +150,14 @@ onUnmounted(()=>{
   max-width: 480px;
   background: white;
   border-radius: 20px;
-  padding: 40px;
+  padding: 0 40px 40px 40px;
   padding-right: 80px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .form-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .form-header h2 {
@@ -151,7 +174,7 @@ onUnmounted(()=>{
 
 .floating-form .input-group {
   position: relative;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .input-group input {
@@ -170,7 +193,6 @@ onUnmounted(()=>{
   top: 50%;
   transform: translateY(-50%);
   background: white;
-  padding: 0 5px;
   color: #95a5a6;
   font-size: 16px;
   transition: all 0.3s ease;
@@ -222,11 +244,12 @@ onUnmounted(()=>{
 
 .form-footer {
   display:flex;
-  justify-content:space-between;
+  justify-content:flex-end;
   align-items:center;
   text-align: center;
   margin-top: 20px;
   color: #95a5a6;
+  gap: 10%;
 }
 
 .form-footer a {
@@ -256,76 +279,11 @@ onUnmounted(()=>{
   }
 }
 
-@media (max-width: 480px) {
-  .login-container {
-      padding: 20px;
-  }
-  
-  .form-header h2 {
-      font-size: 24px;
-  }
-  
-  .input-group input {
-      padding: 12px;
-  }
-}
-
-@media (max-width: 768px) {
-  .login-container {
-      max-width: 400px;
-      padding: 30px;
-  }
-
-  .form-header h2 {
-      font-size: 28px;
-  }
-
-  .form-header p {
-      font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .login-container {
-      padding: 20px;
-      margin: 10px;
-      max-width: 100%;
-  }
-  
-  .form-header h2 {
-      font-size: 24px;
-  }
-  
-  .form-header p {
-      font-size: 14px;
-  }
-
-  .input-group input {
-      padding: 12px;
-      font-size: 14px;
-  }
-
-  .input-group label {
-      font-size: 14px;
-  }
-
-  .submit-btn {
-      padding: 12px;
-      font-size: 16px;
-  }
-}
-
-@media (max-width: 320px) {
-  .login-container {
-      padding: 15px;
-  }
-
-  .form-header h2 {
-      font-size: 20px;
-  }
-
-  .input-group {
-      margin-bottom: 20px;
-  }
+.form-middle{
+  display: flex; 
+  width: 100%;
+  margin-left: 10%;
+  margin-bottom: 10px;
+  gap: 2%;
 }
 </style>

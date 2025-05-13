@@ -20,8 +20,8 @@ def register():
     address = data.get('address')
     school = data.get('school')
     profession = data.get('profession')
-
-    result, status_code = AuthService.register(username, sex, age, email, phone, address, school, profession, password)
+    captcha=data.get('captcha')
+    result, status_code = AuthService.register(username, sex, email, phone, school, profession, password,captcha)
     return jsonify(result), status_code
 
 #注册获取验证码

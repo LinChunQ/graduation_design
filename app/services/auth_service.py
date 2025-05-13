@@ -1,3 +1,4 @@
+from redis import RedisError
 from sqlalchemy import nullsfirst
 import random
 import string
@@ -5,7 +6,7 @@ import string
 from app.models.user import User
 from app.models.admin import Admin
 from app.common.request.response import ResponseHandler
-from app.extensions import db,mail
+from app.extensions import db,mail,redis_client
 from flask_jwt_extended import create_access_token
 from app.utils.MyTool import model_to_dict
 from flask_mail import Message
@@ -14,11 +15,14 @@ from app.models.email_captcha import EmailCaptchaModel
 
 class AuthService:
     @staticmethod
-    def register(username, sex, age, email, phone, address, school, profession, password): #注册用户
-        if User.query.filter_by(username=username).first():
+    def register(username, sex,email, phone, school, profession, password,captcha): #注册用户
+        redis_captcha=redis_client.get(email)
+        if not captcha or captcha!=redis_captcha:
+            return {"code": 400, "msg": "验证码不正确!"}, 200
+        elif User.query.filter_by(username=username).first():
             return {"code": 400, "msg": "该用户名已存在!"}, 200
 
-        new_user = User(username=username, email=email, sex=sex, age=age, phone=phone, address=address, school=school,
+        new_user = User(username=username, email=email, sex=sex,  phone=phone,  school=school,
                         profession=profession)
         new_user.set_password(password)
 
@@ -38,16 +42,16 @@ class AuthService:
         captcha = random.sample(source, 6)
         # 列表变成字符串
         captcha = "".join(captcha)
-        print(captcha)
 
         # I/O 操作
-        message = Message(subject="高校教师助手", recipients=[email], body=f"您的验证码是:{captcha}")
+        message = Message(subject="高校教师助手注册验证", recipients=[email], body=f"您的验证码是:{captcha}")
         mail.send(message)
-
-        # 使用数据库存储
-        email_captcha = EmailCaptchaModel(email=email, captcha=captcha)
-        db.session.add(email_captcha)
-        db.session.commit()
+        try:
+            #以邮箱为Key，验证码为Value，存储到Redis（有效期5分钟）
+            redis_client.setex(email, 300, captcha)  # 300秒
+        except (RedisError, Exception) as e:
+            print(f"Redis 操作失败: {e}")
+            return {"code": 400, "msg": "服务器错误"}, 200
         return {"code": 200, "msg": "验证码已发送到邮箱!"},200
 
     @staticmethod

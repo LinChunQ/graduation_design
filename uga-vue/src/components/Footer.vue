@@ -2,7 +2,7 @@
 </script>
 <template>
 <el-divider border-style="double" />
-<div class="myFooter">Copyright ©2025 高校教师助手</div>
+<div class="myFooter">Copyright ©2025 高校阅卷助手</div>
 </template>
 <style lang="css" scoped>
 .myFooter {

@@ -4,8 +4,8 @@ import useAuthStore from '../../stores/useStoreAuth';
 
 // 全局 Axios 配置
 const axiosConfig = {
-    baseURL: 'http://localhost:5000',  // API 基础地址
-    //baseURL: 'http://114.55.218.3:5000', // 服务器地址
+    //baseURL: 'http://localhost:5000',  // API 基础地址
+    baseURL: 'http://114.55.218.3:5000', // 服务器地址
     headers: { 'Content-Type': 'application/json; charset=utf-8' }, // 默认 JSON
     timeout: 5000, // 超时时间
     withCredentials: true,
