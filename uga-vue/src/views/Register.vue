@@ -75,6 +75,7 @@ import useAuthStore from "../stores/useStoreAuth.js";
 import {useRouter} from 'vue-router'
 import {ElMessage} from "element-plus";
 import {getCaptcha} from '../apis/auth'
+import { use } from 'echarts';
 const authStore=useAuthStore();
 const router=useRouter()
 const {handleRegister}=authStore
@@ -106,7 +107,10 @@ async function register (){
 
 const sendVerificationCode = async () => {
   if(!isClick.value) return;
-  else isClick.value=false;
+  else if(userInfo.email===''){
+    ElMessage.error("请输入邮箱!");
+    return;
+  }else isClick.value=false;
 
   let clock = window.setInterval(() => {
   captchaText.value =totalTime.value + 's后重新发送'

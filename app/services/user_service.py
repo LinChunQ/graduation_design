@@ -55,7 +55,6 @@ class UserService:
 
     @staticmethod
     def getTestByCourseId(data, user_id):  # 根据用户id和课程id获取所有试卷信息
-        print(data)
         course_id = data.get('course_id')
         currentPage = data.get('currentPage', 1)  # 当前页码，默认为1
         pageSize = data.get('pageSize', 10)  # 每页显示的记录数，默认为10

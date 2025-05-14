@@ -1,79 +1,24 @@
 <script setup>
 import TopCard from '@/components/feedback/topCard.vue';
-const topList=[{id:0,title:"好评",num:22},{id:1,title:"差评",num:35},
-                {id:2,title:"建议",num:46},{id:3,title:"其他",num:59}]
+import { getFeedBack } from '../../apis/sys';
+import { onMounted } from 'vue';
+import { ro } from 'element-plus/es/locale/index.mjs';
 
-const tableData = [
-  {
-    id:"000000001",
-    type:'好评',
-    nickname:"李华",
-    date: '2016-05-03',
-    process:"未查看",
-    content:'产品好用.............'
-  },
-  { id:"000000002",
-    type:'建议',
-    nickname:"李华",
-    date: '2016-05-03',
-    process:"未查看",
-    content:'建议增加更多功能.............'
-  },
-  { id:"000000003",
-    type:'差评',
-    nickname:"李华",
-    date: '2016-05-03',
-    process:"未查看",
-    content:'有bug.............'
-  },
-  { id:"000000004",
-    type:'好评',
-    nickname:"李华",
-    date: '2016-05-03',
-    process:"未查看",
-    content:'产品好用.............'
-  },
-  { id:"000000005",
-    type:'建议',
-    nickname:"李华",
-    date: '2016-05-03',
-    process:"未查看",
-    content:'建议增加更多功能.............'
-  },
-  { id:"000000006",
-    type:'差评',
-    nickname:"李华",
-    date: '2016-05-03',
-    process:"未查看",
-    content:'有bug.............'
-  },
-//   { id:"000000007",
-//     type:'好评',
-//     nickname:"李华",
-//     date: '2016-05-03',
-//     process:"未查看",
-//     content:'产品好用.............'
-//   },
-//   { id:"000000008",
-//     type:'好评',
-//     nickname:"李华",
-//     date: '2016-05-03',
-//     process:"未查看",
-//     content:'产品好用.............'
-//   },
-]
+const currentPage = ref(1)
+const pageSize = ref(10)
+const total = ref(0) // 总记录数
 
-const form = reactive({
-    id:"000000008",
-    type:'好评',
-    nickname:"李华",
-    date: '2016-05-03',
-    process:"未查看",
-    content:'产品好用.............'
-})
+const topList=reactive([{id:1,title:"好评",num:0},{id:2,title:"差评",num:0},
+                {id:3,title:"建议",num:0},{id:4,title:"其他",num:0}])
+
+const tableData =ref([])
+
+const form = reactive({})
 
 function handleSelect(row){
     Object.assign(form,row)
+    form.process=row.process==0?'未回复':'已回复'
+    form.type=row.type==1?'好评':form.type==2?'差评':form.type==3?'建议':'其他'
 }
 
 function onSubmit(){
@@ -85,6 +30,45 @@ function onSubmit(){
   })
 }
 
+async function getFeedBackList(){
+    const res=await getFeedBack({
+        pageSize: pageSize.value,
+        currentPage: currentPage.value,
+    })
+    tableData.value=res.data
+    total.value=res.total
+    topList.map(item=>{
+        if(item.id==1) item.num=res.good;
+        else if (item.id==2) item.num=res.bad;
+        else if (item.id==3) item.num=res.suggest;
+        else if (item.id==4) item.num=res.other;
+    })
+    if(res.data.length!=0)
+        handleSelect(res.data[0])
+}
+
+const handleCurrentChange = (newPage) => {
+  currentPage.value = newPage;
+  getFeedBackList()
+}
+
+const handlePrevClick = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    getFeedBackList()
+  }
+}
+
+const handleNextClick = () => {
+  if (currentPage.value < total.value) {
+    currentPage.value++;
+    getFeedBackList()
+  }
+}
+
+onMounted(()=>{
+    getFeedBackList()
+})
 </script>
 
 <template>
@@ -115,18 +99,35 @@ function onSubmit(){
             :cell-style="{ textAlign: 'center' }"
             :header-cell-style="{textAlign: 'center'}"
             @row-click="handleSelect"
-            
             >
                 <el-table-column label="序号"  type="index" width="80%" />
-                <el-table-column prop="type" label="反馈类型" width="100%" />
-                <el-table-column prop="id" label="反馈id" width="100%" />
-                <el-table-column prop="process" label="反馈进度" width="100%" />
-                <el-table-column prop="nickname" label="用户昵称" width="100%" />
-                <el-table-column prop="date" label="反馈时间" width="200%" />
-                <el-table-column prop="content" label="反馈内容" width="auto" />
+                <el-table-column prop="type" label="反馈类型" width="100%">
+                    <template #default="scope">
+                        <span>{{topList.find((item)=>
+                            item.id == scope.row.type
+                        ).title}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="content" label="反馈内容" width="auto"/>
+                <el-table-column prop="process" label="反馈进度" width="100%">
+                    <template #default="scope">
+                        <span>{{process==0?'未回复':'已回复'}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="username" label="用户昵称" width="100%" />
+                <el-table-column prop="user_email" label="用户邮箱" width="100%" />
+                <el-table-column prop="create_time" label="反馈时间" width="200%" />
             </el-table>
         </div>
-        <el-pagination background layout="prev, pager, next" :total="100" />
+        <el-pagination 
+            background 
+            layout="prev, pager, next" 
+            :total="total"
+            :current-page="currentPage" 
+            :page-size="pageSize"
+            @current-change="handleCurrentChange"
+            @prev-click="handlePrevClick"
+            @next-click="handleNextClick" />
     </div>
     <el-divider direction="vertical" border-style="double" />
     <!-- 回复部分 -->
@@ -139,25 +140,22 @@ function onSubmit(){
             <div class="reply-content">
                 <el-form :model="form" label-width="auto" style="max-width: 600px">
                 <el-form-item label="反馈人">
-                <el-input v-model="form.nickname"  disabled/>
+                <el-input v-model="form.username"  disabled/>
                 </el-form-item>
-                <el-form-item label="反馈id">
-                <el-input v-model="form.id"  disabled/>
+                <el-form-item label="反馈人邮箱">
+                <el-input v-model="form.user_email"  disabled/>
                 </el-form-item>
                 <el-form-item label="反馈类型">
                 <el-input v-model="form.type" disabled />
                 </el-form-item>
                 <el-form-item label="反馈进度">
-                <el-select disabled v-model="form.region" placeholder="未查看">
-                    <el-option label="已查看" value="已查看" />
-                    <el-option label="已处理" value="已处理" />
-                </el-select>
+                    <el-input v-model="form.process" disabled />
                 </el-form-item>
                 <el-form-item label="反馈信息">
                 <el-input disabled v-model="form.content" type="textarea" />
                 </el-form-item>
                 <el-form-item label="回复信息">
-                <el-input v-model="form.desc" type="textarea" />
+                <el-input v-model="form.reply_content" type="textarea" />
                 </el-form-item>
                 <el-form-item>
                 <el-button type="primary" @click="onSubmit">回复</el-button>

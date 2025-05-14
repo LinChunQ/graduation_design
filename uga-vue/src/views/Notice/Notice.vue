@@ -1,48 +1,117 @@
 <script setup>
-
+import { computed, onMounted } from 'vue'
+import { addNotice,addNoticeType,getNotice,getNoticeType ,deleteNotice,deleteNoticeType} from '../../apis/sys'
 const optVal1 = ref('')
 const optVal2 = ref('')
 const dialogFormVisible = ref(false)
 const typeFormVisible = ref(false)
 const formLabelWidth = '140px'
-const classfiy_type=ref("");
+const currentPage = ref(1)
+const pageSize = ref(10)
+const total = ref(0) // 总记录数
+
 const form = reactive({
-  name: '',
-  region: '',
-  date1: '',
-  date2: '',
-  delivery: false,
-  type: [],
-  resource: '',
-  desc: '',
+  title: '',
+  type: '',
+  content: '',
 })
 
-const classify=ref([{id:1,name:"活动通知"},{id:2,name:"功能通知"},
-                {id:3,name:"版本更新"},{id:4,name:"紧急通知"}]);
+const classify=ref([]);
 
-const options1 =classify.value
-const options2 =[{id:1,name:'全部用户'},{id:2,name:'测试用户'},{id:3,name:"内部用户"}]
-const tableData=[{title:"版本已更新,赶快体验新功能!",name:"李华",scale:'全部用户',type:'定时发布',stat:"已发布",time:'2025-3-31 12:11:33'},
-{title:"历史使用出现bug,暂停服务!",name:"管理员",scale:'内部用户',type:'定时发布',stat:"已发布",time:'2025-3-31 12:11:33'},
-{title:"智能审批功能已上线,赶快体验新功能!",name:"李华",scale:'全部用户',type:'定时发布',stat:"未发布",time:'2025-3-31 12:11:33'},
-{title:"历史使用功能已上线,赶快体验新功能!",name:"李华",scale:'测试用户',type:'定时发布',stat:"已发布",time:'2025-3-31 12:11:33'},
-{title:"大促销活动,点击链接查看详情!",name:"李华",scale:'全部用户',type:'定时发布',stat:"已发布",time:'2025-3-31 12:11:33'},
-{title:"大促销活动,点击链接查看详情!",name:"李华",scale:'全部用户',type:'定时发布',stat:"未发布",time:'2025-3-31 12:11:33'},
-{title:"大促销活动,点击链接查看详情!",name:"李华",scale:'全部用户',type:'定时发布',stat:"已发布",time:'2025-3-31 12:11:33'},
-{title:"版本已更新,赶快体验新功能!",name:"李华",scale:'全部用户',type:'定时发布',stat:"已发布",time:'2025-3-31 12:11:33'},
-{title:"统计分析出现bug,暂停服务!",name:"管理员",scale:'全部用户',type:'定时发布',stat:"未发布",time:'2025-3-31 12:11:33'},
-{title:"版本已更新,赶快体验新功能!",name:"李华",scale:'全部用户',type:'定时发布',stat:"已发布",time:'2025-3-31 12:11:33'}
-]
+const options1 =computed(()=>{return classify.value}) 
+const tableData=ref([])
 
-const handlType=()=>{
-    let len=classify.value.length;
-    classify.value.push({id:len+1,name:classfiy_type.value})
-    ElMessage({
-    message: '操作成功!',
-    type: 'success',
-  })
+const handlType= async ()=>{
+    await addNoticeType(form)
+    getNoticeTypeList()
     typeFormVisible.value=false;
 }
+
+async function onSubmit(){
+    await addNotice(form)
+    getNoticeList()
+    dialogFormVisible.value=false;
+}
+
+async function getNoticeList(){
+    const res=await getNotice({
+        pageSize: pageSize.value,
+        currentPage: currentPage.value,
+    })
+    tableData.value=res.data
+    total.value=res.total
+}
+
+async function getNoticeTypeList(){
+    const res=await getNoticeType()
+    classify.value=res
+}
+
+const handleCurrentChange = (newPage) => {
+  currentPage.value = newPage;
+  getNoticeList()
+}
+
+const handlePrevClick = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    getNoticeList()
+  }
+}
+
+const handleNextClick = () => {
+  if (currentPage.value < total.value) {
+    currentPage.value++;
+    getNoticeList()
+  }
+}
+
+function  openAddNotice(){
+    resetForm()
+    dialogFormVisible.value = true
+}
+const resetForm=()=>{
+   form.title=''
+   form.content=''
+   form.type=''
+}
+
+const delNotice= (data)=>{
+    ElMessageBox.confirm(
+    '是否要删除此条公告?',
+    '提示',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(async() => { //确认删除
+        await deleteNotice(data)
+        getNoticeList()
+    })
+    
+}
+
+const delNoticeType= (data)=>{
+    ElMessageBox.confirm(
+    '是否要删除此条公告类型?',
+    '提示',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(async() => { //确认删除
+        await deleteNoticeType(data)
+        getNoticeTypeList()
+    })
+    
+}
+
+onMounted(()=>{
+    getNoticeList()
+    getNoticeTypeList()
+})
 </script>
 <template>
 <div class="n-container">
@@ -65,7 +134,7 @@ const handlType=()=>{
                     <span>全部</span>
                 </div>
                 </template>
-                <p v-for="(item,index) in classify" :key="index" class="text-item">{{ item.name}}
+                <p v-for="(item,index) in classify" :key="index" class="text-item" @click="delNoticeType(item)">{{ item.name}}
                     <el-divider />
                 </p>
             </el-card>
@@ -93,22 +162,7 @@ const handlType=()=>{
                     />
                 </el-select>
             </div>
-            <div class="opt-type">
-                <el-select
-                    v-model="optVal2"
-                    placeholder="选择公告范围"
-                    size="large"
-                    style="width: 240px"
-                    >
-                    <el-option
-                        v-for="item in options2"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id"
-                    />
-                </el-select>
-            </div>
-            <el-button type="primary" plain @click="dialogFormVisible = true">发布公告</el-button>
+            <el-button type="primary" plain @click="openAddNotice">发布公告</el-button>
         </div>
         <!-- 表格 -->
         <div class="data">
@@ -120,14 +174,33 @@ const handlType=()=>{
                 >
                 <el-table-column label="序号" type="index" width="100%" />
                 <el-table-column label="公告标题" prop="title" width="280%"/>
-                <el-table-column label="发布人" prop="name" width="100%" />
-                <el-table-column label="发布范围" prop="scale" width="100%" />
-                <el-table-column label="发布类型" prop="type" width="100%"/>
-                <el-table-column label="发布状态" prop="stat" width="100%"/>
-                <el-table-column label="发布时间" prop="time" width="150%"/>
+                <el-table-column label="发布人" prop="username" width="100%" />
+                <el-table-column label="发布类型" prop="type" width="100%">
+                    <template #default="scope">
+                        <span>{{ classify.find(
+                                (i) => i.id == scope.row.type
+                            )?.name }}
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="发布时间" prop="create_time" width="150%"/>
+                <el-table-column label="发布内容" prop="content" width="auto"/>
+                <el-table-column label="操作">
+                    <template #default="scope">
+                        <el-button type="danger" @click="delNotice(scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
-        <el-pagination background layout="prev, pager, next" :total="100" />
+        <el-pagination 
+            background 
+            layout="prev, pager, next" 
+            :total="total"
+            :current-page="currentPage" 
+            :page-size="pageSize"
+            @current-change="handleCurrentChange"
+            @prev-click="handlePrevClick"
+            @next-click="handleNextClick" />
     </div>
 </div>
 
@@ -136,28 +209,26 @@ const handlType=()=>{
 <el-dialog v-model="dialogFormVisible" title="发布公告" width="500">
     <el-form :model="form">
       <el-form-item label="公告标题" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off" />
+        <el-input v-model="form.title" autocomplete="off" />
       </el-form-item>
-      <el-form-item label="公告类型" :label-width="formLabelWidth">
-        <el-select v-model="form.region" placeholder="选择公告类型">
-          <el-option label="活动通知" value="1" />
-          <el-option label="功能通知" value="2" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="发布范围" :label-width="formLabelWidth">
-        <el-select v-model="form.region" placeholder="选择发布范围">
-          <el-option label="全部用户" value="1" />
-          <el-option label="测试用户" value="2" />
+      <el-form-item label="发布类型" :label-width="formLabelWidth">
+        <el-select v-model="form.type" placeholder="选择发布类型">
+          <el-option
+            v-for="item in options1"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="详细内容">
-            <el-input v-model="form.desc" type="textarea" :rows="6" />
+            <el-input v-model="form.content" type="textarea" :rows="6" />
         </el-form-item>
     </el-form>
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">
+        <el-button type="primary" @click="onSubmit">
           发布
         </el-button>
       </div>
@@ -168,7 +239,7 @@ const handlType=()=>{
 <el-dialog v-model="typeFormVisible" title="添加公告类型" width="500">
     <el-form :model="form">
       <el-form-item label="公告类型" :label-width="formLabelWidth">
-        <el-input v-model="classfiy_type" autocomplete="off" />
+        <el-input v-model="form.type" autocomplete="off" />
       </el-form-item>
     </el-form>
     <template #footer>

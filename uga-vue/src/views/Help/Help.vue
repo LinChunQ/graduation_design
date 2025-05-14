@@ -1,18 +1,17 @@
 <script setup>
+import { addFeedBack } from '../../apis/sys';
 const dialogFormVisible = ref(false)
 const rateVal=ref(0);
 const formLabelWidth = '140px'
 const form = reactive({
-  name: '',
-  region: '',
-  date1: '',
-  date2: '',
-  delivery: false,
-  type: [],
-  resource: '',
-  desc: '',
+  type:1,
+  content:''
 })
 
+const handleFeedBack= async()=>{
+    await addFeedBack(form)
+    dialogFormVisible.value = false
+}
 </script>
 
 <template>
@@ -59,14 +58,19 @@ const form = reactive({
             亲爱的用户朋友， 感谢您使用高校教师助手！为了共创更好的平台，我们期待您宝贵的意见和建议：
         </el-form-item>
         <el-form-item label="">
-            <el-input v-model="form.desc" type="textarea" :rows="6" />
+            <el-input v-model="form.content" type="textarea" :rows="6"/>
         </el-form-item>
-        <el-rate v-model="rateVal" clearable />
+        <el-radio-group v-model="form.type">
+            <el-radio :value="1">好评</el-radio>
+            <el-radio :value="2">差评</el-radio>
+            <el-radio :value="3">建议</el-radio>
+            <el-radio :value="4">其他</el-radio>
+        </el-radio-group>
     </el-form>
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">
+        <el-button type="primary" @click="handleFeedBack">
           提交
         </el-button>
       </div>

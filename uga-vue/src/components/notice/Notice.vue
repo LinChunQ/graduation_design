@@ -1,5 +1,5 @@
 <template>
-    <div class="notic-bar">
+<div class="notic-bar">
       <img :src="notic" class="notice-img" />
       <div class="notice-bar-container">
         <div class="notice-bar__wrap">
@@ -7,28 +7,65 @@
             v-for="(item, index) in list"
             :key="index"
             class="notice-bar__wrap_text"
+            @click="noticeClick(item)"
           >
-            {{ item }}
+            {{item.title}}
           </div>
         </div>
       </div>
-    </div>
-  </template>
+</div>
+
+<!-- 添加公告详情弹框 -->
+<el-dialog v-model="dialogFormVisible" title="公告详情" width="500">
+    <el-form :model="form" disabled>
+      <el-form-item label="公告标题" :label-width="formLabelWidth">
+        <el-input v-model="form.title" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="详细内容">
+            <el-input v-model="form.content" type="textarea" :rows="6" />
+        </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">关闭</el-button>
+      </div>
+    </template>
+  </el-dialog>
+</template>
    
-  <script setup lang="ts">
-  import notic from "../../assets/icons/notice.png";
-  const list = [
-    "版本已更新,赶快体验新功能!",
-    "",
-    "智能审批功能已上线,赶快体验新功能!",
-    "",
-    "历史使用功能已上线,赶快体验新功能!",
-    "",
-    "大促销活动,点击链接查看详情!",
-  ];
-  </script>
+<script setup>
+import notic from "../../assets/icons/notice.png";
+import {getNotice} from "../../apis/sys";
+import { onMounted, onUnmounted } from "vue";
+
+const list =ref([])
+const dialogFormVisible = ref(false);
+const form = reactive({
+  title: '',
+  content: '',
+})
+
+async function getNoticeList(){
+    const res=await getNotice({
+        pageSize: 0,
+        currentPage: 0,
+    })
+    list.value=res
+}
+
+const noticeClick = (item) => {
+  form.content = item.content;
+  form.title = item.title;
+  dialogFormVisible.value = true;
+}
+
+onMounted(()=>{
+  getNoticeList()
+})
+
+</script>
    
-  <style lang="scss" scoped>
+<style lang="scss" scoped>
   .notic-bar {
     display: flex;
     justify-content:center;
@@ -54,20 +91,24 @@
     margin-left: 10px;
     display: flex;
     animation: move 30s linear infinite;
+    white-space: nowrap; /* 防止换行 */
     line-height: 20px;
     color: #000;
-   
     .notice-bar__wrap_text {
       width: max-content;
       min-width: 100px;
+      padding-right: 50px;
     }
+  }
+  .notice-bar__wrap:hover {
+    animation-play-state: paused;
   }
   @keyframes move {
     0% {
-      transform: translateX(100%);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
   }
   </style>

@@ -5,10 +5,10 @@ import Suggestion from '@/assets/imgs/feedback/suggestion.png'
 import Other from '@/assets/imgs/feedback/other.png'
 
 const imgList={
-    0:Good,
-    1:Bad,
-    2:Suggestion,
-    3:Other
+    1:Good,
+    2:Bad,
+    3:Suggestion,
+    4:Other
 }
 const props=defineProps({
     title:'',

@@ -1,7 +1,7 @@
 from datetime import timedelta
 class Config:
     #数据库
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:QQ1314520@114.55.218.3:3306/uga-flask'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:QQ1314520@114.55.218.3:3306/uga-flask?charset=utf8mb4'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
     #JWT

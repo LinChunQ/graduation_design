@@ -3,6 +3,7 @@ from app.extensions import db, jwt,mail
 from app.blueprints.auth_routes import auth_bp
 from app.blueprints.smart_routes import smart_bp
 from app.blueprints.user_routes import user_bp
+from app.blueprints.sys_routes import sys_bp
 from app.config import Config
 from flask_cors import CORS
 
@@ -24,6 +25,7 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(smart_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(sys_bp)
     # # 🚀 打印所有路由
     # with app.app_context():
     #     print(app.url_map)

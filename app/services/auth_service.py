@@ -11,7 +11,6 @@ from flask_jwt_extended import create_access_token
 from app.utils.MyTool import model_to_dict
 from flask_mail import Message
 from flask import Flask, request
-from app.models.email_captcha import EmailCaptchaModel
 
 class AuthService:
     @staticmethod
@@ -21,6 +20,10 @@ class AuthService:
             return {"code": 400, "msg": "验证码不正确!"}, 200
         elif User.query.filter_by(username=username).first():
             return {"code": 400, "msg": "该用户名已存在!"}, 200
+        elif User.query.filter_by(phone=phone).first():
+            return {"code": 400, "msg": "该手机号已存在!"}, 200
+        elif User.query.filter_by(email=email).first():
+            return {"code": 400, "msg": "该邮箱已存在!"}, 200
 
         new_user = User(username=username, email=email, sex=sex,  phone=phone,  school=school,
                         profession=profession)
