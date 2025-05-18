@@ -7,13 +7,8 @@
           </div>
           <form @submit.prevent="register" class="floating-form">
               <div class="input-group">
-                  <input type="text" id="username" v-model="userInfo.username" required maxlength="20" />
+                  <input type="text" id="username" v-model="userInfo.username" required maxlength="20" placeholder="              必须以字母开头且由数字与字母组合不包含其它符号" />
                   <label for="username">用户名</label>
-                  <span class="highlight"></span>
-              </div>
-              <div class="input-group">
-                  <input type="text" id="sex" v-model="userInfo.sex" required maxlength="20" />
-                  <label for="sex">性别</label>
                   <span class="highlight"></span>
               </div>
               <div class="input-group">
@@ -75,13 +70,11 @@ import useAuthStore from "../stores/useStoreAuth.js";
 import {useRouter} from 'vue-router'
 import {ElMessage} from "element-plus";
 import {getCaptcha} from '../apis/auth'
-import { use } from 'echarts';
 const authStore=useAuthStore();
 const router=useRouter()
 const {handleRegister}=authStore
 const userInfo=reactive({
   username:'',
-  sex:'',
   phone:'',
   email:'',
   profession:'',
@@ -97,6 +90,8 @@ const totalTime = ref(60)//倒计时
 const captchaText=ref('获取验证码')
 const isClick=ref(true) //控制按钮是否可用
 async function register (){
+  const regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+  regex.test(userInfo.username)?'':ElMessage.error("用户名格式错误!");
   if(userInfo.password!==confirmPassword.value){
     ElMessage.error("两次密码不相等!");
   }
@@ -127,7 +122,6 @@ const sendVerificationCode = async () => {
 
 const reset=()=>{
   userInfo.username=''
-  userInfo.sex=''
   userInfo.phone=''
   userInfo.email=''
   userInfo.profession=''
@@ -184,6 +178,14 @@ onMounted(()=>{
   margin-bottom: 15px;
 }
 
+input::placeholder {
+    color:red;          /* 文字颜色 */
+    font-size: 10px;      /* 字体大小 */
+    font-style: italic;   /* 斜体 */
+    opacity: 0.5;         /* 透明度 */
+    letter-spacing: 1px;  /* 字符间距 */
+}
+
 .input-group input {
   width: 95%;
   padding: 10px;
@@ -192,6 +194,7 @@ onMounted(()=>{
   font-size: 14px;
   transition: all 0.3s ease;
   background: transparent;
+  
 }
 
 .input-group label {

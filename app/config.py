@@ -15,10 +15,10 @@ class Config:
     MAIL_SERVER = "smtp.qq.com"
     MAIL_USE_TLS = True
     MAIL_PORT = 587
-    # 你个人的邮箱
+    #个人的邮箱
     MAIL_USERNAME = "497603213@qq.com"
 
-    # 刚刚获取到的授权码填在这里
+    #获取到的授权码
     MAIL_PASSWORD = "bfrlhaeeujclcach"
     # 你的邮箱名字可以和MAIL_USERNAME一样
     MAIL_DEFAULT_SENDER = "497603213@qq.com"

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import useAuthStore from '../stores/useStoreAuth';
 // 布局文件
 import HomePage from '@/views/Home/HomePage.vue'
 
@@ -24,5 +25,20 @@ const routes = [
 const index = createRouter({
     history: createWebHistory(),
     routes
+})
+
+
+index.beforeEach((to, from, next) => {
+    const authStore = useAuthStore();
+    const { isLogin, token} = authStore;
+    if (to.path === '/login'||to.path === '/register') {
+        next();
+    } else {
+        if (token === null || token === '' && isLogin) {
+            next('/login');
+        } else{
+            next();
+        }
+    }
 })
 export default index

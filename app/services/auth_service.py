@@ -1,20 +1,19 @@
-from redis import RedisError
-from sqlalchemy import nullsfirst
 import random
 import string
-
+import re
+from redis import RedisError
 from app.models.user import User
 from app.models.admin import Admin
-from app.common.request.response import ResponseHandler
 from app.extensions import db,mail,redis_client
 from flask_jwt_extended import create_access_token
 from app.utils.MyTool import model_to_dict
 from flask_mail import Message
+
 from flask import Flask, request
 
 class AuthService:
     @staticmethod
-    def register(username, sex,email, phone, school, profession, password,captcha): #注册用户
+    def register(username, email, phone, school, profession, password,captcha): #注册用户
         redis_captcha=redis_client.get(email)
         if not captcha or captcha!=redis_captcha:
             return {"code": 400, "msg": "验证码不正确!"}, 200
@@ -25,7 +24,7 @@ class AuthService:
         elif User.query.filter_by(email=email).first():
             return {"code": 400, "msg": "该邮箱已存在!"}, 200
 
-        new_user = User(username=username, email=email, sex=sex,  phone=phone,  school=school,
+        new_user = User(username=username, email=email, phone=phone,  school=school,
                         profession=profession)
         new_user.set_password(password)
 
@@ -59,17 +58,27 @@ class AuthService:
 
     @staticmethod
     def login(username, password,role):#登陆
-        if role=='0':
-            user = Admin.query.filter_by(username=username).first()
-        elif role=='1':
-            user = User.query.filter_by(username=username).first()
+        if role == '0':
+            if re.match(r'^1[3-9]\d{9}$', username):  # 简单的手机号正则
+                user = Admin.query.filter_by(phone=username).first()
+            elif '@' in username and '.' in username.split('@')[1]:
+                user = Admin.query.filter_by(email=username).first()
+            else:
+                user = Admin.query.filter_by(username=username).first()
+        elif role == '1':
+            if re.match(r'^1[3-9]\d{9}$', username):  # 简单的手机号正则
+                user = User.query.filter_by(phone=username).first()
+            elif '@' in username and '.' in username.split('@')[1]:
+                user = User.query.filter_by(email=username).first()
+            else:
+                user = User.query.filter_by(username=username).first()
 
         if not user:
             return {"code": 400, "msg": "不存在该用户,请注册!"}, 200
         elif not user.check_password(password):
             return {"code": 400, "msg": "用户名或密码错误!"}, 200
         else:
-            if role=='0':
+            if role == '0':
                 token = create_access_token(identity=str(user.admin_id))
             else:
                 token = create_access_token(identity=str(user.teacher_id))

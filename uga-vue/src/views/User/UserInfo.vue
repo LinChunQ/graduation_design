@@ -165,7 +165,7 @@ watch(userStore.courseList,(newVal)=>{
           <el-input v-model="ruleForm.profession" />
         </el-form-item>
         <el-form-item label="手机" prop="phone">
-          <el-input v-model="ruleForm.phone" />
+          <el-input v-model="ruleForm.phone" disabled />
         </el-form-item>
         <el-form-item label="邮件" prop="email">
           <el-input v-model="ruleForm.email" :disabled="true" />

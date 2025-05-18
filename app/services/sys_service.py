@@ -6,6 +6,8 @@ from app.models.user import User
 from  app.models.notice_type import NoticeType
 from datetime import datetime
 from app.utils.MyTool import model_to_dict
+from flask_mail import Message
+from app.extensions import mail
 class SystemService:
     @staticmethod
     def addNotice(data,user_id): #添加公告
@@ -113,7 +115,6 @@ class SystemService:
         return {"code": 200, "msg": "反馈成功，谢谢你的反馈！"}, 200
 
     @staticmethod
-    @staticmethod
     def getFeedBack(data):  # 获取反馈列表
         currentPage = data.get('currentPage', 1)  # 当前页码，默认为1
         pageSize = data.get('pageSize', 10)  # 每页显示的记录数，默认为10
@@ -156,3 +157,23 @@ class SystemService:
                 "other":other
             }
         }, 200
+
+    @staticmethod
+    def replyFeedBack(data):
+        email=data['user_email']
+        try:
+            feedbackMsg=Message(subject='高校助手反馈回复',recipients=[email],body=f"反馈回复:{data['reply_content']}")
+            mail.send(feedbackMsg)
+        except  Exception as e:
+            return {"code": 500, "msg": "发送邮件失败!"}, 200
+        new_feedback = FeedBack.query.filter_by(id=data['id']).first()
+        new_feedback.reply_content = data['reply_content']
+        new_feedback.process = 1
+        try:
+            db.session.commit()
+            return {"code": 200, "msg": "回复成功!"}, 200
+        except Exception as e:
+            db.session.rollback()
+            return {"code": 500, "msg": "回复失败!"}, 200
+
+

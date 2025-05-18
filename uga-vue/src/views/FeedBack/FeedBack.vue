@@ -1,6 +1,6 @@
 <script setup>
 import TopCard from '@/components/feedback/topCard.vue';
-import { getFeedBack } from '../../apis/sys';
+import { getFeedBack,replyFeedBack } from '../../apis/sys';
 import { onMounted } from 'vue';
 import { ro } from 'element-plus/es/locale/index.mjs';
 
@@ -21,13 +21,8 @@ function handleSelect(row){
     form.type=row.type==1?'好评':form.type==2?'差评':form.type==3?'建议':'其他'
 }
 
-function onSubmit(){
-    debugger
-    form.process='已回复'
-    ElMessage({
-    message: '操作成功!',
-    type: 'success'
-  })
+ async function onSubmit(){
+   await replyFeedBack(form)
 }
 
 async function getFeedBackList(){
@@ -155,11 +150,10 @@ onMounted(()=>{
                 <el-input disabled v-model="form.content" type="textarea" />
                 </el-form-item>
                 <el-form-item label="回复信息">
-                <el-input v-model="form.reply_content" type="textarea" />
+                <el-input v-model="form.reply_content" type="textarea"  :disabled="form.reply_content!=''" />
                 </el-form-item>
                 <el-form-item>
-                <el-button type="primary" @click="onSubmit">回复</el-button>
-                <el-button>取消</el-button>
+                <el-button type="primary" @click="onSubmit" v-if="form.reply_content==''">回复</el-button>
                 </el-form-item>
             </el-form>
             </div>

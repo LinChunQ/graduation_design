@@ -26,7 +26,9 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ElUpload: typeof import('element-plus/es')['ElUpload']
+    Footer: typeof import('./src/components/Footer.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     MainChart: typeof import('./src/components/statistics/MainChart.vue')['default']
     Notice: typeof import('./src/components/notice/Notice.vue')['default']
@@ -35,6 +37,7 @@ declare module 'vue' {
     RateChart: typeof import('./src/components/statistics/RateChart.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SIdentify: typeof import('./src/components/SIdentify.vue')['default']
     TopCard: typeof import('./src/components/feedback/topCard.vue')['default']
   }
 }

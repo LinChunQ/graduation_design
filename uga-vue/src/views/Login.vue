@@ -96,7 +96,7 @@ onUnmounted(()=>{
           </div>
           <form @submit.prevent="login" class="floating-form">
               <div class="input-group">
-                  <input id="username" v-model.trim="loginForm.username" type="text" autocomplete="off" @input="validateInput" required />
+                  <input id="username" v-model.trim="loginForm.username" type="text" autocomplete="off" @input="validateInput" required placeholder="           可以使用用户名/手机号/邮箱/进行登录"/>
                   <label for="username">用户名</label>
                   <span class="highlight"></span>
               </div>
@@ -111,8 +111,10 @@ onUnmounted(()=>{
                   <el-radio :value="'0'">管理员</el-radio>
                   <el-radio :value="'1'">普通用户</el-radio>
                 </el-radio-group>
-                <el-input v-model="code" style="height:35px; width: 120px;" placeholder="请输入验证码" />
-                <SIdentify :identifyCode="identifyCode" @click="changeCode"/>
+                <div style="display: flex;">
+                  <el-input v-model="code" style="height:35px; width: 120px;" placeholder="请输入验证码" />
+                  <SIdentify :identifyCode="identifyCode" @click="changeCode"/>
+                </div>
               </div>
               <button type="submit" class="submit-btn" :disabled="!isFormValid">
                   <span>登录</span>
@@ -170,6 +172,14 @@ onUnmounted(()=>{
 .form-header p {
   color: #95a5a6;
   font-size: 16px;
+}
+
+input::placeholder {
+    color:#95a5a6;          /* 文字颜色 */
+    font-size: 14px;      /* 字体大小 */
+    font-style: italic;   /* 斜体 */
+    opacity: 0.5;         /* 透明度 */
+    letter-spacing: 1px;  /* 字符间距 */
 }
 
 .floating-form .input-group {
@@ -282,8 +292,8 @@ onUnmounted(()=>{
 .form-middle{
   display: flex; 
   width: 100%;
-  margin-left: 10%;
+  justify-content: space-between;
   margin-bottom: 10px;
-  gap: 2%;
+  margin-left: 3%;
 }
 </style>

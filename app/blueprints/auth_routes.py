@@ -1,4 +1,3 @@
-
 from flask import request, jsonify, Blueprint
 from app.services.auth_service import AuthService
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -14,14 +13,11 @@ def register():
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
-    sex = data.get('sex')
-    age = data.get('age')
     phone = data.get('phone')
-    address = data.get('address')
     school = data.get('school')
     profession = data.get('profession')
     captcha=data.get('captcha')
-    result, status_code = AuthService.register(username, sex, email, phone, school, profession, password,captcha)
+    result, status_code = AuthService.register(username,email, phone, school, profession, password,captcha)
     return jsonify(result), status_code
 
 #注册获取验证码

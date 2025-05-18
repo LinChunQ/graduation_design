@@ -62,3 +62,11 @@ export function getFeedBack(data){
         data
     })
 }
+
+export function replyFeedBack(data){
+    return request({
+        url:'/sys/replyFeedBack',
+        method:'post',
+        data
+    })
+}
