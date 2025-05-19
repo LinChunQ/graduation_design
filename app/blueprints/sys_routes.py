@@ -12,7 +12,6 @@ def addNotice(): #添加公告
     return jsonify(result), status_code
 
 @sys_bp.route('/getNotice',methods=['POST'])
-@jwt_required()
 def getNotice(): #获取公告
     data=request.json
     result, status_code = SystemService.getNotice(data)

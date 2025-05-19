@@ -8,6 +8,8 @@ from datetime import datetime
 from app.utils.MyTool import model_to_dict
 from flask_mail import Message
 from app.extensions import mail
+
+
 class SystemService:
     @staticmethod
     def addNotice(data,user_id): #添加公告

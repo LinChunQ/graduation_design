@@ -49,6 +49,9 @@ const rules = reactive({
     { required: true, message: '请输入手机号!', trigger: 'blur' },
     { min: 11, max: 11, message: '手机号长度必须为11位!', trigger: 'blur' },
   ],
+  email: [
+    { required: true, message: '请输入邮箱!', trigger: 'blur' },
+  ],
   desc: [
     { required: true, message: '请输入描述信息', trigger: 'blur' },
   ],
@@ -167,8 +170,8 @@ watch(userStore.courseList,(newVal)=>{
         <el-form-item label="手机" prop="phone">
           <el-input v-model="ruleForm.phone" disabled />
         </el-form-item>
-        <el-form-item label="邮件" prop="email">
-          <el-input v-model="ruleForm.email" :disabled="true" />
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="ruleForm.email" :disabled="true"/>
         </el-form-item>
         <el-form-item label="地址" prop="address">
           <el-input v-model="ruleForm.address" />

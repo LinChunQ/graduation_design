@@ -31,10 +31,15 @@ const index = createRouter({
 index.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
     const { isLogin, token} = authStore;
-    if (to.path === '/login'||to.path === '/register') {
+    if (to.path === '/login'||to.path === '/register'|| to.path === '/') {
         next();
     } else {
         if (token === null || token === '' && isLogin) {
+            ElMessage({
+                message: '请登录后进行相关操作！',
+                type: 'warning',
+                plain: true,
+              })
             next('/login');
         } else{
             next();
