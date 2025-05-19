@@ -70,7 +70,7 @@
           <token-type value="" />
           <token-config-file value="" />
           <token-profile value="" />
-          <session-user value="root@223.104.150.60" />
+          <session-user value="root@223.104.150.70" />
         </database>
         <properties>
           <auto-commit value="true" />
