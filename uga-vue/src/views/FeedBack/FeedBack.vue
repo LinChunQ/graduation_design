@@ -2,7 +2,6 @@
 import TopCard from '@/components/feedback/topCard.vue';
 import { getFeedBack,replyFeedBack } from '../../apis/sys';
 import { onMounted } from 'vue';
-import { ro } from 'element-plus/es/locale/index.mjs';
 
 const currentPage = ref(1)
 const pageSize = ref(10)
