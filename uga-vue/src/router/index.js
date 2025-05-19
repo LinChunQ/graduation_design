@@ -35,6 +35,11 @@ index.beforeEach((to, from, next) => {
         next();
     } else {
         if (token === null || token === '' && isLogin) {
+            ElMessage({
+                message: '请登录后进相关操作！',
+                type: 'warning',
+                plain: true,
+            })
             next('/login');
         } else{
             next();
