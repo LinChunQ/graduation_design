@@ -29,14 +29,16 @@ import Footer  from "@/components/Footer.vue";
 }
 
 header {
-    flex: 0 0 auto;
+  flex: 0 0 auto;
+  z-index: 999;
 }
 
 main {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 footer {
-    flex: 0 0 auto;
+  flex: 0 0 auto;
+  z-index: 999;
 }
 </style>
