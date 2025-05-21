@@ -9,7 +9,7 @@
       <!-- 关于说明 -->
       <div class="about-text">
         <p>
-          本系统采用Vue3作为前端框架，Flask作为后端框架，MySQL作为数据库，Redis作为验证码缓存，并采用Docker作为容器化技术，实现系统部署和运维。
+          本系统采用Vue3作为前端框架，Flask作为后端框架，MySQL作为数据库，Redis作为验证码缓存，并采用Docker作为容器化技术和Jenkins作为持续集成和持续部署工具，实现系统部署和运维。
         </p>
       </div>
       <!-- 展示图片 -->

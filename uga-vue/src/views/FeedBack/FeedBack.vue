@@ -9,18 +9,21 @@ const total = ref(0) // 总记录数
 
 const topList=reactive([{id:1,title:"好评",num:0},{id:2,title:"差评",num:0},
                 {id:3,title:"建议",num:0},{id:4,title:"其他",num:0}])
-
+const processDict=['未回复','已回复']
+const typeDict=['','好评','差评','建议','其他']
 const tableData =ref([])
 
 const form = reactive({})
 
 function handleSelect(row){
     Object.assign(form,row)
-    form.process=row.process==0?'未回复':'已回复'
-    form.type=row.type==1?'好评':form.type==2?'差评':form.type==3?'建议':'其他'
+    form.process=processDict[row.process]
+    form.type=typeDict[row.type]
 }
 
  async function onSubmit(){
+   form.process=processDict.indexOf(form.process)
+   form.type=typeDict.indexOf(form.type)
    await replyFeedBack(form)
 }
 
@@ -105,7 +108,7 @@ onMounted(()=>{
                 <el-table-column prop="content" label="反馈内容" width="auto"/>
                 <el-table-column prop="process" label="反馈进度" width="100%">
                     <template #default="scope">
-                        <span>{{process==0?'未回复':'已回复'}}</span>
+                        <span>{{processDict[scope.row.process]}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="username" label="用户昵称" width="100%" />
@@ -149,10 +152,10 @@ onMounted(()=>{
                 <el-input disabled v-model="form.content" type="textarea" />
                 </el-form-item>
                 <el-form-item label="回复信息">
-                <el-input v-model="form.reply_content" type="textarea"  :disabled="form.reply_content!=''" />
+                <el-input v-model="form.reply_content" type="textarea"  :disabled="form.process=='已回复'" />
                 </el-form-item>
                 <el-form-item>
-                <el-button type="primary" @click="onSubmit" v-if="form.reply_content==''">回复</el-button>
+                <el-button type="primary" @click="onSubmit" v-if="form.process!='已回复'">回复</el-button>
                 </el-form-item>
             </el-form>
             </div>
