@@ -19,6 +19,7 @@ const routes = [
     { path: '/notice', component: ()=>import('@/views/Notice/Notice.vue') },
     { path: '/feedback', component: ()=>import('@/views/FeedBack/FeedBack.vue') },
     { path: '/webgl', component: ()=>import('@/views/Home/WebGL.vue') },
+    { path: '/webgl1', component: ()=>import('@/views/Home/WebGL1.vue') },
     {path: '/login', name: 'Login', component: () => import('@/views/Login.vue')},// 直接使用懒加载
     {path: '/404',name: '404',component: () => import('@/views/404.vue')},  // 假设使用 @ 作为别名
     {path: '/:pathMatch(.*)*', redirect: '/404'},

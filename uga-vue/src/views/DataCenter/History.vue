@@ -1,6 +1,7 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import useUserStore from '@/stores/useStoreUser'
+import {getTestByCourseId} from '@/apis/user'
 const userStore=useUserStore()
 const search = ref('')
 const filterTableData = computed(() =>
@@ -14,9 +15,14 @@ const filterTableData = computed(() =>
 const optionVal = ref('')
 const options =reactive([])
 const tableData = reactive([])
+const allTableData =reactive([])
 const currentPage = ref(1)
 const pageSize = ref(12)
 const total = ref(0) // 总记录数
+
+const fields=ref({'学院':'college','班级':'stu_class','学号':'stu_no',
+              '姓名':'stu_name','题目一':'p1','题目二':'p2',
+              '题目三':'p3','题目四':'p4','题目五':'p5','题目六':'p6','总分':'total'})
 const handleEdit = (index, row) => {
   console.log(index, row)
 }
@@ -52,12 +58,23 @@ const handleNextClick = () => {
   }
 }
 
+const handleExportData= async()=>{
+  const params = {
+    pageSize: 999,
+    currentPage: currentPage.value,
+    course_id: optionVal.value || 0
+  };
+  const res=await getTestByCourseId(params);
+  allTableData.length=0;
+  Object.assign(allTableData,res.data)
+}
 
 onMounted(()=>{
     if(!optionVal.value){
         fetchTestPaper();
     }
     userStore.getCourse()
+    handleExportData();
 })
 
 watch(userStore.testPaperData,(newVal)=>{
@@ -72,10 +89,12 @@ watch(userStore.testPaperData,(newVal)=>{
 
 watch(optionVal,(newVal)=>{
     userStore.getTestPaper({course_id:newVal});
+    handleExportData();
 })
 
 watch(userStore.courseList,(newVal)=>{
     Object.assign(options,newVal)
+    handleExportData();
 })
 
 </script>
@@ -86,23 +105,30 @@ watch(userStore.courseList,(newVal)=>{
             <!-- 选择框 -->
         <div class="optionCourse">
             <el-select
-                v-model="optionVal"
-                placeholder="请选择课程"
-                size="large"
-                style="width: 25%"
-                >
-                <el-option
-                    v-for="item in options"
-                    :key="item.course_id"
-                    :label="item.course_name"
-                    :value="item.course_id"
-                />
+              v-model="optionVal"
+              placeholder="请选择课程"
+              size="large"
+              style="width: 25%"
+              >
+              <el-option
+                  v-for="item in options"
+                  :key="item.course_id"
+                  :label="item.course_name"
+                  :value="item.course_id"
+              />
             </el-select>
+            <vue3-json-excel
+              :json-data="allTableData"
+              :fields="fields"
+              name="学生成绩表.xls"
+            >
+            <el-button type="success" plain size="large">
+              导出数据<el-icon class="el-icon--right"><Upload /></el-icon>
+            </el-button>
+            </vue3-json-excel>
         </div>
         <!-- 数据表 -->
-        
-         <div class="data">
-            
+        <div class="data">
             <el-table 
                 :data="filterTableData" 
                 style="width: 100%"
@@ -163,7 +189,9 @@ watch(userStore.courseList,(newVal)=>{
 }
 
 .optionCourse{
-    margin-bottom:10px;;
+  display: flex;
+  margin-bottom:10px;
+  justify-content: space-between;
 }
 .data{
     margin-bottom:20px;
@@ -171,9 +199,11 @@ watch(userStore.courseList,(newVal)=>{
 .mainarea{
     margin-top:1%;
     width:80vw;
+    height: 90%;
     margin-left:10%;
     padding:10px;
     border-radius:10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
     background-color:#fff;
     overflow: auto;
 }

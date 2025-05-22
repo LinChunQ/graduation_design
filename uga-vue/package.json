@@ -27,7 +27,8 @@
     "vite-plugin-vue-devtools": "^7.7.1",
     "vue": "^3.5.13",
     "vue-i18n": "^11.1.0",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "vue3-json-excel": "1.0.10-alpha"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",

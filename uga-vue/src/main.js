@@ -11,11 +11,14 @@ import 'element-plus/dist/index.css';
 import 'normalize.css';  // 使用normalize.css 重置样式
 import DataVVue3 from '@kjgl77/datav-vue3'
 import * as echarts from 'echarts'; 
+import vue3JsonExcel from "vue3-json-excel"
+
 
 const  app=createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
+app.use(vue3JsonExcel)
 app.use(i18n);
 const pinia = createPinia();
 pinia.use(piniaPersist);
