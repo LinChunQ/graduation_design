@@ -31,9 +31,7 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="6735cb48-63b4-41d1-8048-0e9a95922249" object-ref="schemas/uga-flask/tables/users" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="6735cb48-63b4-41d1-8048-0e9a95922249" />
@@ -74,7 +72,7 @@
           <token-type value="" />
           <token-config-file value="" />
           <token-profile value="" />
-          <session-user value="root@39.144.156.94" />
+          <session-user value="root@39.144.156.42" />
         </database>
         <properties>
           <auto-commit value="false" />

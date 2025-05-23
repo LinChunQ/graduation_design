@@ -46,7 +46,7 @@ const initThreeJS  = () => {
     createCube();
 
     //  6、添加辅助坐标轴
-    const axesHelper = new THREE.AxesHelper(3); 
+    const axesHelper = new THREE.AxesHelper(5); 
     scene.add(axesHelper);
 
     // 7、添加环境光和平行光
@@ -72,11 +72,27 @@ function animate() {
 }
 //定义立方体
 function createCube() {
-    const cube = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-);
-scene.add(cube); 
+  // const cube = new THREE.Mesh(
+  //   new THREE.BoxGeometry(1, 1, 1),
+  //   new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+  // );
+  // scene.add(cube); 
+const geometry = new THREE.BufferGeometry();
+const vertices = new Float32Array( [
+	-1.0, -1.0,  1.0, // v0
+	 1.0, -1.0,  1.0, // v1
+	 1.0,  1.0,  0, // v2
+	-1.0,  1.0,  0, // v3
+   1.0,    0,  -1.0, // v4
+] );
+const indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
+
+geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+geometry.setIndex(new THREE.BufferAttribute(indices, 1)); // 关键：设置索引
+
+const material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+const mesh = new THREE.Mesh( geometry, material );
+scene.add( mesh );
 }
 //处理窗口大小变化
 const handleResize = () => {

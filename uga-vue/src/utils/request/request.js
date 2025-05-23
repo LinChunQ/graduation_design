@@ -13,7 +13,7 @@ const axiosConfig = {
 
 export default function request(options) {
     const authStore = useAuthStore();
-    const { isLogin, token, clearToken } = authStore;
+    const {token, clearToken } = authStore;
 
     return new Promise((resolve, reject) => {
         // 创建 Axios 实例
@@ -39,10 +39,7 @@ export default function request(options) {
                 }
                 //成功!
                 if(msg){
-                    ElMessage({
-                        message:msg,
-                        type: 'success',
-                      })
+                    ElMessage({ message:msg,type: 'success',})
                 }
                 return data; // 直接返回 data，避免调用者访问 `res.data.data`
             },
