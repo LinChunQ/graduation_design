@@ -9,3 +9,4 @@ Werkzeug
 pymysql
 redis
 flask_mail
+python-dotenv

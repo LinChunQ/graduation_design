@@ -1,7 +1,17 @@
 from datetime import timedelta
+from dotenv import load_dotenv
+import os
+
+# 加载 .env 文件
+load_dotenv()
+db_password = os.getenv("DB_PASSWORD")
+server_ip = os.getenv("SERVER_IP")
+
 class Config:
-    #数据库
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:QQ1314520@114.55.218.3:3306/uga-flask?charset=utf8mb4'
+    # 数据库
+    SQLALCHEMY_DATABASE_URI = (
+        f"mysql+pymysql://root:{db_password}@{server_ip}:3306/uga-flask?charset=utf8mb4"
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
     #JWT
