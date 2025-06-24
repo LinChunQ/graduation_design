@@ -72,8 +72,10 @@ onMounted(()=>{
     align-items:center;
     height:100%;
     width:80%;
-    background: #e7ebe5;
+    //background: #e7ebe5;
+    background: transparent;
     border-radius: 20px;
+    z-index: 10;
   }
   .notice-bar-container {
     display: flex;
@@ -93,7 +95,8 @@ onMounted(()=>{
     animation: move 30s linear infinite;
     white-space: nowrap; /* 防止换行 */
     line-height: 20px;
-    color: #000;
+    // color: #000;
+    color: #fff;
     .notice-bar__wrap_text {
       width: max-content;
       min-width: 100px;

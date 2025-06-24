@@ -27,9 +27,9 @@ class Config:
     MAIL_PORT = 587
     #个人的邮箱
     MAIL_USERNAME = "497603213@qq.com"
-
     #获取到的授权码
     MAIL_PASSWORD = "bfrlhaeeujclcach"
     # 你的邮箱名字可以和MAIL_USERNAME一样
     MAIL_DEFAULT_SENDER = "497603213@qq.com"
+
 

@@ -11,9 +11,9 @@ from flask_cors import CORS
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    #配置跨域
+    # #配置跨域
     CORS(app,
-         resources={r"/*": {"origins": "http://localhost:5173"}},
+         resources={r"/*": {"origins":"*"}},
          supports_credentials=True,
          allow_headers=["Content-Type", "Authorization"])
 

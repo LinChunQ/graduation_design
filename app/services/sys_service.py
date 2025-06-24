@@ -8,6 +8,8 @@ from datetime import datetime
 from app.utils.MyTool import model_to_dict
 from flask_mail import Message
 from app.extensions import mail
+
+
 class SystemService:
     @staticmethod
     def addNotice(data,user_id): #添加公告
@@ -162,7 +164,7 @@ class SystemService:
     def replyFeedBack(data):
         email=data['user_email']
         try:
-            feedbackMsg=Message(subject='高校助手反馈回复',recipients=[email],body=f"反馈回复:{data['reply_content']}")
+            feedbackMsg=Message(subject='高校助手反馈回复',recipients=[email],body=f"回复内容:{data['reply_content']}")
             mail.send(feedbackMsg)
         except  Exception as e:
             return {"code": 500, "msg": "发送邮件失败!"}, 200

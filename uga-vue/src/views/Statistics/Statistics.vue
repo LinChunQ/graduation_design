@@ -84,15 +84,15 @@ watch(userStore.courseList,(newVal)=>{
 .left{
     display:flex;
     flex-direction:column;
-    height:80%;
-    width:25%;
+    height:80vh;
+    width:30%;
     margin-top:50px;
 }
 .middle{
     display:flex;
     flex-direction:column;
-    height:80%;
-    width:35%;
+    height:80vh;
+    width:38%;
     margin-top:50px;
     .optionCourse{
         width:100%;
@@ -114,8 +114,8 @@ watch(userStore.courseList,(newVal)=>{
 .right{
     display:flex;
     flex-direction:column;
-    height:80%;
-    width:25%;
+    height:80vh;
+    width:30%;
     margin-top:50px;
     .table{
     height:80%;

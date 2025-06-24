@@ -12,7 +12,7 @@ const config = reactive({
   oddRowBGC:"transparent",
   evenRowBGC:"transparent",
   headerHeight:30,
-  rowNum:8,
+  rowNum:10,
   align: ['left'],
 })
 

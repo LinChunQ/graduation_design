@@ -7,14 +7,14 @@ import SIdentify from '../components/SIdentify.vue'
 const router = useRouter()
 const authStore = useAuthStore()
 const {handleLogin,isLogin}=authStore
-const Role = ref('1')
+const Role = ref('0')
 const identifyCode=ref()
 const code=ref('')
 // 表单数据
 const loginForm = reactive({
   role:Role.value,
-  username: '',
-  password: ''
+  username: 'admin',
+  password: '123456'
 })
 
 const errorMsg = ref('')

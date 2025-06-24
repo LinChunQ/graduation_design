@@ -16,16 +16,19 @@
     "echarts": "^5.6.0",
     "element-plus": "^2.9.4",
     "katex": "^0.16.21",
+    "lil-gui": "^0.20.0",
     "normalize.css": "^8.0.1",
-    "pinia": "^2.3.1",
+    "pinia": "^3.0.2",
     "pinia-plugin-persist": "^1.0.0",
-    "pinia-plugin-persistedstate": "^4.2.0",
+    "pinia-plugin-persistedstate": "^4.3.0",
+    "three": "^0.176.0",
     "unplugin-auto-import": "^19.0.0",
     "unplugin-vue-components": "^28.0.0",
     "vite-plugin-vue-devtools": "^7.7.1",
     "vue": "^3.5.13",
     "vue-i18n": "^11.1.0",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "vue3-json-excel": "1.0.10-alpha"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
