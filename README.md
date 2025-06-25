@@ -37,3 +37,5 @@ src/
     ├── SmartCorrections/ # 智能阅卷
     ├── Statistics/       # 数据统计
     └── User/             # 用户管理
+    
+作品展示地址：http://114.55.218.3:8080/
